@@ -2,50 +2,50 @@ name: Daily TRA Extra Train Auto Sync (45 Days)
 
 on:
   schedule:
-    # UTC 時間 22:46、10:46 執行
-    # 等於台灣時間 (UTC+8) 06:46、18:46 觸發
-    - cron: '46 22,10 * * *'
-  workflow_dispatch: # 支援在 GitHub 介面上隨時手動點擊執行
+    # UTC 時間 15:52、03:52 執行
+    # 等於台灣時間 (UTC+8) 23:52、11:52 觸發
+    - cron: '52 15,3 * * *[span_0](start_span)'[span_0](end_span)
+  workflow_dispatch: # 支援在 GitHub 介面上隨時手動點擊執行[span_1](start_span)[span_1](end_span)
 
 jobs:
   run-bot:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest[span_2](start_span)[span_2](end_span)
     
     # 允許 Actions 寫入 Git 倉庫以儲存 JSON 狀態與 HTTP 快取檔
     permissions:
-      contents: write
+      contents: write[span_3](start_span)[span_3](end_span)
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4[span_4](start_span)[span_4](end_span)
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v5[span_5](start_span)[span_5](end_span)
         with:
-          python-version: '3.10'
+          python-version: '3.10[span_6](start_span)'[span_6](end_span)
 
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests urllib3
+          pip install requests urllib3[span_7](start_span)[span_7](end_span)
 
       - name: Run Main Script (Fetch 45 Days Data & Send TG)
         env:
           # 🌟 第一組金鑰 (主 Key)
-          TDX_CLIENT_ID: ${{ secrets.TDX_CLIENT_ID }}
-          TDX_CLIENT_SECRET: ${{ secrets.TDX_CLIENT_SECRET }}
+          TDX_CLIENT_ID: ${{ secrets.TDX_CLIENT_ID }}[span_8](start_span)[span_8](end_span)
+          TDX_CLIENT_SECRET: ${{ secrets.TDX_CLIENT_SECRET }}[span_9](start_span)[span_9](end_span)
           # 🌟 第二組金鑰 (備援 Key 2)
-          TDX_CLIENT_ID_2: ${{ secrets.TDX_CLIENT_ID_2 }}
-          TDX_CLIENT_SECRET_2: ${{ secrets.TDX_CLIENT_SECRET_2 }}
+          TDX_CLIENT_ID_2: ${{ secrets.TDX_CLIENT_ID_2 }}[span_10](start_span)[span_10](end_span)
+          TDX_CLIENT_SECRET_2: ${{ secrets.TDX_CLIENT_SECRET_2 }}[span_11](start_span)[span_11](end_span)
           # 🌟 第三組金鑰 (備援 Key 3)
-          TDX_CLIENT_ID_3: ${{ secrets.TDX_CLIENT_ID_3 }}
-          TDX_CLIENT_SECRET_3: ${{ secrets.TDX_CLIENT_SECRET_3 }}
+          TDX_CLIENT_ID_3: ${{ secrets.TDX_CLIENT_ID_3 }}[span_12](start_span)[span_12](end_span)
+          TDX_CLIENT_SECRET_3: ${{ secrets.TDX_CLIENT_SECRET_3 }}[span_13](start_span)[span_13](end_span)
           # Telegram 設定 (設定兩個 Chat ID 確保同時傳送)
-          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
-          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
-          TG_CHAT_ID_2: ${{ secrets.TG_CHAT_ID_2 }}
+          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}[span_14](start_span)[span_14](end_span)
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}[span_15](start_span)[span_15](end_span)
+          TG_CHAT_ID_2: ${{ secrets.TG_CHAT_ID_2 }}[span_16](start_span)[span_16](end_span)
         run: |
-          python main.py
+          python main.py[span_17](start_span)[span_17](end_span)
 
       - name: Save State and HTTP Cache to Repository
         run: |
@@ -53,7 +53,7 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
           # 💡 新增：推送前先拉取遠端最新變更並進行 rebase，避免拒絕推送
-          git pull origin main --rebase || echo "No rebase needed"
+          git pull origin main --rebase || echo "No rebase needed[span_18](start_span)"[span_18](end_span)
           
           git add last_trains.json http_cache.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: auto update state and http cache" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: auto update state and http cache" && git push)[span_19](start_span)[span_19](end_span)
