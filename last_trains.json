@@ -1,97 +1,7 @@
 {
-  "last_updated": "2026-10-12 19:29:36",
+  "last_updated": "2026-10-13 06:45:29",
   "data": {
     "shun": {
-      "230": {
-        "type": "自強(3000)(EMU3000 型電車)",
-        "dates": [
-          "10/12-"
-        ],
-        "route": "花蓮 16:43 -> 壽豐 17:01",
-        "stops": [
-          {
-            "station": "花蓮",
-            "arrival": "16:43",
-            "departure": "16:43"
-          },
-          {
-            "station": "吉安",
-            "arrival": "16:47",
-            "departure": "16:48"
-          },
-          {
-            "station": "志學",
-            "arrival": "16:55",
-            "departure": "16:56"
-          },
-          {
-            "station": "壽豐",
-            "arrival": "17:01",
-            "departure": "17:01"
-          }
-        ]
-      },
-      "5280": {
-        "type": "普悠瑪(普悠瑪)",
-        "dates": [
-          "10/12+",
-          "10/24+",
-          "10/27+"
-        ],
-        "route": "彰化 06:37 -> 花蓮 11:12",
-        "stops": [
-          {
-            "station": "彰化",
-            "arrival": "06:37",
-            "departure": "06:37"
-          },
-          {
-            "station": "臺中",
-            "arrival": "06:49",
-            "departure": "06:51"
-          },
-          {
-            "station": "豐原",
-            "arrival": "07:00",
-            "departure": "07:02"
-          },
-          {
-            "station": "板橋",
-            "arrival": "08:33",
-            "departure": "08:35"
-          },
-          {
-            "station": "臺北",
-            "arrival": "08:43",
-            "departure": "08:47"
-          },
-          {
-            "station": "松山",
-            "arrival": "08:53",
-            "departure": "08:54"
-          },
-          {
-            "station": "七堵",
-            "arrival": "09:08",
-            "departure": "09:10"
-          },
-          {
-            "station": "宜蘭",
-            "arrival": "10:05",
-            "departure": "10:07"
-          },
-          {
-            "station": "羅東",
-            "arrival": "10:13",
-            "departure": "10:15"
-          },
-          {
-            "station": "花蓮",
-            "arrival": "11:12",
-            "departure": "11:12"
-          }
-        ]
-      },
       "4542": {
         "type": "區間",
         "dates": [
@@ -1164,6 +1074,66 @@
           }
         ]
       },
+      "5280": {
+        "type": "普悠瑪(普悠瑪)",
+        "dates": [
+          "10/24+",
+          "10/27+"
+        ],
+        "route": "彰化 06:37 -> 花蓮 11:12",
+        "stops": [
+          {
+            "station": "彰化",
+            "arrival": "06:37",
+            "departure": "06:37"
+          },
+          {
+            "station": "臺中",
+            "arrival": "06:49",
+            "departure": "06:51"
+          },
+          {
+            "station": "豐原",
+            "arrival": "07:00",
+            "departure": "07:02"
+          },
+          {
+            "station": "板橋",
+            "arrival": "08:33",
+            "departure": "08:35"
+          },
+          {
+            "station": "臺北",
+            "arrival": "08:43",
+            "departure": "08:47"
+          },
+          {
+            "station": "松山",
+            "arrival": "08:53",
+            "departure": "08:54"
+          },
+          {
+            "station": "七堵",
+            "arrival": "09:08",
+            "departure": "09:10"
+          },
+          {
+            "station": "宜蘭",
+            "arrival": "10:05",
+            "departure": "10:07"
+          },
+          {
+            "station": "羅東",
+            "arrival": "10:13",
+            "departure": "10:15"
+          },
+          {
+            "station": "花蓮",
+            "arrival": "11:12",
+            "departure": "11:12"
+          }
+        ]
+      },
       "5148": {
         "type": "普悠瑪(普悠瑪)",
         "dates": [
@@ -1798,117 +1768,6 @@
       }
     },
     "ni": {
-      "5109": {
-        "type": "自強(3000)(EMU3000 型電車)",
-        "dates": [
-          "10/12+",
-          "10/26+",
-          "10/27+"
-        ],
-        "route": "七堵 08:15 -> 潮州 13:52",
-        "stops": [
-          {
-            "station": "七堵",
-            "arrival": "08:15",
-            "departure": "08:15"
-          },
-          {
-            "station": "汐止",
-            "arrival": "08:23",
-            "departure": "08:24"
-          },
-          {
-            "station": "南港",
-            "arrival": "08:32",
-            "departure": "08:33"
-          },
-          {
-            "station": "松山",
-            "arrival": "08:37",
-            "departure": "08:38"
-          },
-          {
-            "station": "臺北",
-            "arrival": "08:45",
-            "departure": "08:48"
-          },
-          {
-            "station": "板橋",
-            "arrival": "08:55",
-            "departure": "08:57"
-          },
-          {
-            "station": "桃園",
-            "arrival": "09:16",
-            "departure": "09:18"
-          },
-          {
-            "station": "中壢",
-            "arrival": "09:27",
-            "departure": "09:30"
-          },
-          {
-            "station": "新竹",
-            "arrival": "09:58",
-            "departure": "10:01"
-          },
-          {
-            "station": "豐原",
-            "arrival": "10:45",
-            "departure": "10:46"
-          },
-          {
-            "station": "臺中",
-            "arrival": "10:55",
-            "departure": "10:58"
-          },
-          {
-            "station": "彰化",
-            "arrival": "11:11",
-            "departure": "11:13"
-          },
-          {
-            "station": "斗六",
-            "arrival": "11:43",
-            "departure": "11:44"
-          },
-          {
-            "station": "嘉義",
-            "arrival": "12:03",
-            "departure": "12:05"
-          },
-          {
-            "station": "臺南",
-            "arrival": "12:45",
-            "departure": "12:46"
-          },
-          {
-            "station": "新左營",
-            "arrival": "13:11",
-            "departure": "13:13"
-          },
-          {
-            "station": "高雄",
-            "arrival": "13:21",
-            "departure": "13:23"
-          },
-          {
-            "station": "鳳山",
-            "arrival": "13:28",
-            "departure": "13:29"
-          },
-          {
-            "station": "屏東",
-            "arrival": "13:40",
-            "departure": "13:41"
-          },
-          {
-            "station": "潮州",
-            "arrival": "13:52",
-            "departure": "13:55"
-          }
-        ]
-      },
       "5145": {
         "type": "自強(推拉式自強號且無自行車車廂)",
         "dates": [
@@ -2898,6 +2757,116 @@
             "station": "臺東",
             "arrival": "13:01",
             "departure": "13:01"
+          }
+        ]
+      },
+      "5109": {
+        "type": "自強(3000)(EMU3000 型電車)",
+        "dates": [
+          "10/26+",
+          "10/27+"
+        ],
+        "route": "七堵 08:15 -> 潮州 13:52",
+        "stops": [
+          {
+            "station": "七堵",
+            "arrival": "08:15",
+            "departure": "08:15"
+          },
+          {
+            "station": "汐止",
+            "arrival": "08:23",
+            "departure": "08:24"
+          },
+          {
+            "station": "南港",
+            "arrival": "08:32",
+            "departure": "08:33"
+          },
+          {
+            "station": "松山",
+            "arrival": "08:37",
+            "departure": "08:38"
+          },
+          {
+            "station": "臺北",
+            "arrival": "08:45",
+            "departure": "08:48"
+          },
+          {
+            "station": "板橋",
+            "arrival": "08:55",
+            "departure": "08:57"
+          },
+          {
+            "station": "桃園",
+            "arrival": "09:16",
+            "departure": "09:18"
+          },
+          {
+            "station": "中壢",
+            "arrival": "09:27",
+            "departure": "09:30"
+          },
+          {
+            "station": "新竹",
+            "arrival": "09:58",
+            "departure": "10:01"
+          },
+          {
+            "station": "豐原",
+            "arrival": "10:45",
+            "departure": "10:46"
+          },
+          {
+            "station": "臺中",
+            "arrival": "10:55",
+            "departure": "10:58"
+          },
+          {
+            "station": "彰化",
+            "arrival": "11:11",
+            "departure": "11:13"
+          },
+          {
+            "station": "斗六",
+            "arrival": "11:43",
+            "departure": "11:44"
+          },
+          {
+            "station": "嘉義",
+            "arrival": "12:03",
+            "departure": "12:05"
+          },
+          {
+            "station": "臺南",
+            "arrival": "12:45",
+            "departure": "12:46"
+          },
+          {
+            "station": "新左營",
+            "arrival": "13:11",
+            "departure": "13:13"
+          },
+          {
+            "station": "高雄",
+            "arrival": "13:21",
+            "departure": "13:23"
+          },
+          {
+            "station": "鳳山",
+            "arrival": "13:28",
+            "departure": "13:29"
+          },
+          {
+            "station": "屏東",
+            "arrival": "13:40",
+            "departure": "13:41"
+          },
+          {
+            "station": "潮州",
+            "arrival": "13:52",
+            "departure": "13:55"
           }
         ]
       },
