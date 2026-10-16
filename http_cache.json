@@ -4748,7 +4748,7 @@
     "results": []
   },
   "2026-10-16": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": [
       [
         "149",
@@ -6911,7 +6911,7 @@
     ]
   },
   "2026-10-17": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": [
       [
         "3111",
@@ -7795,27 +7795,27 @@
     ]
   },
   "2026-10-18": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-10-19": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-10-20": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-10-21": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-10-22": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-10-23": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": [
       [
         "4542",
@@ -8374,6 +8374,69 @@
         "自強(3000)(EMU3000 型電車)"
       ],
       [
+        "5245",
+        5245,
+        "10/23",
+        "臺東",
+        "16:42",
+        "樹林",
+        "21:23",
+        "+",
+        [
+          {
+            "station": "臺東",
+            "arrival": "16:42",
+            "departure": "16:42"
+          },
+          {
+            "station": "關山",
+            "arrival": "17:07",
+            "departure": "17:08"
+          },
+          {
+            "station": "池上",
+            "arrival": "17:24",
+            "departure": "17:25"
+          },
+          {
+            "station": "玉里",
+            "arrival": "17:40",
+            "departure": "17:42"
+          },
+          {
+            "station": "瑞穗",
+            "arrival": "17:54",
+            "departure": "17:56"
+          },
+          {
+            "station": "花蓮",
+            "arrival": "18:44",
+            "departure": "18:47"
+          },
+          {
+            "station": "松山",
+            "arrival": "20:58",
+            "departure": "20:59"
+          },
+          {
+            "station": "臺北",
+            "arrival": "21:06",
+            "departure": "21:09"
+          },
+          {
+            "station": "板橋",
+            "arrival": "21:16",
+            "departure": "21:17"
+          },
+          {
+            "station": "樹林",
+            "arrival": "21:23",
+            "departure": "21:25"
+          }
+        ],
+        "自強(3000)(EMU3000 型電車)"
+      ],
+      [
         "5248",
         5248,
         "10/23",
@@ -8586,11 +8649,94 @@
           }
         ],
         "普悠瑪(普悠瑪)"
+      ],
+      [
+        "5433",
+        5433,
+        "10/23",
+        "七堵",
+        "19:04",
+        "彰化",
+        "22:18",
+        "+",
+        [
+          {
+            "station": "七堵",
+            "arrival": "19:04",
+            "departure": "19:04"
+          },
+          {
+            "station": "南港",
+            "arrival": "19:18",
+            "departure": "19:29"
+          },
+          {
+            "station": "松山",
+            "arrival": "19:33",
+            "departure": "19:34"
+          },
+          {
+            "station": "臺北",
+            "arrival": "19:41",
+            "departure": "19:44"
+          },
+          {
+            "station": "板橋",
+            "arrival": "19:51",
+            "departure": "19:53"
+          },
+          {
+            "station": "桃園",
+            "arrival": "20:09",
+            "departure": "20:10"
+          },
+          {
+            "station": "中壢",
+            "arrival": "20:18",
+            "departure": "20:20"
+          },
+          {
+            "station": "新竹",
+            "arrival": "20:47",
+            "departure": "20:49"
+          },
+          {
+            "station": "竹南",
+            "arrival": "21:04",
+            "departure": "21:05"
+          },
+          {
+            "station": "苗栗",
+            "arrival": "21:16",
+            "departure": "21:18"
+          },
+          {
+            "station": "豐原",
+            "arrival": "21:44",
+            "departure": "21:46"
+          },
+          {
+            "station": "臺中",
+            "arrival": "21:56",
+            "departure": "21:59"
+          },
+          {
+            "station": "新烏日",
+            "arrival": "22:07",
+            "departure": "22:09"
+          },
+          {
+            "station": "彰化",
+            "arrival": "22:18",
+            "departure": "22:18"
+          }
+        ],
+        "區間快"
       ]
     ]
   },
   "2026-10-24": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": [
       [
         "3039",
@@ -9535,6 +9681,117 @@
         "太魯閣(太魯閣)"
       ],
       [
+        "5216",
+        5216,
+        "10/24",
+        "樹林",
+        "12:04",
+        "花蓮",
+        "14:50",
+        "+",
+        [
+          {
+            "station": "樹林",
+            "arrival": "11:54",
+            "departure": "12:04"
+          },
+          {
+            "station": "板橋",
+            "arrival": "12:11",
+            "departure": "12:13"
+          },
+          {
+            "station": "臺北",
+            "arrival": "12:22",
+            "departure": "12:25"
+          },
+          {
+            "station": "松山",
+            "arrival": "12:31",
+            "departure": "12:32"
+          },
+          {
+            "station": "宜蘭",
+            "arrival": "13:35",
+            "departure": "13:37"
+          },
+          {
+            "station": "羅東",
+            "arrival": "13:44",
+            "departure": "13:46"
+          },
+          {
+            "station": "花蓮",
+            "arrival": "14:50",
+            "departure": "14:50"
+          }
+        ],
+        "太魯閣(太魯閣)"
+      ],
+      [
+        "5230",
+        5230,
+        "10/24",
+        "樹林",
+        "08:02",
+        "臺東",
+        "12:50",
+        "+",
+        [
+          {
+            "station": "樹林",
+            "arrival": "07:55",
+            "departure": "08:02"
+          },
+          {
+            "station": "板橋",
+            "arrival": "08:09",
+            "departure": "08:11"
+          },
+          {
+            "station": "臺北",
+            "arrival": "08:20",
+            "departure": "08:25"
+          },
+          {
+            "station": "松山",
+            "arrival": "08:31",
+            "departure": "08:32"
+          },
+          {
+            "station": "花蓮",
+            "arrival": "10:32",
+            "departure": "10:37"
+          },
+          {
+            "station": "瑞穗",
+            "arrival": "11:19",
+            "departure": "11:20"
+          },
+          {
+            "station": "玉里",
+            "arrival": "11:33",
+            "departure": "11:35"
+          },
+          {
+            "station": "池上",
+            "arrival": "11:59",
+            "departure": "12:01"
+          },
+          {
+            "station": "關山",
+            "arrival": "12:25",
+            "departure": "12:26"
+          },
+          {
+            "station": "臺東",
+            "arrival": "12:50",
+            "departure": "12:50"
+          }
+        ],
+        "自強(3000)(EMU3000 型電車)"
+      ],
+      [
         "5233",
         5233,
         "10/24",
@@ -10058,7 +10315,7 @@
     ]
   },
   "2026-10-25": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": [
       [
         "3039",
@@ -10394,7 +10651,7 @@
     ]
   },
   "2026-10-26": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": [
       [
         "4540",
@@ -11398,6 +11655,54 @@
         "自強(3000)(EMU3000 型電車)"
       ],
       [
+        "5219",
+        5219,
+        "10/26",
+        "花蓮",
+        "14:37",
+        "樹林",
+        "17:19",
+        "+",
+        [
+          {
+            "station": "花蓮",
+            "arrival": "14:37",
+            "departure": "14:37"
+          },
+          {
+            "station": "羅東",
+            "arrival": "15:33",
+            "departure": "15:35"
+          },
+          {
+            "station": "宜蘭",
+            "arrival": "15:41",
+            "departure": "15:43"
+          },
+          {
+            "station": "松山",
+            "arrival": "16:51",
+            "departure": "16:52"
+          },
+          {
+            "station": "臺北",
+            "arrival": "16:59",
+            "departure": "17:02"
+          },
+          {
+            "station": "板橋",
+            "arrival": "17:10",
+            "departure": "17:12"
+          },
+          {
+            "station": "樹林",
+            "arrival": "17:19",
+            "departure": "17:24"
+          }
+        ],
+        "太魯閣(太魯閣)"
+      ],
+      [
         "5223",
         5223,
         "10/26",
@@ -12030,6 +12335,185 @@
         "普悠瑪(普悠瑪)"
       ],
       [
+        "5296",
+        5296,
+        "10/26",
+        "樹林",
+        "20:04",
+        "臺東",
+        "00:23",
+        "+",
+        [
+          {
+            "station": "樹林",
+            "arrival": "19:55",
+            "departure": "20:04"
+          },
+          {
+            "station": "板橋",
+            "arrival": "20:11",
+            "departure": "20:13"
+          },
+          {
+            "station": "臺北",
+            "arrival": "20:21",
+            "departure": "20:25"
+          },
+          {
+            "station": "松山",
+            "arrival": "20:31",
+            "departure": "20:32"
+          },
+          {
+            "station": "花蓮",
+            "arrival": "22:42",
+            "departure": "22:45"
+          },
+          {
+            "station": "玉里",
+            "arrival": "23:34",
+            "departure": "23:36"
+          },
+          {
+            "station": "池上",
+            "arrival": "23:51",
+            "departure": "23:52"
+          },
+          {
+            "station": "關山",
+            "arrival": "00:00",
+            "departure": "00:02"
+          },
+          {
+            "station": "臺東",
+            "arrival": "00:23",
+            "departure": "00:23"
+          }
+        ],
+        "自強(3000)(EMU3000 型電車)"
+      ],
+      [
+        "5297",
+        5297,
+        "10/26",
+        "臺東",
+        "14:18",
+        "樹林",
+        "18:59",
+        "+",
+        [
+          {
+            "station": "臺東",
+            "arrival": "14:18",
+            "departure": "14:18"
+          },
+          {
+            "station": "關山",
+            "arrival": "14:38",
+            "departure": "14:40"
+          },
+          {
+            "station": "池上",
+            "arrival": "14:49",
+            "departure": "14:51"
+          },
+          {
+            "station": "玉里",
+            "arrival": "15:07",
+            "departure": "15:09"
+          },
+          {
+            "station": "花蓮",
+            "arrival": "16:11",
+            "departure": "16:15"
+          },
+          {
+            "station": "松山",
+            "arrival": "18:33",
+            "departure": "18:34"
+          },
+          {
+            "station": "臺北",
+            "arrival": "18:42",
+            "departure": "18:44"
+          },
+          {
+            "station": "板橋",
+            "arrival": "18:52",
+            "departure": "18:53"
+          },
+          {
+            "station": "樹林",
+            "arrival": "18:59",
+            "departure": "19:02"
+          }
+        ],
+        "自強(3000)(EMU3000 型電車)"
+      ],
+      [
+        "5316",
+        5316,
+        "10/26",
+        "花蓮",
+        "16:48",
+        "新左營",
+        "22:08",
+        "+",
+        [
+          {
+            "station": "花蓮",
+            "arrival": "16:48",
+            "departure": "16:48"
+          },
+          {
+            "station": "玉里",
+            "arrival": "17:57",
+            "departure": "18:00"
+          },
+          {
+            "station": "池上",
+            "arrival": "18:23",
+            "departure": "18:29"
+          },
+          {
+            "station": "關山",
+            "arrival": "18:41",
+            "departure": "18:56"
+          },
+          {
+            "station": "臺東",
+            "arrival": "19:19",
+            "departure": "19:25"
+          },
+          {
+            "station": "知本",
+            "arrival": "19:37",
+            "departure": "19:48"
+          },
+          {
+            "station": "潮州",
+            "arrival": "21:22",
+            "departure": "21:23"
+          },
+          {
+            "station": "屏東",
+            "arrival": "21:35",
+            "departure": "21:37"
+          },
+          {
+            "station": "高雄",
+            "arrival": "21:55",
+            "departure": "21:58"
+          },
+          {
+            "station": "新左營",
+            "arrival": "22:08",
+            "departure": "22:08"
+          }
+        ],
+        "自強(推拉式自強號且無自行車車廂)"
+      ],
+      [
         "5376",
         5376,
         "10/26",
@@ -12156,11 +12640,182 @@
           }
         ],
         "自強(3000)(EMU3000 型電車)"
+      ],
+      [
+        "5429",
+        5429,
+        "10/26",
+        "七堵",
+        "11:24",
+        "彰化",
+        "14:30",
+        "+",
+        [
+          {
+            "station": "七堵",
+            "arrival": "11:24",
+            "departure": "11:24"
+          },
+          {
+            "station": "汐止",
+            "arrival": "11:32",
+            "departure": "11:32"
+          },
+          {
+            "station": "南港",
+            "arrival": "11:39",
+            "departure": "11:40"
+          },
+          {
+            "station": "松山",
+            "arrival": "11:44",
+            "departure": "11:45"
+          },
+          {
+            "station": "臺北",
+            "arrival": "11:52",
+            "departure": "11:55"
+          },
+          {
+            "station": "板橋",
+            "arrival": "12:03",
+            "departure": "12:05"
+          },
+          {
+            "station": "桃園",
+            "arrival": "12:21",
+            "departure": "12:22"
+          },
+          {
+            "station": "中壢",
+            "arrival": "12:30",
+            "departure": "12:32"
+          },
+          {
+            "station": "新竹",
+            "arrival": "12:59",
+            "departure": "13:01"
+          },
+          {
+            "station": "竹南",
+            "arrival": "13:15",
+            "departure": "13:16"
+          },
+          {
+            "station": "苗栗",
+            "arrival": "13:27",
+            "departure": "13:29"
+          },
+          {
+            "station": "豐原",
+            "arrival": "13:54",
+            "departure": "13:55"
+          },
+          {
+            "station": "臺中",
+            "arrival": "14:06",
+            "departure": "14:13"
+          },
+          {
+            "station": "新烏日",
+            "arrival": "14:20",
+            "departure": "14:21"
+          },
+          {
+            "station": "彰化",
+            "arrival": "14:30",
+            "departure": "14:30"
+          }
+        ],
+        "區間快"
+      ],
+      [
+        "5430",
+        5430,
+        "10/26",
+        "彰化",
+        "14:51",
+        "七堵",
+        "17:58",
+        "+",
+        [
+          {
+            "station": "彰化",
+            "arrival": "14:51",
+            "departure": "14:51"
+          },
+          {
+            "station": "新烏日",
+            "arrival": "15:00",
+            "departure": "15:02"
+          },
+          {
+            "station": "臺中",
+            "arrival": "15:10",
+            "departure": "15:12"
+          },
+          {
+            "station": "豐原",
+            "arrival": "15:23",
+            "departure": "15:25"
+          },
+          {
+            "station": "苗栗",
+            "arrival": "15:48",
+            "departure": "15:50"
+          },
+          {
+            "station": "竹南",
+            "arrival": "16:01",
+            "departure": "16:02"
+          },
+          {
+            "station": "新竹",
+            "arrival": "16:16",
+            "departure": "16:17"
+          },
+          {
+            "station": "中壢",
+            "arrival": "16:46",
+            "departure": "16:47"
+          },
+          {
+            "station": "桃園",
+            "arrival": "16:56",
+            "departure": "16:58"
+          },
+          {
+            "station": "板橋",
+            "arrival": "17:17",
+            "departure": "17:19"
+          },
+          {
+            "station": "臺北",
+            "arrival": "17:28",
+            "departure": "17:31"
+          },
+          {
+            "station": "松山",
+            "arrival": "17:37",
+            "departure": "17:38"
+          },
+          {
+            "station": "南港",
+            "arrival": "17:41",
+            "departure": "17:43"
+          },
+          {
+            "station": "七堵",
+            "arrival": "17:58",
+            "departure": "17:58"
+          }
+        ],
+        "區間快"
       ]
     ]
   },
   "2026-10-27": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": [
       [
         "4542",
@@ -12487,135 +13142,135 @@
     ]
   },
   "2026-10-28": {
-    "last_modified": "Thu, 08 Oct 2026 23:39:17 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-10-29": {
-    "last_modified": "Thu, 08 Oct 2026 23:39:17 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-10-30": {
-    "last_modified": "Thu, 08 Oct 2026 23:39:17 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-10-31": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-11-01": {
-    "last_modified": "Thu, 08 Oct 2026 23:39:17 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-11-02": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-11-03": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-11-04": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-11-05": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-11-06": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-11-07": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-11-08": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-11-09": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-11-10": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-11-11": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-11-12": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-11-13": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-11-14": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-11-15": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-11-16": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-11-17": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-11-18": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-11-19": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-11-20": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-11-21": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-11-22": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-11-23": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-11-24": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-11-25": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-11-26": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-11-27": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-11-28": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   },
   "2026-11-29": {
-    "last_modified": "Thu, 15 Oct 2026 00:45:19 GMT",
+    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
     "results": []
   }
 }
