@@ -111,7 +111,7 @@ def get_valid_token():
     alive_indices = [i for i in range(len(KEY_PAIRS)) if i not in DEAD_KEYS]
 
     if not alive_indices:
-        print("[Fatal Error] ❌ 所有 TDX 金鑰皆已被標記為無效！")
+        print("[Fatal Error] 所有 TDX 金鑰皆已被標記為無效！")
         sys.exit(1)
 
     for idx in alive_indices:
@@ -121,13 +121,13 @@ def get_valid_token():
         if token:
             current_key_index = idx
             current_token = token
-            print(f"[Key System] 🎉 【{key_info['name']}】驗證成功並啟用！")
+            print(f"[Key System] 【{key_info['name']}】驗證成功並啟用！")
             return current_token
         else:
-            print(f"[Key System] ❌ 【{key_info['name']}】驗證失敗！")
+            print(f"[Key System] 【{key_info['name']}】驗證失敗！")
             DEAD_KEYS.add(idx)
 
-    print("[Fatal Error] ❌ 無可用金鑰！")
+    print("[Fatal Error] 無可用金鑰！")
     sys.exit(1)
 
 
@@ -257,7 +257,7 @@ def main():
     save_http_cache(http_cache)
 
     if not trains_a or not trains_b:
-        print("❌ 資料獲取不完全，無法比對。")
+        print("資料獲取不完全，無法比對。")
         sys.exit(1)
 
     set_a = set(trains_a.keys())
