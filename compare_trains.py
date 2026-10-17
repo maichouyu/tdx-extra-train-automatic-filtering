@@ -289,34 +289,34 @@ def main():
     lines_modified = [f"• *{t_no}次*\n  原: {old_r}\n  新: {new_r}" for t_no, old_r, new_r in sorted(modified_list, key=lambda x: int(x[0]) if x[0].isdigit() else 0)]
 
     header = (
-        f"🚆 *臺鐵時刻表兩天比對報告*\n"
+        f"*臺鐵時刻表兩天比對報告*\n"
         f"基準日（正常）：`{date_normal}`\n"
         f"目標日（調整）：`{date_target}`\n"
         f"------------------------------------\n"
     )
 
     messages = []
-    current_msg = header + f"*{f'🚫 停駛車次 ({len(suspended_list)} 筆)'}*\n"
+    current_msg = header + f"*{f'停駛車次 ({len(suspended_list)} 筆)'}*\n"
 
     if lines_suspended:
         for line in lines_suspended:
             if len(current_msg) + len(line) + 1 > 3500:
                 current_msg += "------------------------------------"
                 messages.append(current_msg)
-                current_msg = "🚆 *臺鐵時刻表兩天比對報告（停駛續集）*\n" + line + "\n"
+                current_msg = "*臺鐵時刻表兩天比對報告（停駛續集）*\n" + line + "\n"
             else:
                 current_msg += line + "\n"
     else:
         current_msg += "• 無\n"
 
-    added_section = f"\n*{f'✨ 新增車次 ({len(added_list)} 筆)'}*\n"
+    added_section = f"\n*{f'新增車次 ({len(added_list)} 筆)'}*\n"
     if lines_added:
         for line in lines_added:
             added_section += line + "\n"
     else:
         added_section += "• 無\n"
 
-    modified_section = f"\n*{f'🔄 區間調整車次 ({len(modified_list)} 筆)'}*\n"
+    modified_section = f"\n*{f'區間調整車次 ({len(modified_list)} 筆)'}*\n"
     if lines_modified:
         for line in lines_modified:
             modified_section += line + "\n"
@@ -332,7 +332,7 @@ def main():
     else:
         current_msg += "------------------------------------"
         messages.append(current_msg)
-        messages.append("🚆 *臺鐵時刻表兩天比對報告（新增與調整）*\n" + remaining_content)
+        messages.append("*臺鐵時刻表兩天比對報告（新增與調整）*\n" + remaining_content)
 
     print(f"\n總共切分成 {len(messages)} 則 Telegram 訊息發送...")
     send_telegram_messages(messages)
