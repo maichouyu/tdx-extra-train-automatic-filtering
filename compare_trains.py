@@ -40,7 +40,7 @@ if os.environ.get("TDX_CLIENT_ID_3") and os.environ.get("TDX_CLIENT_SECRET_3"):
 
 TG_BOT_TOKEN = os.environ.get("TG_BOT_TOKEN")
 
-# 讀取並彙整多個 Telegram Chat ID
+# 🔗 讀取並彙整多個 Telegram Chat ID（支援 TG_CHAT_ID 與 TG_CHAT_ID_2）
 tg_ids = []
 if os.environ.get("TG_CHAT_ID"):
     tg_ids.append(os.environ.get("TG_CHAT_ID").strip())
@@ -156,7 +156,6 @@ def fetch_single_day_timetable(api_date_str, http_cache):
                 data = response.json()
                 new_last_modified = response.headers.get("Last-Modified")
                 
-                # 解析並轉成以 train_no 為 Key 的對照字典
                 trains_map = {}
                 for item in data.get("TrainTimetables", []):
                     train_info = item.get("TrainInfo", {})
@@ -164,10 +163,10 @@ def fetch_single_day_timetable(api_date_str, http_cache):
                     if not train_no:
                         continue
 
-                    raw_note = train_info.get("Note", "")
+                    raw_note = item.get("TrainInfo", {}).get("Note", "")
                     note = raw_note.get("Zh_tw", "") if isinstance(raw_note, dict) else str(raw_note or "")
                     
-                    # 💡 修正點：只抓取官方真實的停駛標記 (SuspendedFlag == 1)，避免被常態備註（如假日停駛）誤導
+                    # 💡 嚴格使用官方 SuspendedFlag 判定停駛，排除 4714 這種常態週休誤判
                     is_suspended = train_info.get("SuspendedFlag", 0) == 1
 
                     stop_times = item.get("StopTimes", [])
@@ -213,7 +212,7 @@ def fetch_single_day_timetable(api_date_str, http_cache):
 
 
 def send_telegram_messages(messages):
-    """支援多 Chat ID 與自動分段訊息發送"""
+    """支援多 Chat ID 彙整發送"""
     if not TG_BOT_TOKEN or not TG_CHAT_ID:
         print("[TG Warning] 未設定 Telegram Bot Token 或 Chat ID，跳過。")
         return
@@ -336,7 +335,7 @@ def main():
         messages.append(current_msg)
         messages.append("*臺鐵時刻表兩天比對報告（新增與調整）*\n" + remaining_content)
 
-    print(f"\n總共切分成 {len(messages)} 則 Telegram 訊息發送...")
+    print(f"\n總共切分成 {len(messages)} 則 Telegram 訊息準備發送至所有設定的 Chat ID...")
     send_telegram_messages(messages)
 
 
