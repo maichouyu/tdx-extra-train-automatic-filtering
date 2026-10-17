@@ -13142,139 +13142,318 @@
     ]
   },
   "2026-10-28": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   },
   "2026-10-29": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   },
   "2026-10-30": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   },
   "2026-10-31": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   },
   "2026-11-01": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   },
   "2026-11-02": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   },
   "2026-11-03": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   },
   "2026-11-04": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   },
   "2026-11-05": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   },
   "2026-11-06": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   },
   "2026-11-07": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   },
   "2026-11-08": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   },
   "2026-11-09": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
-    "results": []
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "results": [
+      [
+        "1214",
+        1214,
+        "11/09",
+        "新竹",
+        "14:08",
+        "基隆",
+        "16:50",
+        "+",
+        [
+          {
+            "station": "新竹",
+            "arrival": "14:08",
+            "departure": "14:08"
+          },
+          {
+            "station": "北新竹",
+            "arrival": "14:10",
+            "departure": "14:11"
+          },
+          {
+            "station": "竹北",
+            "arrival": "14:16",
+            "departure": "14:21"
+          },
+          {
+            "station": "新豐",
+            "arrival": "14:27",
+            "departure": "14:28"
+          },
+          {
+            "station": "湖口",
+            "arrival": "14:33",
+            "departure": "14:34"
+          },
+          {
+            "station": "北湖",
+            "arrival": "14:37",
+            "departure": "14:42"
+          },
+          {
+            "station": "新富",
+            "arrival": "14:45",
+            "departure": "14:45"
+          },
+          {
+            "station": "富岡",
+            "arrival": "14:47",
+            "departure": "14:48"
+          },
+          {
+            "station": "楊梅",
+            "arrival": "14:53",
+            "departure": "14:54"
+          },
+          {
+            "station": "埔心",
+            "arrival": "14:58",
+            "departure": "15:03"
+          },
+          {
+            "station": "平鎮",
+            "arrival": "15:08",
+            "departure": "15:09"
+          },
+          {
+            "station": "中壢",
+            "arrival": "15:12",
+            "departure": "15:13"
+          },
+          {
+            "station": "內壢",
+            "arrival": "15:16",
+            "departure": "15:18"
+          },
+          {
+            "station": "桃園",
+            "arrival": "15:23",
+            "departure": "15:25"
+          },
+          {
+            "station": "鳳鳴",
+            "arrival": "15:29",
+            "departure": "15:30"
+          },
+          {
+            "station": "鶯歌",
+            "arrival": "15:35",
+            "departure": "15:36"
+          },
+          {
+            "station": "山佳",
+            "arrival": "15:40",
+            "departure": "15:40"
+          },
+          {
+            "station": "南樹林",
+            "arrival": "15:43",
+            "departure": "15:43"
+          },
+          {
+            "station": "樹林",
+            "arrival": "15:46",
+            "departure": "15:47"
+          },
+          {
+            "station": "浮洲",
+            "arrival": "15:50",
+            "departure": "15:51"
+          },
+          {
+            "station": "板橋",
+            "arrival": "15:54",
+            "departure": "15:55"
+          },
+          {
+            "station": "萬華",
+            "arrival": "15:59",
+            "departure": "16:00"
+          },
+          {
+            "station": "臺北",
+            "arrival": "16:05",
+            "departure": "16:07"
+          },
+          {
+            "station": "松山",
+            "arrival": "16:13",
+            "departure": "16:14"
+          },
+          {
+            "station": "南港",
+            "arrival": "16:17",
+            "departure": "16:17"
+          },
+          {
+            "station": "汐科",
+            "arrival": "16:22",
+            "departure": "16:23"
+          },
+          {
+            "station": "汐止",
+            "arrival": "16:25",
+            "departure": "16:26"
+          },
+          {
+            "station": "五堵",
+            "arrival": "16:28",
+            "departure": "16:28"
+          },
+          {
+            "station": "百福",
+            "arrival": "16:32",
+            "departure": "16:32"
+          },
+          {
+            "station": "七堵",
+            "arrival": "16:37",
+            "departure": "16:38"
+          },
+          {
+            "station": "八堵",
+            "arrival": "16:41",
+            "departure": "16:42"
+          },
+          {
+            "station": "三坑",
+            "arrival": "16:45",
+            "departure": "16:45"
+          },
+          {
+            "station": "基隆",
+            "arrival": "16:50",
+            "departure": "16:50"
+          }
+        ],
+        "區間"
+      ]
+    ]
   },
   "2026-11-10": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   },
   "2026-11-11": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   },
   "2026-11-12": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   },
   "2026-11-13": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   },
   "2026-11-14": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   },
   "2026-11-15": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   },
   "2026-11-16": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   },
   "2026-11-17": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   },
   "2026-11-18": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   },
   "2026-11-19": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   },
   "2026-11-20": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   },
   "2026-11-21": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   },
   "2026-11-22": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   },
   "2026-11-23": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   },
   "2026-11-24": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   },
   "2026-11-25": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   },
   "2026-11-26": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   },
   "2026-11-27": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   },
   "2026-11-28": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   },
   "2026-11-29": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   },
   "2026-11-30": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
     "results": []
   }
 }
