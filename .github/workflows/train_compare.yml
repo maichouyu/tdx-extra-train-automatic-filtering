@@ -37,9 +37,13 @@ jobs:
         env:
           TDX_CLIENT_ID: ${{ secrets.TDX_CLIENT_ID }}
           TDX_CLIENT_SECRET: ${{ secrets.TDX_CLIENT_SECRET }}
+          TDX_CLIENT_ID_2: ${{ secrets.TDX_CLIENT_ID_2 }}
+          TDX_CLIENT_SECRET_2: ${{ secrets.TDX_CLIENT_SECRET_2 }}
+          TDX_CLIENT_ID_3: ${{ secrets.TDX_CLIENT_ID_3 }}
+          TDX_CLIENT_SECRET_3: ${{ secrets.TDX_CLIENT_SECRET_3 }}
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
           TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
-          # 將 GitHub 手動輸入的參數帶入環境變數或直接傳給 Python
+          TG_CHAT_ID_2: ${{ secrets.TG_CHAT_ID_2 }}
           DATE_NORMAL: ${{ inputs.date_normal }}
           DATE_TARGET: ${{ inputs.date_target }}
         run: |
