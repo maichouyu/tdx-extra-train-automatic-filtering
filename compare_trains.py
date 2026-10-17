@@ -9,6 +9,8 @@ sys.stdout.reconfigure(line_buffering=True)
 # 讀取環境變數金鑰
 CLIENT_ID = os.environ.get("TDX_CLIENT_ID")
 CLIENT_SECRET = os.environ.get("TDX_CLIENT_SECRET")
+TG_BOT_TOKEN = os.environ.get("TG_BOT_TOKEN")
+TG_CHAT_ID = os.environ.get("TG_CHAT_ID")
 
 
 def get_tdx_token(client_id, client_secret):
@@ -70,7 +72,7 @@ def fetch_day_timetable(api_date_str, token):
         else str(raw_note or "")
     )
 
-    # 檢查是否整車停駛 (SuspendedFlag == 1 或者是 Note 包含停駛)
+    # 檢查是否整車停駛
     is_suspended = train_info.get("SuspendedFlag", 0) == 1 or "停駛" in note
 
     stop_times = item.get("StopTimes", [])
@@ -117,8 +119,39 @@ def fetch_day_timetable(api_date_str, token):
   return trains_map
 
 
+def send_telegram_message(message):
+  """發送訊息至 Telegram"""
+  if not TG_BOT_TOKEN or not TG_CHAT_ID:
+    print("[TG Warning] 未設定 Telegram Bot Token 或 Chat ID，跳過發送。")
+    return
+
+  chat_ids = [
+      c.strip()
+      for c in TG_CHAT_ID.replace(";", ",").replace(" ", ",").split(",")
+      if c.strip()
+  ]
+  url = f"https://api.telegram.org/bot{TG_BOT_TOKEN}/sendMessage"
+
+  for target_id in chat_ids:
+    print(f"[TG] 發送訊息至 Chat ID: {target_id}")
+    payload = {
+        "chat_id": target_id,
+        "text": message,
+        "parse_mode": "Markdown",
+        "disable_web_page_preview": True,
+    }
+    try:
+      res = requests.post(url, json=payload, timeout=8)
+      if res.status_code == 200:
+        print(f"[TG] 發送至 {target_id} 成功！")
+      else:
+        print(f"[TG Error] 發送至 {target_id} 失敗: {res.text}")
+    except Exception as e:
+        print(f"[TG Exception] 發送錯誤: {e}")
+
+
 def compare_two_dates(date_a, date_b):
-  """比對基準日 (Date A，例如正常日) 與目標日 (Date B，例如減班日)"""
+  """比對基準日與目標日，並組成報表發送至 Telegram"""
   token = get_tdx_token(CLIENT_ID, CLIENT_SECRET)
   if not token:
     return
@@ -133,21 +166,21 @@ def compare_two_dates(date_a, date_b):
   set_a = set(trains_a.keys())
   set_b = set(trains_b.keys())
 
-  # 1. 停駛車次：在 A 存在，但在 B 完全消失、或是 B 的 is_suspended 為 True
+  # 1. 停駛車次
   suspended_list = []
   for t_no in set_a:
     if t_no not in set_b:
-      suspended_list.append((t_no, trains_a[t_no]["route"], "完全自時刻表中移除"))
+      suspended_list.append((t_no, trains_a[t_no]["route"], "自時刻表中移除"))
     elif trains_b[t_no]["is_suspended"]:
-      suspended_list.append((t_no, trains_b[t_no]["route"], "狀態標示為停駛"))
+      suspended_list.append((t_no, trains_b[t_no]["route"], "標示為停駛"))
 
-  # 2. 新增/加開車次：A 沒有，B 新出現
+  # 2. 新增/加開車次
   added_list = []
   for t_no in set_b:
     if t_no not in set_a:
       added_list.append((t_no, trains_b[t_no]["route"]))
 
-  # 3. 區間調整車次：兩天都有開，但起訖站（route）或 Note 有變動
+  # 3. 區間調整車次
   modified_list = []
   common_trains = set_a.intersection(set_b)
   for t_no in common_trains:
@@ -158,40 +191,52 @@ def compare_two_dates(date_a, date_b):
           (t_no, info_a["route"], info_b["route"], info_b["note"])
       )
 
-  # --- 印出比對報告 ---
-  print("\n" + "=" * 40)
-  print(f"📊 臺鐵時刻表異動比對報告")
-  print(f"基準日（正常）：{date_a} | 目標日（調整）：{date_b}")
-  print("=" * 40)
+  # --- 組裝 Telegram 訊息 ---
+  report = (
+      f"🚆 *臺鐵時刻表異動比對報告*\n"
+      f"基準日：`{date_a}`\n"
+      f"目標日：`{date_b}`\n"
+      f"------------------------------------\n"
+  )
 
-  print(f"\n【🚫 停駛車次總計：{len(suspended_list)} 筆】")
-  for t_no, route, reason in sorted(
-      suspended_list, key=lambda x: int(x[0]) if x[0].isdigit() else 0
-  ):
-    print(f"• {t_no}次 ({route}) - 原因: {reason}")
+  report += f"*{f'🚫 停駛車次 ({len(suspended_list)} 筆)'}*\n"
+  if suspended_list:
+    for t_no, route, reason in sorted(
+        suspended_list, key=lambda x: int(x[0]) if x[0].isdigit() else 0
+    ):
+      report += f"• *{t_no}次* ({route}) - {reason}\n"
+  else:
+    report += "• 無\n"
 
-  print(f"\n【✨ 新增/加開車次總計：{len(added_list)} 筆】")
-  for t_no, route in sorted(
-      added_list, key=lambda x: int(x[0]) if x[0].isdigit() else 0
-  ):
-    print(f"• {t_no}次 ({route})")
+  report += f"\n*{f'✨ 新增車次 ({len(added_list)} 筆)'}*\n"
+  if added_list:
+    for t_no, route in sorted(
+        added_list, key=lambda x: int(x[0]) if x[0].isdigit() else 0
+    ):
+      report += f"• *{t_no}次* ({route})\n"
+  else:
+    report += "• 無\n"
 
-  print(f"\n【🔄 區間調整行駛車次總計：{len(modified_list)} 筆】")
-  for t_no, old_r, new_r, note in sorted(
-      modified_list, key=lambda x: int(x[0]) if x[0].isdigit() else 0
-  ):
-    print(f"• {t_no}次")
-    print(f"  原區間: {old_r}")
-    print(f"  新區間: {new_r}")
-    if note:
-      print(f"  備註: {note}")
-  print("=" * 40)
+  report += f"\n*{f'🔄 區間調整車次 ({len(modified_list)} 筆)'}*\n"
+  if modified_list:
+    for t_no, old_r, new_r, note in sorted(
+        modified_list, key=lambda x: int(x[0]) if x[0].isdigit() else 0
+    ):
+      report += f"• *{t_no}次*\n  原: {old_r}\n  新: {new_r}\n"
+  else:
+    report += "• 無\n"
+
+  report += "------------------------------------"
+
+  # 印在 Console
+  print("\n" + report)
+
+  # 發送到 Telegram
+  send_telegram_message(report)
 
 
 if __name__ == "__main__":
-  # 測試比對：你可以將日期換成你要的星期一 (例如 11/2 與 11/9)
-  # 由於是未來或過去的日期，請確保 TDX 資料庫中有該日資料
-  date_normal = "2026-11-02"  # 基準日 (一)
-  date_target = "2026-11-09"  # 異動日 (一)
+  date_normal = os.environ.get("DATE_NORMAL", "2026-11-02")
+  date_target = os.environ.get("DATE_TARGET", "2026-11-09")
 
   compare_two_dates(date_normal, date_target)
