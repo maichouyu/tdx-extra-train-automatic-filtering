@@ -211,7 +211,7 @@ def fetch_single_day_timetable(api_date_str, http_cache):
 
 
 def send_telegram_messages(messages):
-    """支援多 Chat ID 發送 Telegram 報表"""
+    """支援多 Chat ID 與自動分段訊息發送"""
     if not TG_BOT_TOKEN or not TG_CHAT_ID:
         print("[TG Warning] 未設定 Telegram Bot Token 或 Chat ID，跳過。")
         return
@@ -283,40 +283,49 @@ def main():
         if not trains_b[t_no]["is_suspended"] and trains_a[t_no]["route"] != trains_b[t_no]["route"]:
             modified_list.append((t_no, trains_a[t_no]["route"], trains_b[t_no]["route"]))
 
-    # 組裝 TG 訊息
-    report = (
+    # 組裝 TG 訊息與自動分段
+    header = (
         f"🚆 *臺鐵時刻表異動比對報告*\n"
         f"基準日：`{date_normal}`\n"
         f"目標日：`{date_target}`\n"
-        f"------------------------------------\n\n"
-        f"*{f'🚫 停駛車次 ({len(suspended_list)} 筆)'}*\n"
+        f"------------------------------------\n"
     )
+
+    suspended_text = f"*{f'🚫 停駛車次 ({len(suspended_list)} 筆)'}*\n"
     if suspended_list:
         for t_no, route, reason in sorted(suspended_list, key=lambda x: int(x[0]) if x[0].isdigit() else 0):
-            report += f"• *{t_no}次* ({route}) - {reason}\n"
+            suspended_text += f"• *{t_no}次* ({route}) - {reason}\n"
     else:
-        report += "• 無\n"
+        suspended_text += "• 無\n"
 
-    report += f"\n*{f'✨ 新增車次 ({len(added_list)} 筆)'}*\n"
+    added_text = f"\n*{f'✨ 新增車次 ({len(added_list)} 筆)'}*\n"
     if added_list:
         for t_no, route in sorted(added_list, key=lambda x: int(x[0]) if x[0].isdigit() else 0):
-            report += f"• *{t_no}次* ({route})\n"
+            added_text += f"• *{t_no}次* ({route})\n"
     else:
-        report += "• 無\n"
+        added_text += "• 無\n"
 
-    report += f"\n*{f'🔄 區間調整車次 ({len(modified_list)} 筆)'}*\n"
+    modified_text = f"\n*{f'🔄 區間調整車次 ({len(modified_list)} 筆)'}*\n"
     if modified_list:
         for t_no, old_r, new_r in sorted(modified_list, key=lambda x: int(x[0]) if x[0].isdigit() else 0):
-            report += f"• *{t_no}次*\n  原: {old_r}\n  新: {new_r}\n"
+            modified_text += f"• *{t_no}次*\n  原: {old_r}\n  新: {new_r}\n"
     else:
-        report += "• 無\n"
+        modified_text += "• 無\n"
 
-    report += "------------------------------------"
+    footer = "\n------------------------------------"
 
-    print("\n" + report)
-    send_telegram_messages([report])
+    full_content = suspended_text + added_text + modified_text
+    messages = []
+
+    if len(header + full_content + footer) <= 3800:
+        messages.append(header + full_content + footer)
+    else:
+        messages.append(header + suspended_text + "------------------------------------ (續下頁)")
+        messages.append(f"🚆 *臺鐵時刻表異動比對報告（續）*\n" + added_text + modified_text + footer)
+
+    print(f"\n總共產生 {len(messages)} 則 Telegram 訊息準備發送...")
+    send_telegram_messages(messages)
 
 
 if __name__ == "__main__":
     main()
-a
