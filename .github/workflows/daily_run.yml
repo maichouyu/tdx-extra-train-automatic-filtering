@@ -1,4 +1,4 @@
-name: Daily TRA Extra Train Auto Sync (45 Days)
+name: 自動監測45天內加減班車
 
 on:
   schedule:
