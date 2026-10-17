@@ -283,47 +283,58 @@ def main():
         if not trains_b[t_no]["is_suspended"] and trains_a[t_no]["route"] != trains_b[t_no]["route"]:
             modified_list.append((t_no, trains_a[t_no]["route"], trains_b[t_no]["route"]))
 
-    # 組裝 TG 訊息與自動分段
+    # 準備逐行資料
+    lines_suspended = [f"• *{t_no}次* ({route}) - {reason}" for t_no, route, reason in sorted(suspended_list, key=lambda x: int(x[0]) if x[0].isdigit() else 0)]
+    lines_added = [f"• *{t_no}次* ({route})" for t_no, route in sorted(added_list, key=lambda x: int(x[0]) if x[0].isdigit() else 0)]
+    lines_modified = [f"• *{t_no}次*\n  原: {old_r}\n  新: {new_r}" for t_no, old_r, new_r in sorted(modified_list, key=lambda x: int(x[0]) if x[0].isdigit() else 0)]
+
     header = (
-        f"🚆 *臺鐵時刻表異動比對報告*\n"
-        f"基準日：`{date_normal}`\n"
-        f"目標日：`{date_target}`\n"
+        f"🚆 *臺鐵時刻表兩天比對報告*\n"
+        f"基準日（正常）：`{date_normal}`\n"
+        f"目標日（調整）：`{date_target}`\n"
         f"------------------------------------\n"
     )
 
-    suspended_text = f"*{f'🚫 停駛車次 ({len(suspended_list)} 筆)'}*\n"
-    if suspended_list:
-        for t_no, route, reason in sorted(suspended_list, key=lambda x: int(x[0]) if x[0].isdigit() else 0):
-            suspended_text += f"• *{t_no}次* ({route}) - {reason}\n"
-    else:
-        suspended_text += "• 無\n"
+    messages = []
+    current_msg = header + f"*{f'🚫 停駛車次 ({len(suspended_list)} 筆)'}*\n"
 
-    added_text = f"\n*{f'✨ 新增車次 ({len(added_list)} 筆)'}*\n"
-    if added_list:
-        for t_no, route in sorted(added_list, key=lambda x: int(x[0]) if x[0].isdigit() else 0):
-            added_text += f"• *{t_no}次* ({route})\n"
+    if lines_suspended:
+        for line in lines_suspended:
+            if len(current_msg) + len(line) + 1 > 3500:
+                current_msg += "------------------------------------"
+                messages.append(current_msg)
+                current_msg = "🚆 *臺鐵時刻表兩天比對報告（停駛續集）*\n" + line + "\n"
+            else:
+                current_msg += line + "\n"
     else:
-        added_text += "• 無\n"
+        current_msg += "• 無\n"
 
-    modified_text = f"\n*{f'🔄 區間調整車次 ({len(modified_list)} 筆)'}*\n"
-    if modified_list:
-        for t_no, old_r, new_r in sorted(modified_list, key=lambda x: int(x[0]) if x[0].isdigit() else 0):
-            modified_text += f"• *{t_no}次*\n  原: {old_r}\n  新: {new_r}\n"
+    added_section = f"\n*{f'✨ 新增車次 ({len(added_list)} 筆)'}*\n"
+    if lines_added:
+        for line in lines_added:
+            added_section += line + "\n"
     else:
-        modified_text += "• 無\n"
+        added_section += "• 無\n"
+
+    modified_section = f"\n*{f'🔄 區間調整車次 ({len(modified_list)} 筆)'}*\n"
+    if lines_modified:
+        for line in lines_modified:
+            modified_section += line + "\n"
+    else:
+        modified_section += "• 無\n"
 
     footer = "\n------------------------------------"
 
-    full_content = suspended_text + added_text + modified_text
-    messages = []
-
-    if len(header + full_content + footer) <= 3800:
-        messages.append(header + full_content + footer)
+    remaining_content = added_section + modified_section + footer
+    if len(current_msg) + len(remaining_content) <= 3800:
+        current_msg += remaining_content
+        messages.append(current_msg)
     else:
-        messages.append(header + suspended_text + "------------------------------------ (續下頁)")
-        messages.append(f"🚆 *臺鐵時刻表異動比對報告（續）*\n" + added_text + modified_text + footer)
+        current_msg += "------------------------------------"
+        messages.append(current_msg)
+        messages.append("🚆 *臺鐵時刻表兩天比對報告（新增與調整）*\n" + remaining_content)
 
-    print(f"\n總共產生 {len(messages)} 則 Telegram 訊息準備發送...")
+    print(f"\n總共切分成 {len(messages)} 則 Telegram 訊息發送...")
     send_telegram_messages(messages)
 
 
