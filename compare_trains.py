@@ -166,7 +166,9 @@ def fetch_single_day_timetable(api_date_str, http_cache):
 
                     raw_note = train_info.get("Note", "")
                     note = raw_note.get("Zh_tw", "") if isinstance(raw_note, dict) else str(raw_note or "")
-                    is_suspended = train_info.get("SuspendedFlag", 0) == 1 or "停駛" in note
+                    
+                    # 💡 修正點：只抓取官方真實的停駛標記 (SuspendedFlag == 1)，避免被常態備註（如假日停駛）誤導
+                    is_suspended = train_info.get("SuspendedFlag", 0) == 1
 
                     stop_times = item.get("StopTimes", [])
                     route_str = "未知區間"
