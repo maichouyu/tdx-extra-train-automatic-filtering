@@ -6,6 +6,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timedelta, timezone
 import requests
+import re
 
 # 強制 Log 即時印出，不等待 Buffer
 sys.stdout.reconfigure(line_buffering=True)
@@ -164,8 +165,34 @@ def is_extra_train(train_type, note, train_num):
     return "民國" in note or (6000 <= train_num <= 6999)
 
 
+def process_note(raw_note):
+    """
+    處理備註條件：
+    - 如果有民國字眼，且結尾為行駛（或包含 民國...行駛）：
+      - 若整個備註剛好是 民國...行駛，則去掉整個備註（回傳空字串）。
+      - 若除了民國...行駛外還有其他文字，則去掉民國...行駛部分，留下剩餘的作為備註。
+    """
+    if not raw_note:
+        return ""
+    
+    note = raw_note.strip()
+    
+    # 檢查是否包含「民國」與「行駛」
+    if "民國" in note and "行駛" in note:
+        # 使用正規表達式匹配從「民國」開始到「行駛」結束的字串（支援中間各種日期與文字）
+        # 例如：民國\d+年.*?行駛 或更寬鬆的匹配
+        pattern = r"民國.*?[行駛]"
+        # 尋找符合民國...行駛的區段並移除
+        cleaned = re.sub(r"民國.*?行駛", "", note).strip()
+        # 移除可能殘留的標點符號（如逗號、分號、空格等）
+        cleaned = re.sub(r"^[,，、\s]+|[,，、\s]+$", "", cleaned)
+        return cleaned
+    
+    return note
+
+
 def parse_train_data(data, date_str):
-    """將 API 回傳的原始資料解析為加班車清單（含車種、備註與全車站時刻）"""
+    """將 API 回傳的原始資料解析為加班車清單（含車種、處理後的備註與全車站時刻）"""
     results = []
     for item in data.get("TrainTimetables", []):
         train_info = item.get("TrainInfo", {})
@@ -174,11 +201,12 @@ def parse_train_data(data, date_str):
         if train_no and train_no.isdigit():
             train_num = int(train_no)
             raw_note = train_info.get("Note", "")
-            note = (
+            note_str = (
                 raw_note.get("Zh_tw", "")
                 if isinstance(raw_note, dict)
                 else str(raw_note or "")
             )
+            
             train_type_dict = train_info.get("TrainTypeName", {})
             train_type = (
                 train_type_dict.get("Zh_tw", "")
@@ -187,12 +215,16 @@ def parse_train_data(data, date_str):
             )
 
             if (
-                is_extra_train(train_type, note, train_num)
+                is_extra_train(train_type, note_str, train_num)
                 and train_no not in EXCLUDE_TRAINS
             ):
                 status_sign = (
-                    "+" if "行駛" in note else ("-" if "停駛" in note else "")
+                    "+" if "行駛" in note_str else ("-" if "停駛" in note_str else "")
                 )
+                
+                # 處理備註條件
+                processed_note = process_note(note_str)
+
                 stop_times = item.get("StopTimes", [])
                 start_station, end_station, start_time, end_time = (
                     "",
@@ -245,8 +277,8 @@ def parse_train_data(data, date_str):
                     end_time,
                     status_sign,
                     stops,
-                    train_type,  # 車種資訊
-                    note,        # 備註資訊
+                    train_type,     # 車種資訊
+                    processed_note, # 處理後的備註
                 ])
     return results
 
@@ -324,7 +356,7 @@ def load_previous_trains():
 
 
 def save_current_trains(train_dates):
-    """儲存含車種、備註、站點與更新時間的全新 JSON"""
+    """儲存含車種、過濾後備註、站點與更新時間的 JSON"""
     tz_taipei = timezone(timedelta(hours=8))
     now_str = datetime.now(tz_taipei).strftime("%Y-%m-%d %H:%M:%S")
 
@@ -334,7 +366,7 @@ def save_current_trains(train_dates):
         for train_no, info in trains.items():
             serializable[dir_key][train_no] = {
                 "type": info.get("type", ""),
-                "note": info.get("note", ""),  # 寫入備註供網頁渲染
+                "note": info.get("note", ""),  # 寫入處理後的備註供網頁渲染
                 "dates": sorted(list(info["dates"])),
                 "route": info["route"],
                 "stops": info.get("stops", []),
@@ -525,7 +557,7 @@ def main():
                             status_sign,
                             stops,
                             train_type,
-                            note,  # 接收備註
+                            note,  # 接收處理後的備註
                         ) = item
                         total_found += 1
                         dir_key = "shun" if train_num % 2 == 0 else "ni"
