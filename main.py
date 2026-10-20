@@ -165,7 +165,7 @@ def is_extra_train(train_type, note, train_num):
 
 
 def parse_train_data(data, date_str):
-    """將 API 回傳的原始資料解析為加班車清單（含車種與全車站時刻）"""
+    """將 API 回傳的原始資料解析為加班車清單（含車種、備註與全車站時刻）"""
     results = []
     for item in data.get("TrainTimetables", []):
         train_info = item.get("TrainInfo", {})
@@ -245,7 +245,8 @@ def parse_train_data(data, date_str):
                     end_time,
                     status_sign,
                     stops,
-                    train_type,  # 👈 補上車種資訊
+                    train_type,  # 車種資訊
+                    note,        # 備註資訊
                 ])
     return results
 
@@ -323,7 +324,7 @@ def load_previous_trains():
 
 
 def save_current_trains(train_dates):
-    """儲存含車種、站點與更新時間的全新 JSON"""
+    """儲存含車種、備註、站點與更新時間的全新 JSON"""
     tz_taipei = timezone(timedelta(hours=8))
     now_str = datetime.now(tz_taipei).strftime("%Y-%m-%d %H:%M:%S")
 
@@ -332,7 +333,8 @@ def save_current_trains(train_dates):
         serializable[dir_key] = {}
         for train_no, info in trains.items():
             serializable[dir_key][train_no] = {
-                "type": info.get("type", ""),  # 👈 寫入車種供網頁渲染
+                "type": info.get("type", ""),
+                "note": info.get("note", ""),  # 寫入備註供網頁渲染
                 "dates": sorted(list(info["dates"])),
                 "route": info["route"],
                 "stops": info.get("stops", []),
@@ -522,7 +524,8 @@ def main():
                             end_time,
                             status_sign,
                             stops,
-                            train_type,  # 👈 接收車種
+                            train_type,
+                            note,  # 接收備註
                         ) = item
                         total_found += 1
                         dir_key = "shun" if train_num % 2 == 0 else "ni"
@@ -545,7 +548,8 @@ def main():
                             )
 
                             train_dates[dir_key][train_no] = {
-                                "type": train_type,  # 👈 寫入種類
+                                "type": train_type,
+                                "note": note,  # 寫入備註
                                 "dates": set(),
                                 "route": route_str,
                                 "stops": stops,
