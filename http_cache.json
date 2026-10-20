@@ -7803,19 +7803,19 @@
     "results": []
   },
   "2026-10-20": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-10-21": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-10-22": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-10-23": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": [
       [
         "4542",
@@ -8736,7 +8736,7 @@
     ]
   },
   "2026-10-24": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": [
       [
         "3039",
@@ -10315,7 +10315,7 @@
     ]
   },
   "2026-10-25": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": [
       [
         "3039",
@@ -10651,7 +10651,7 @@
     ]
   },
   "2026-10-26": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": [
       [
         "4540",
@@ -12815,7 +12815,7 @@
     ]
   },
   "2026-10-27": {
-    "last_modified": "Fri, 16 Oct 2026 01:45:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": [
       [
         "4542",
@@ -13142,55 +13142,879 @@
     ]
   },
   "2026-10-28": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-10-29": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-10-30": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-10-31": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
-    "results": []
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
+    "results": [
+      [
+        "3348",
+        3348,
+        "10/31",
+        "枋寮",
+        "22:19",
+        "臺南",
+        "00:42",
+        "+",
+        [
+          {
+            "station": "枋寮",
+            "arrival": "22:19",
+            "departure": "22:19"
+          },
+          {
+            "station": "東海",
+            "arrival": "22:23",
+            "departure": "22:24"
+          },
+          {
+            "station": "佳冬",
+            "arrival": "22:28",
+            "departure": "22:30"
+          },
+          {
+            "station": "林邊",
+            "arrival": "22:36",
+            "departure": "22:37"
+          },
+          {
+            "station": "鎮安",
+            "arrival": "22:40",
+            "departure": "22:41"
+          },
+          {
+            "station": "南州",
+            "arrival": "22:45",
+            "departure": "22:46"
+          },
+          {
+            "station": "崁頂",
+            "arrival": "22:49",
+            "departure": "22:49"
+          },
+          {
+            "station": "潮州",
+            "arrival": "22:54",
+            "departure": "22:55"
+          },
+          {
+            "station": "竹田",
+            "arrival": "22:59",
+            "departure": "22:59"
+          },
+          {
+            "station": "西勢",
+            "arrival": "23:03",
+            "departure": "23:04"
+          },
+          {
+            "station": "麟洛",
+            "arrival": "23:06",
+            "departure": "23:07"
+          },
+          {
+            "station": "歸來",
+            "arrival": "23:09",
+            "departure": "23:10"
+          },
+          {
+            "station": "屏東",
+            "arrival": "23:13",
+            "departure": "23:14"
+          },
+          {
+            "station": "六塊厝",
+            "arrival": "23:16",
+            "departure": "23:17"
+          },
+          {
+            "station": "九曲堂",
+            "arrival": "23:21",
+            "departure": "23:22"
+          },
+          {
+            "station": "後庄",
+            "arrival": "23:25",
+            "departure": "23:26"
+          },
+          {
+            "station": "鳳山",
+            "arrival": "23:30",
+            "departure": "23:31"
+          },
+          {
+            "station": "正義",
+            "arrival": "23:33",
+            "departure": "23:33"
+          },
+          {
+            "station": "科工館",
+            "arrival": "23:36",
+            "departure": "23:37"
+          },
+          {
+            "station": "民族",
+            "arrival": "23:38",
+            "departure": "23:39"
+          },
+          {
+            "station": "高雄",
+            "arrival": "23:41",
+            "departure": "23:43"
+          },
+          {
+            "station": "三塊厝",
+            "arrival": "23:44",
+            "departure": "23:45"
+          },
+          {
+            "station": "鼓山",
+            "arrival": "23:47",
+            "departure": "23:48"
+          },
+          {
+            "station": "美術館",
+            "arrival": "23:50",
+            "departure": "23:51"
+          },
+          {
+            "station": "內惟",
+            "arrival": "23:53",
+            "departure": "23:53"
+          },
+          {
+            "station": "左營",
+            "arrival": "23:55",
+            "departure": "23:55"
+          },
+          {
+            "station": "新左營",
+            "arrival": "23:59",
+            "departure": "00:01"
+          },
+          {
+            "station": "楠梓",
+            "arrival": "00:05",
+            "departure": "00:06"
+          },
+          {
+            "station": "橋頭",
+            "arrival": "00:09",
+            "departure": "00:10"
+          },
+          {
+            "station": "岡山",
+            "arrival": "00:13",
+            "departure": "00:14"
+          },
+          {
+            "station": "路竹",
+            "arrival": "00:20",
+            "departure": "00:20"
+          },
+          {
+            "station": "大湖",
+            "arrival": "00:24",
+            "departure": "00:24"
+          },
+          {
+            "station": "中洲",
+            "arrival": "00:28",
+            "departure": "00:28"
+          },
+          {
+            "station": "仁德",
+            "arrival": "00:31",
+            "departure": "00:32"
+          },
+          {
+            "station": "保安",
+            "arrival": "00:34",
+            "departure": "00:35"
+          },
+          {
+            "station": "臺南",
+            "arrival": "00:42",
+            "departure": "00:42"
+          }
+        ],
+        "區間"
+      ]
+    ]
   },
   "2026-11-01": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-11-02": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-11-03": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-11-04": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-11-05": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-11-06": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-11-07": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-11-08": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
-    "results": []
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
+    "results": [
+      [
+        "2008",
+        2008,
+        "11/08",
+        "嘉義",
+        "04:40",
+        "基隆",
+        "09:50",
+        "+",
+        [
+          {
+            "station": "嘉義",
+            "arrival": "04:40",
+            "departure": "04:40"
+          },
+          {
+            "station": "民雄",
+            "arrival": "04:48",
+            "departure": "04:48"
+          },
+          {
+            "station": "大林",
+            "arrival": "04:53",
+            "departure": "04:53"
+          },
+          {
+            "station": "斗南",
+            "arrival": "05:00",
+            "departure": "05:01"
+          },
+          {
+            "station": "斗六",
+            "arrival": "05:07",
+            "departure": "05:08"
+          },
+          {
+            "station": "林內",
+            "arrival": "05:15",
+            "departure": "05:16"
+          },
+          {
+            "station": "二水",
+            "arrival": "05:22",
+            "departure": "05:23"
+          },
+          {
+            "station": "田中",
+            "arrival": "05:28",
+            "departure": "05:30"
+          },
+          {
+            "station": "社頭",
+            "arrival": "05:34",
+            "departure": "05:35"
+          },
+          {
+            "station": "員林",
+            "arrival": "05:41",
+            "departure": "05:42"
+          },
+          {
+            "station": "彰化",
+            "arrival": "05:56",
+            "departure": "05:58"
+          },
+          {
+            "station": "沙鹿",
+            "arrival": "06:16",
+            "departure": "06:17"
+          },
+          {
+            "station": "清水",
+            "arrival": "06:20",
+            "departure": "06:21"
+          },
+          {
+            "station": "大甲",
+            "arrival": "06:30",
+            "departure": "06:32"
+          },
+          {
+            "station": "苑裡",
+            "arrival": "06:41",
+            "departure": "06:42"
+          },
+          {
+            "station": "通霄",
+            "arrival": "06:48",
+            "departure": "06:49"
+          },
+          {
+            "station": "白沙屯",
+            "arrival": "06:56",
+            "departure": "06:57"
+          },
+          {
+            "station": "後龍",
+            "arrival": "07:07",
+            "departure": "07:08"
+          },
+          {
+            "station": "竹南",
+            "arrival": "07:20",
+            "departure": "07:21"
+          },
+          {
+            "station": "新竹",
+            "arrival": "07:34",
+            "departure": "07:36"
+          },
+          {
+            "station": "竹北",
+            "arrival": "07:41",
+            "departure": "07:41"
+          },
+          {
+            "station": "新豐",
+            "arrival": "07:46",
+            "departure": "07:46"
+          },
+          {
+            "station": "湖口",
+            "arrival": "07:51",
+            "departure": "07:52"
+          },
+          {
+            "station": "楊梅",
+            "arrival": "08:00",
+            "departure": "08:02"
+          },
+          {
+            "station": "埔心",
+            "arrival": "08:05",
+            "departure": "08:06"
+          },
+          {
+            "station": "中壢",
+            "arrival": "08:12",
+            "departure": "08:14"
+          },
+          {
+            "station": "內壢",
+            "arrival": "08:17",
+            "departure": "08:18"
+          },
+          {
+            "station": "桃園",
+            "arrival": "08:24",
+            "departure": "08:26"
+          },
+          {
+            "station": "鶯歌",
+            "arrival": "08:33",
+            "departure": "08:35"
+          },
+          {
+            "station": "樹林",
+            "arrival": "08:42",
+            "departure": "08:44"
+          },
+          {
+            "station": "板橋",
+            "arrival": "08:50",
+            "departure": "08:52"
+          },
+          {
+            "station": "萬華",
+            "arrival": "08:56",
+            "departure": "08:57"
+          },
+          {
+            "station": "臺北",
+            "arrival": "09:02",
+            "departure": "09:05"
+          },
+          {
+            "station": "松山",
+            "arrival": "09:11",
+            "departure": "09:12"
+          },
+          {
+            "station": "南港",
+            "arrival": "09:15",
+            "departure": "09:16"
+          },
+          {
+            "station": "汐科",
+            "arrival": "09:21",
+            "departure": "09:22"
+          },
+          {
+            "station": "汐止",
+            "arrival": "09:24",
+            "departure": "09:28"
+          },
+          {
+            "station": "七堵",
+            "arrival": "09:37",
+            "departure": "09:39"
+          },
+          {
+            "station": "八堵",
+            "arrival": "09:43",
+            "departure": "09:43"
+          },
+          {
+            "station": "基隆",
+            "arrival": "09:50",
+            "departure": "09:50"
+          }
+        ],
+        "區間快"
+      ],
+      [
+        "2207",
+        2207,
+        "11/08",
+        "臺中",
+        "04:20",
+        "田中",
+        "05:15",
+        "+",
+        [
+          {
+            "station": "臺中",
+            "arrival": "04:20",
+            "departure": "04:20"
+          },
+          {
+            "station": "五權",
+            "arrival": "04:23",
+            "departure": "04:23"
+          },
+          {
+            "station": "大慶",
+            "arrival": "04:26",
+            "departure": "04:26"
+          },
+          {
+            "station": "烏日",
+            "arrival": "04:29",
+            "departure": "04:30"
+          },
+          {
+            "station": "新烏日",
+            "arrival": "04:31",
+            "departure": "04:32"
+          },
+          {
+            "station": "成功",
+            "arrival": "04:35",
+            "departure": "04:35"
+          },
+          {
+            "station": "彰化",
+            "arrival": "04:42",
+            "departure": "04:44"
+          },
+          {
+            "station": "花壇",
+            "arrival": "04:52",
+            "departure": "04:53"
+          },
+          {
+            "station": "大村",
+            "arrival": "04:57",
+            "departure": "04:57"
+          },
+          {
+            "station": "員林",
+            "arrival": "05:01",
+            "departure": "05:02"
+          },
+          {
+            "station": "永靖",
+            "arrival": "05:05",
+            "departure": "05:06"
+          },
+          {
+            "station": "社頭",
+            "arrival": "05:09",
+            "departure": "05:10"
+          },
+          {
+            "station": "田中",
+            "arrival": "05:15",
+            "departure": "05:15"
+          }
+        ],
+        "區間"
+      ],
+      [
+        "3137",
+        3137,
+        "11/08",
+        "臺中",
+        "04:36",
+        "潮州",
+        "09:31",
+        "+",
+        [
+          {
+            "station": "臺中",
+            "arrival": "04:36",
+            "departure": "04:36"
+          },
+          {
+            "station": "五權",
+            "arrival": "04:39",
+            "departure": "04:39"
+          },
+          {
+            "station": "大慶",
+            "arrival": "04:42",
+            "departure": "04:42"
+          },
+          {
+            "station": "烏日",
+            "arrival": "04:45",
+            "departure": "04:46"
+          },
+          {
+            "station": "新烏日",
+            "arrival": "04:47",
+            "departure": "04:48"
+          },
+          {
+            "station": "成功",
+            "arrival": "04:51",
+            "departure": "04:51"
+          },
+          {
+            "station": "彰化",
+            "arrival": "04:58",
+            "departure": "05:00"
+          },
+          {
+            "station": "花壇",
+            "arrival": "05:09",
+            "departure": "05:10"
+          },
+          {
+            "station": "大村",
+            "arrival": "05:14",
+            "departure": "05:14"
+          },
+          {
+            "station": "員林",
+            "arrival": "05:18",
+            "departure": "05:19"
+          },
+          {
+            "station": "永靖",
+            "arrival": "05:22",
+            "departure": "05:23"
+          },
+          {
+            "station": "社頭",
+            "arrival": "05:26",
+            "departure": "05:27"
+          },
+          {
+            "station": "田中",
+            "arrival": "05:31",
+            "departure": "05:32"
+          },
+          {
+            "station": "二水",
+            "arrival": "05:37",
+            "departure": "05:38"
+          },
+          {
+            "station": "林內",
+            "arrival": "05:44",
+            "departure": "05:45"
+          },
+          {
+            "station": "石榴",
+            "arrival": "05:49",
+            "departure": "05:50"
+          },
+          {
+            "station": "斗六",
+            "arrival": "05:54",
+            "departure": "05:55"
+          },
+          {
+            "station": "斗南",
+            "arrival": "06:01",
+            "departure": "06:02"
+          },
+          {
+            "station": "石龜",
+            "arrival": "06:05",
+            "departure": "06:06"
+          },
+          {
+            "station": "大林",
+            "arrival": "06:10",
+            "departure": "06:11"
+          },
+          {
+            "station": "民雄",
+            "arrival": "06:15",
+            "departure": "06:16"
+          },
+          {
+            "station": "嘉北",
+            "arrival": "06:21",
+            "departure": "06:22"
+          },
+          {
+            "station": "嘉義",
+            "arrival": "06:25",
+            "departure": "06:27"
+          },
+          {
+            "station": "水上",
+            "arrival": "06:32",
+            "departure": "06:32"
+          },
+          {
+            "station": "南靖",
+            "arrival": "06:35",
+            "departure": "06:35"
+          },
+          {
+            "station": "後壁",
+            "arrival": "06:40",
+            "departure": "06:41"
+          },
+          {
+            "station": "新營",
+            "arrival": "06:47",
+            "departure": "06:48"
+          },
+          {
+            "station": "柳營",
+            "arrival": "06:51",
+            "departure": "06:51"
+          },
+          {
+            "station": "林鳳營",
+            "arrival": "06:55",
+            "departure": "06:55"
+          },
+          {
+            "station": "隆田",
+            "arrival": "07:00",
+            "departure": "07:01"
+          },
+          {
+            "station": "拔林",
+            "arrival": "07:03",
+            "departure": "07:04"
+          },
+          {
+            "station": "善化",
+            "arrival": "07:08",
+            "departure": "07:09"
+          },
+          {
+            "station": "南科",
+            "arrival": "07:12",
+            "departure": "07:12"
+          },
+          {
+            "station": "新市",
+            "arrival": "07:16",
+            "departure": "07:17"
+          },
+          {
+            "station": "永康",
+            "arrival": "07:22",
+            "departure": "07:23"
+          },
+          {
+            "station": "大橋",
+            "arrival": "07:26",
+            "departure": "07:27"
+          },
+          {
+            "station": "臺南",
+            "arrival": "07:30",
+            "departure": "07:32"
+          },
+          {
+            "station": "保安",
+            "arrival": "07:38",
+            "departure": "07:38"
+          },
+          {
+            "station": "仁德",
+            "arrival": "07:40",
+            "departure": "07:41"
+          },
+          {
+            "station": "中洲",
+            "arrival": "07:44",
+            "departure": "07:44"
+          },
+          {
+            "station": "大湖",
+            "arrival": "07:47",
+            "departure": "07:48"
+          },
+          {
+            "station": "路竹",
+            "arrival": "07:52",
+            "departure": "07:52"
+          },
+          {
+            "station": "岡山",
+            "arrival": "08:00",
+            "departure": "08:08"
+          },
+          {
+            "station": "橋頭",
+            "arrival": "08:12",
+            "departure": "08:13"
+          },
+          {
+            "station": "楠梓",
+            "arrival": "08:16",
+            "departure": "08:17"
+          },
+          {
+            "station": "新左營",
+            "arrival": "08:22",
+            "departure": "08:23"
+          },
+          {
+            "station": "左營",
+            "arrival": "08:25",
+            "departure": "08:26"
+          },
+          {
+            "station": "內惟",
+            "arrival": "08:27",
+            "departure": "08:28"
+          },
+          {
+            "station": "美術館",
+            "arrival": "08:30",
+            "departure": "08:30"
+          },
+          {
+            "station": "鼓山",
+            "arrival": "08:32",
+            "departure": "08:33"
+          },
+          {
+            "station": "三塊厝",
+            "arrival": "08:35",
+            "departure": "08:36"
+          },
+          {
+            "station": "高雄",
+            "arrival": "08:38",
+            "departure": "08:44"
+          },
+          {
+            "station": "民族",
+            "arrival": "08:46",
+            "departure": "08:46"
+          },
+          {
+            "station": "科工館",
+            "arrival": "08:48",
+            "departure": "08:49"
+          },
+          {
+            "station": "正義",
+            "arrival": "08:51",
+            "departure": "08:52"
+          },
+          {
+            "station": "鳳山",
+            "arrival": "08:54",
+            "departure": "08:55"
+          },
+          {
+            "station": "後庄",
+            "arrival": "08:58",
+            "departure": "08:59"
+          },
+          {
+            "station": "九曲堂",
+            "arrival": "09:02",
+            "departure": "09:03"
+          },
+          {
+            "station": "六塊厝",
+            "arrival": "09:07",
+            "departure": "09:08"
+          },
+          {
+            "station": "屏東",
+            "arrival": "09:11",
+            "departure": "09:12"
+          },
+          {
+            "station": "歸來",
+            "arrival": "09:15",
+            "departure": "09:15"
+          },
+          {
+            "station": "麟洛",
+            "arrival": "09:18",
+            "departure": "09:18"
+          },
+          {
+            "station": "西勢",
+            "arrival": "09:21",
+            "departure": "09:22"
+          },
+          {
+            "station": "竹田",
+            "arrival": "09:25",
+            "departure": "09:26"
+          },
+          {
+            "station": "潮州",
+            "arrival": "09:31",
+            "departure": "09:31"
+          }
+        ],
+        "區間"
+      ]
+    ]
   },
   "2026-11-09": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": [
       [
         "1214",
@@ -13373,99 +14197,99 @@
     ]
   },
   "2026-11-10": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-11-11": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-11-12": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-11-13": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-11-14": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-11-15": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-11-16": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-11-17": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-11-18": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-11-19": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-11-20": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-11-21": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-11-22": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-11-23": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-11-24": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-11-25": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-11-26": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-11-27": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-11-28": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-11-29": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-11-30": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-12-01": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-12-02": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   },
   "2026-12-03": {
-    "last_modified": "Fri, 16 Oct 2026 22:35:12 GMT",
+    "last_modified": "Tue, 20 Oct 2026 01:35:13 GMT",
     "results": []
   }
 }
