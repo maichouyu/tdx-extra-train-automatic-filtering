@@ -109,6 +109,19 @@
       word-break: break-all;
     }
 
+    /* 備註區塊樣式 */
+    .train-note {
+      font-size: 0.75rem;
+      color: #ffb74d;
+      background: #252525;
+      padding: 4px 8px;
+      border-radius: 4px;
+      margin-top: 4px;
+      word-break: break-all;
+      border-left: 3px solid #ff9800;
+      line-height: 1.4;
+    }
+
     /* 右側停靠站網格區 */
     .stops-wrapper {
       flex: 1;
@@ -353,6 +366,11 @@
           ? `<span class="train-type-badge" style="background:${themeColor};">${train.type}</span>` 
           : '';
 
+        // 產生過濾後的備註區塊（有剩餘備註時才顯示）
+        const noteHTML = train.note 
+          ? `<div class="train-note">備註：${train.note}</div>` 
+          : '';
+
         const wrapperId = `stops-wrapper-${index}`;
 
         card.innerHTML = `
@@ -361,6 +379,7 @@
             ${typeBadge}
             <div class="train-route">${train.route}</div>
             <div class="train-dates">開行日期：${train.cleanDates.join(', ')}</div>
+            ${noteHTML}
           </div>
 
           <button class="toggle-btn" onclick="toggleStops('${wrapperId}', this)">
