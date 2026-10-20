@@ -181,9 +181,9 @@ def process_note(raw_note):
     if "民國" in note and "行駛" in note:
         # 使用正規表達式匹配從「民國」開始到「行駛」結束的字串（支援中間各種日期與文字）
         # 例如：民國\d+年.*?行駛 或更寬鬆的匹配
-        pattern = r"民國.*?[行駛]"
+        pattern = r"民國.*?[行駛。]"
         # 尋找符合民國...行駛的區段並移除
-        cleaned = re.sub(r"民國.*?行駛", "", note).strip()
+        cleaned = re.sub(r"民國.*?行駛。", "", note).strip()
         # 移除可能殘留的標點符號（如逗號、分號、空格等）
         cleaned = re.sub(r"^[,，、\s]+|[,，、\s]+$", "", cleaned)
         return cleaned
