@@ -5,17 +5,64 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>臺鐵45天內加班車資訊</title>
   <style>
-    /* --- 全域橘黑極致暗黑風格 --- */
+    /* --- 1. 顏色變數設定（預設為深色模式） --- */
+    :root {
+      --bg-color: #121212;
+      --card-bg: #1e1e1e;
+      --text-color: #e0e0e0;
+      --text-main: #ffffff;
+      --text-muted: #aaa;
+      --text-hint: #888;
+      --border-color: #333;
+      
+      --accent-color: #ff9800;
+      --accent-hover: #e68a00;
+      
+      --input-bg: #252525;
+      --input-border: #444;
+      
+      --tag-bg: #2a2a2a;
+      
+      /* 【新增變數】深色模式下的切換按鈕：白底黑字無邊框 */
+      --toggle-btn-bg: #ffffff;
+      --toggle-btn-text: #121212;
+    }
+
+    /* 淺色模式主題變數 */
+    body.light-mode {
+      --bg-color: #f5f5f7;
+      --card-bg: #ffffff;
+      --text-color: #333333;
+      --text-main: #111111;
+      --text-muted: #555555;
+      --text-hint: #777777;
+      --border-color: #dddddd;
+      
+      --accent-color: #e67e22; 
+      --accent-hover: #d35400;
+      
+      --input-bg: #fdfdfd;
+      --input-border: #cccccc;
+      
+      --tag-bg: #fff3e0;
+      
+      /* 【新增變數】淺色模式下的切換按鈕：黑底白字無邊框 */
+      --toggle-btn-bg: #111111;
+      --toggle-btn-text: #ffffff;
+    }
+
+    /* --- 全域極致暗黑/自適應風格 --- */
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      background: #121212;
-      color: #e0e0e0;
+      background: var(--bg-color);
+      color: var(--text-color);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       padding: 16px;
       display: flex;
       justify-content: center;
+      transition: background 0.3s, color 0.3s;
     }
 
     .container {
@@ -23,12 +70,41 @@
       max-width: 1200px;
     }
 
+    /* 頂部控制列（支援右上角圓形按鈕配置） */
+    .top-controls {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: -5px;
+    }
+
+    /* 圓形切換主題按鈕（只要一個字：深 / 淺） */
+    .theme-toggle-btn {
+      background: var(--toggle-btn-bg);
+      color: var(--toggle-btn-text);
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .theme-toggle-btn:active {
+      transform: scale(0.9);
+    }
+
     /* 頁首標題區 */
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 2px solid #ff9800;
+      border-bottom: 2px solid var(--accent-color);
       padding-bottom: 12px;
       margin-bottom: 16px;
       flex-wrap: wrap;
@@ -38,13 +114,13 @@
     h1 {
       margin: 0;
       font-size: 1.4rem;
-      color: #ff9800;
+      color: var(--accent-color);
       font-weight: 800;
     }
 
     .update-time {
       font-size: 0.8rem;
-      color: #888;
+      color: var(--text-hint);
     }
 
     /* 搜尋與排序工具列 */
@@ -65,25 +141,25 @@
 
     .filter-label {
       font-size: 0.85rem;
-      color: #ff9800;
+      color: var(--accent-color);
       font-weight: bold;
     }
 
-    /* 搜尋輸入框直接美化，取消外層框 */
+    /* 搜尋輸入框 */
     .search-input {
       width: 100%;
-      background: #1e1e1e;
-      border: 1px solid #333;
-      color: #fff;
+      background: var(--input-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
       padding: 10px 12px;
       border-radius: 8px;
       font-size: 0.9rem;
       outline: none;
-      transition: border-color 0.2s ease;
+      transition: border-color 0.2s ease, background 0.3s, color 0.3s;
     }
 
     .search-input:focus {
-      border-color: #ff9800;
+      border-color: var(--accent-color);
     }
 
     /* 排序按鈕群組樣式 */
@@ -94,9 +170,9 @@
 
     .sort-btn {
       flex: 1;
-      background: #252525;
-      border: 1px solid #444;
-      color: #aaa;
+      background: var(--input-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
       padding: 10px 12px;
       border-radius: 8px;
       font-size: 0.85rem;
@@ -107,29 +183,30 @@
     }
 
     .sort-btn:hover {
-      border-color: #ff9800;
-      color: #fff;
+      border-color: var(--accent-color);
+      color: var(--text-main);
     }
 
     /* 選中時的高亮樣式 */
     .sort-btn.active {
-      background: #ff9800;
-      border-color: #ff9800;
+      background: var(--accent-color);
+      border-color: var(--accent-color);
       color: #121212;
       box-shadow: 0 0 10px rgba(255, 152, 0, 0.4);
     }
 
-    /* 車次卡片（電腦版） */
+    /* 車次卡片 */
     .train-card {
-      background: #1e1e1e;
-      border: 1px solid #333;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
       border-radius: 12px;
       padding: 18px 20px;
       margin-bottom: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
       display: flex;
       gap: 20px;
       align-items: center;
+      transition: background 0.3s, border-color 0.3s;
     }
     
     /* 左側車次資訊區 */
@@ -141,7 +218,7 @@
       flex-direction: column;
       gap: 6px;
       padding-right: 16px;
-      border-right: 1px dashed #333;
+      border-right: 1px dashed var(--border-color);
     }
     
     .train-no {
@@ -166,14 +243,14 @@
     .train-route {
       font-size: 1.1rem;
       font-weight: 700;
-      color: #ffffff;
+      color: var(--text-main);
       margin-top: 4px;
     }
 
     .train-dates {
       font-size: 0.75rem;
-      color: #aaa;
-      background: #252525;
+      color: var(--text-muted);
+      background: var(--input-bg);
       padding: 4px 8px;
       border-radius: 4px;
       margin-top: 6px;
@@ -184,13 +261,13 @@
     /* 備註區塊樣式 */
     .train-note {
       font-size: 0.75rem;
-      color: #ffb74d;
-      background: #252525;
+      color: var(--accent-color);
+      background: var(--input-bg);
       padding: 4px 8px;
       border-radius: 4px;
       margin-top: 4px;
       word-break: break-all;
-      border-left: 3px solid #ff9800;
+      border-left: 3px solid var(--accent-color);
       line-height: 1.4;
     }
 
@@ -207,8 +284,8 @@
     }
 
     .stop-item {
-      background: #252525;
-      border: 1px solid #333;
+      background: var(--input-bg);
+      border: 1px solid var(--border-color);
       border-radius: 6px;
       padding: 8px 10px;
       font-size: 0.85rem;
@@ -219,7 +296,7 @@
     
     .station-name {
       font-weight: bold;
-      color: #fff;
+      color: var(--text-main);
       margin-right: 6px;
       flex-shrink: 0;
     }
@@ -246,7 +323,7 @@
       .train-info-sidebar {
         width: 100%;
         border-right: none;
-        border-bottom: 1px dashed #333;
+        border-bottom: 1px dashed var(--border-color);
         padding-right: 0;
         padding-bottom: 12px;
       }
@@ -254,9 +331,9 @@
       .toggle-btn {
         display: flex;
         width: 100%;
-        background: #282828;
-        color: #ccc;
-        border: 1px solid #3a3a3a;
+        background: var(--input-bg);
+        color: var(--text-muted);
+        border: 1px solid var(--border-color);
         border-radius: 6px;
         padding: 8px 12px;
         font-size: 0.85rem;
@@ -269,7 +346,7 @@
 
       .toggle-btn .icon {
         font-size: 0.75rem;
-        color: #ff9800;
+        color: var(--accent-color);
         transition: transform 0.2s ease;
       }
 
@@ -301,7 +378,7 @@
     .status-msg {
       text-align: center;
       padding: 40px;
-      color: #888;
+      color: var(--text-hint);
       font-size: 1rem;
     }
   </style>
@@ -309,17 +386,22 @@
 <body>
 
   <div class="container">
+    <!-- 頂部獨立控制列：放置圓形主題切換按鈕 -->
+    <div class="top-controls">
+      <button type="button" id="themeToggle" class="theme-toggle-btn" onclick="toggleTheme()">淺</button>
+    </div>
+
     <header>
       <div>
         <h1>臺鐵45天內加班車時刻表</h1>
-        <div class="date-range" id="date-range" style="font-size: 0.9rem; color: #ff9800; font-weight: bold; margin-top: 4px;"></div>
+        <div class="date-range" id="date-range" style="font-size: 0.9rem; color: var(--accent-color); font-weight: bold; margin-top: 4px;"></div>
       </div>
       <div class="update-time" id="last-updated">載入中...</div>
     </header>
 
     <!-- 搜尋與排序工具列 -->
     <div class="filter-bar">
-      <!-- 搜尋車次號碼（已去除外層多餘框框） -->
+      <!-- 搜尋車次號碼 -->
       <div class="filter-group">
         <span class="filter-label">搜尋車次：</span>
         <input type="text" id="search-input" class="search-input" placeholder="輸入車次號碼 (例如: 5210)" oninput="filterAndRender()">
@@ -343,6 +425,49 @@
   <script>
     let cachedTrains = [];
     let currentSortType = 'date-first'; // 預設排序模式
+
+    // --- 主題切換邏輯（完美對接 index 63 機制與「深/淺」單字按鈕） ---
+    function toggleTheme() {
+      const body = document.body;
+      const themeBtn = document.getElementById('themeToggle');
+      if (!themeBtn) return;
+      
+      body.classList.toggle('light-mode');
+      
+      if (body.classList.contains('light-mode')) {
+        themeBtn.innerText = '深'; // 目前是淺色模式，按鈕顯示「深」讓使用者切回深色
+        localStorage.setItem('calculator-theme', 'light');
+      } else {
+        themeBtn.innerText = '淺'; // 目前是深色模式，按鈕顯示「淺」讓使用者切回淺色
+        localStorage.setItem('calculator-theme', 'dark');
+      }
+    }
+
+    // 初始化主題（自適應硬體或讀取記憶）
+    function initTheme() {
+      const savedTheme = localStorage.getItem('calculator-theme');
+      const themeBtn = id => document.getElementById('themeToggle');
+      const btn = document.getElementById('themeToggle');
+      
+      const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      
+      if (savedTheme === 'light') {
+        document.body.classList.add('light-mode');
+        if (btn) btn.innerText = '深';
+      } else if (savedTheme === 'dark') {
+        document.body.classList.remove('light-mode');
+        if (btn) btn.innerText = '淺';
+      } else {
+        // 第一次訪問時，跟隨系統硬體偏好
+        if (darkModeMediaQuery.matches) {
+          document.body.classList.remove('light-mode');
+          if (btn) btn.innerText = '淺';
+        } else {
+          document.body.classList.add('light-mode');
+          if (btn) btn.innerText = '深';
+        }
+      }
+    }
 
     function getTrainTypeColor(typeStr) {
       if (!typeStr) return '#0055b8';
@@ -466,7 +591,7 @@
           return `
             <div class="stop-item">
               <span class="station-name">${st.station}</span>
-              <span class="time-info" style="color: #ffb74d; font-weight: 600;">${timeText}</span>
+              <span class="time-info" style="color: var(--accent-color); font-weight: 600;">${timeText}</span>
             </div>
           `;
         }).join('');
@@ -497,7 +622,7 @@
 
           <div id="${wrapperId}" class="stops-wrapper">
             <div class="stops-grid">
-              ${stopsHTML || '<div style="color:#666;">無詳細停靠站資料</div>'}
+              ${stopsHTML || '<div style="color:var(--text-hint);">無詳細停靠站資料</div>'}
             </div>
           </div>
         `;
@@ -520,6 +645,7 @@
     }
 
     async function initApp() {
+      initTheme(); // 初始化主題
       try {
         const cacheBuster = new Date().getTime();
         const response = await fetch(`./last_trains.json?v=${cacheBuster}`);
