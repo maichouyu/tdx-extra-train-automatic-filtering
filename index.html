@@ -30,7 +30,7 @@
       align-items: center;
       border-bottom: 2px solid #ff9800;
       padding-bottom: 12px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       flex-wrap: wrap;
       gap: 10px;
     }
@@ -45,6 +45,48 @@
     .update-time {
       font-size: 0.8rem;
       color: #888;
+    }
+
+    /* 搜尋與排序工具列 */
+    .filter-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .filter-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #1e1e1e;
+      border: 1px solid #333;
+      padding: 8px 12px;
+      border-radius: 8px;
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .filter-item label {
+      font-size: 0.85rem;
+      color: #ff9800;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .filter-item input, .filter-item select {
+      width: 100%;
+      background: #252525;
+      border: 1px solid #444;
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .filter-item input:focus, .filter-item select:focus {
+      border-color: #ff9800;
     }
 
     /* 車次卡片（電腦版） */
@@ -245,12 +287,30 @@
       <div class="update-time" id="last-updated">載入中...</div>
     </header>
 
+    <!-- 新增：搜尋與排序工具列 -->
+    <div class="filter-bar">
+      <div class="filter-item">
+        <label for="search-input">搜尋車次：</label>
+        <input type="text" id="search-input" placeholder="輸入車次號碼 (例如: 5210)" oninput="filterAndRender()">
+      </div>
+      <div class="filter-item">
+        <label for="sort-select">排序方式：</label>
+        <select id="sort-select" onchange="filterAndRender()">
+          <option value="date-first" selected>先開行日期，再車次號碼</option>
+          <option value="number-first">純依照車次號碼大小</option>
+        </select>
+      </div>
+    </div>
+
     <main id="train-list">
       <div class="status-msg">正在讀取最新的加班車資料...</div>
     </main>
   </div>
 
   <script>
+    // 全域變數，用來快取全車次清單，搜尋與切換排序時直接重繪
+    let cachedTrains = [];
+
     function getTrainTypeColor(typeStr) {
       if (!typeStr) return '#0055b8';
 
@@ -263,19 +323,11 @@
       return '#4BE13A';
     }
 
-    function renderTrains(json) {
-      const container = document.getElementById('train-list');
+    function processJsonData(json) {
       const timeContainer = document.getElementById('last-updated');
       const rangeContainer = document.getElementById('date-range');
 
-      if (!container || !timeContainer) return;
-
-      timeContainer.textContent = `最後更新於：${json.last_updated || '未知'}`;
-      container.innerHTML = '';
-
-      if (json.start_date && json.end_date) {
-        rangeContainer.textContent = `統計區間：${json.start_date} ～ ${json.end_date}`;
-      }
+      if (timeContainer) timeContainer.textContent = `最後更新於：${json.last_updated || '未知'}`;
 
       const data = json.data || {};
       const allTrains = [];
@@ -290,7 +342,6 @@
             const validDates = rawDates.filter(d => !d.includes('-'));
             if (validDates.length === 0) return;
 
-            // 清理並進行內部日期排序
             const cleanedDates = validDates
               .map(d => d.replace(/\+/g, '').trim())
               .sort();
@@ -306,34 +357,55 @@
         }
       });
 
-      if ((!json.start_date || !json.end_date) && allDatesSet.size > 0) {
+      if (json.start_date && json.end_date) {
+        rangeContainer.textContent = `統計區間：${json.start_date} ～ ${json.end_date}`;
+      } else if (allDatesSet.size > 0) {
         const sortedDates = Array.from(allDatesSet).sort();
         rangeContainer.textContent = `開行區間：${sortedDates[0]} ～ ${sortedDates[sortedDates.length - 1]}`;
       }
 
-      if (allTrains.length === 0) {
-        container.innerHTML = '<div class="status-msg">目前沒有搜尋到加班車資料。</div>';
-        if (rangeContainer) rangeContainer.textContent = '';
-        return;
-      }
-          
-      // ==========================================
-      // 多重排序：優先比較開行日期，其次比較車次數字
-      // ==========================================
-      allTrains.sort((a, b) => {
-        const firstDateA = a.cleanDates[0] || '';
-        const firstDateB = b.cleanDates[0] || '';
+      cachedTrains = allTrains;
+      filterAndRender();
+    }
 
-        // 1. 先比開行日期（由早到晚）
-        if (firstDateA !== firstDateB) {
-          return firstDateA.localeCompare(firstDateB);
-        }
+    function filterAndRender() {
+      const container = document.getElementById('train-list');
+      const searchKeyword = document.getElementById('search-input').value.trim();
+      const sortType = document.getElementById('sort-select').value;
 
-        // 2. 日期相同，再比車次數字（由小到大）
-        return parseInt(a.trainNo) - parseInt(b.trainNo);
+      if (!container) return;
+
+      // 1. 關鍵字過濾（車次號碼）
+      let displayTrains = cachedTrains.filter(train => {
+        if (!searchKeyword) return true;
+        return train.trainNo.includes(searchKeyword);
       });
 
-      allTrains.forEach((train, index) => {
+      if (displayTrains.length === 0) {
+        container.innerHTML = '<div class="status-msg">沒有找到符合搜尋條件的加班車資料。</div>';
+        return;
+      }
+
+      // 2. 依照所選模式進行排序
+      displayTrains.sort((a, b) => {
+        if (sortType === 'number-first') {
+          // 純依照車次號碼大小排序
+          return parseInt(a.trainNo) - parseInt(b.trainNo);
+        } else {
+          // 先開行日期，再車次號碼大小排序
+          const firstDateA = a.cleanDates[0] || '';
+          const firstDateB = b.cleanDates[0] || '';
+
+          if (firstDateA !== firstDateB) {
+            return firstDateA.localeCompare(firstDateB);
+          }
+          return parseInt(a.trainNo) - parseInt(b.trainNo);
+        }
+      });
+
+      // 3. 渲染 DOM
+      container.innerHTML = '';
+      displayTrains.forEach((train, index) => {
         const card = document.createElement('div');
         card.className = 'train-card';
 
@@ -366,7 +438,6 @@
           ? `<span class="train-type-badge" style="background:${themeColor};">${train.type}</span>` 
           : '';
 
-        // 產生過濾後的備註區塊（有剩餘備註時才顯示）
         const noteHTML = train.note 
           ? `<div class="train-note">備註：${train.note}</div>` 
           : '';
@@ -418,7 +489,7 @@
         
         if (!response.ok) throw new Error(`HTTP 錯誤狀態: ${response.status}`);
         const realJson = await response.json();
-        renderTrains(realJson);
+        processJsonData(realJson);
       } catch (err) {
         console.error('讀取 JSON 資料失敗：', err.message);
         document.getElementById('train-list').innerHTML = `
