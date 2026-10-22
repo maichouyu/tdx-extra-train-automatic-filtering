@@ -50,43 +50,73 @@
     /* 搜尋與排序工具列 */
     .filter-bar {
       display: flex;
-      gap: 12px;
+      gap: 16px;
       margin-bottom: 20px;
       flex-wrap: wrap;
     }
 
-    .filter-item {
+    .filter-group {
       display: flex;
-      align-items: center;
-      gap: 8px;
-      background: #1e1e1e;
-      border: 1px solid #333;
-      padding: 8px 12px;
-      border-radius: 8px;
+      flex-direction: column;
+      gap: 6px;
       flex: 1;
-      min-width: 200px;
+      min-width: 250px;
     }
 
-    .filter-item label {
+    .filter-label {
       font-size: 0.85rem;
       color: #ff9800;
       font-weight: bold;
-      white-space: nowrap;
     }
 
-    .filter-item input, .filter-item select {
+    /* 搜尋輸入框直接美化，取消外層框 */
+    .search-input {
       width: 100%;
-      background: #252525;
-      border: 1px solid #444;
+      background: #1e1e1e;
+      border: 1px solid #333;
       color: #fff;
-      padding: 6px 10px;
-      border-radius: 6px;
+      padding: 10px 12px;
+      border-radius: 8px;
       font-size: 0.9rem;
       outline: none;
+      transition: border-color 0.2s ease;
     }
 
-    .filter-item input:focus, .filter-item select:focus {
+    .search-input:focus {
       border-color: #ff9800;
+    }
+
+    /* 排序按鈕群組樣式 */
+    .sort-btn-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .sort-btn {
+      flex: 1;
+      background: #252525;
+      border: 1px solid #444;
+      color: #aaa;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .sort-btn:hover {
+      border-color: #ff9800;
+      color: #fff;
+    }
+
+    /* 選中時的高亮樣式 */
+    .sort-btn.active {
+      background: #ff9800;
+      border-color: #ff9800;
+      color: #121212;
+      box-shadow: 0 0 10px rgba(255, 152, 0, 0.4);
     }
 
     /* 車次卡片（電腦版） */
@@ -287,18 +317,21 @@
       <div class="update-time" id="last-updated">載入中...</div>
     </header>
 
-    <!-- 新增：搜尋與排序工具列 -->
+    <!-- 搜尋與排序工具列 -->
     <div class="filter-bar">
-      <div class="filter-item">
-        <label for="search-input">搜尋車次：</label>
-        <input type="text" id="search-input" placeholder="輸入車次號碼 (例如: 5210)" oninput="filterAndRender()">
+      <!-- 搜尋車次號碼（已去除外層多餘框框） -->
+      <div class="filter-group">
+        <span class="filter-label">搜尋車次：</span>
+        <input type="text" id="search-input" class="search-input" placeholder="輸入車次號碼 (例如: 5210)" oninput="filterAndRender()">
       </div>
-      <div class="filter-item">
-        <label for="sort-select">排序方式：</label>
-        <select id="sort-select" onchange="filterAndRender()">
-          <option value="date-first" selected>先開行日期，再車次號碼</option>
-          <option value="number-first">純依照車次號碼大小</option>
-        </select>
+
+      <!-- 排序方式按鈕群組 -->
+      <div class="filter-group">
+        <span class="filter-label">排序方式：</span>
+        <div class="sort-btn-group">
+          <button type="button" class="sort-btn active" id="sort-date" onclick="setSortType('date-first')">先日期再車次</button>
+          <button type="button" class="sort-btn" id="sort-num" onclick="setSortType('number-first')">純車次號碼大小</button>
+        </div>
       </div>
     </div>
 
@@ -308,8 +341,8 @@
   </div>
 
   <script>
-    // 全域變數，用來快取全車次清單，搜尋與切換排序時直接重繪
     let cachedTrains = [];
+    let currentSortType = 'date-first'; // 預設排序模式
 
     function getTrainTypeColor(typeStr) {
       if (!typeStr) return '#0055b8';
@@ -321,6 +354,16 @@
       if (typeStr.includes('莒光')) return '#ff9800';
       
       return '#4BE13A';
+    }
+
+    // 切換排序並更新按鈕高亮狀態
+    function setSortType(type) {
+      currentSortType = type;
+
+      document.getElementById('sort-date').classList.toggle('active', type === 'date-first');
+      document.getElementById('sort-num').classList.toggle('active', type === 'number-first');
+
+      filterAndRender();
     }
 
     function processJsonData(json) {
@@ -371,11 +414,9 @@
     function filterAndRender() {
       const container = document.getElementById('train-list');
       const searchKeyword = document.getElementById('search-input').value.trim();
-      const sortType = document.getElementById('sort-select').value;
 
       if (!container) return;
 
-      // 1. 關鍵字過濾（車次號碼）
       let displayTrains = cachedTrains.filter(train => {
         if (!searchKeyword) return true;
         return train.trainNo.includes(searchKeyword);
@@ -386,13 +427,10 @@
         return;
       }
 
-      // 2. 依照所選模式進行排序
       displayTrains.sort((a, b) => {
-        if (sortType === 'number-first') {
-          // 純依照車次號碼大小排序
+        if (currentSortType === 'number-first') {
           return parseInt(a.trainNo) - parseInt(b.trainNo);
         } else {
-          // 先開行日期，再車次號碼大小排序
           const firstDateA = a.cleanDates[0] || '';
           const firstDateB = b.cleanDates[0] || '';
 
@@ -403,7 +441,6 @@
         }
       });
 
-      // 3. 渲染 DOM
       container.innerHTML = '';
       displayTrains.forEach((train, index) => {
         const card = document.createElement('div');
