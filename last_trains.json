@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-10-22 03:49:24",
+  "last_updated": "2026-10-22 14:47:13",
   "data": {
     "shun": {
       "4542": {
@@ -2021,6 +2021,81 @@
           }
         ]
       },
+      "5440": {
+        "type": "區間快",
+        "note": "",
+        "dates": [
+          "10/26+"
+        ],
+        "route": "彰化 16:43 -> 南港 19:46",
+        "stops": [
+          {
+            "station": "彰化",
+            "arrival": "16:43",
+            "departure": "16:43"
+          },
+          {
+            "station": "新烏日",
+            "arrival": "16:52",
+            "departure": "16:54"
+          },
+          {
+            "station": "臺中",
+            "arrival": "17:02",
+            "departure": "17:04"
+          },
+          {
+            "station": "豐原",
+            "arrival": "17:15",
+            "departure": "17:17"
+          },
+          {
+            "station": "苗栗",
+            "arrival": "17:40",
+            "departure": "17:42"
+          },
+          {
+            "station": "竹南",
+            "arrival": "17:54",
+            "departure": "17:57"
+          },
+          {
+            "station": "新竹",
+            "arrival": "18:11",
+            "departure": "18:14"
+          },
+          {
+            "station": "中壢",
+            "arrival": "18:40",
+            "departure": "18:41"
+          },
+          {
+            "station": "桃園",
+            "arrival": "18:50",
+            "departure": "18:52"
+          },
+          {
+            "station": "板橋",
+            "arrival": "19:18",
+            "departure": "19:20"
+          },
+          {
+            "station": "臺北",
+            "arrival": "19:29",
+            "departure": "19:33"
+          },
+          {
+            "station": "松山",
+            "arrival": "19:40",
+            "departure": "19:41"
+          },
+          {
+            "station": "南港",
+            "arrival": "19:46",
+            "departure": "19:46"
+          }
+        ]
+      },
       "5238": {
         "type": "自強(3000)(EMU3000 型電車)",
         "note": "※乘車當日限量發售無座票。 第6節為騰雲座艙，為本公司公告指定不發售無座位車票之車廂，持當日當次騰雲座艙車票旅客始可搭乘。",
@@ -3096,6 +3171,76 @@
             "station": "彰化",
             "arrival": "22:18",
             "departure": "22:18"
+          }
+        ]
+      },
+      "5435": {
+        "type": "區間快",
+        "note": "",
+        "dates": [
+          "10/23+"
+        ],
+        "route": "七堵 19:55 -> 臺中 22:35",
+        "stops": [
+          {
+            "station": "七堵",
+            "arrival": "19:55",
+            "departure": "19:55"
+          },
+          {
+            "station": "南港",
+            "arrival": "20:08",
+            "departure": "20:09"
+          },
+          {
+            "station": "松山",
+            "arrival": "20:13",
+            "departure": "20:14"
+          },
+          {
+            "station": "臺北",
+            "arrival": "20:21",
+            "departure": "20:24"
+          },
+          {
+            "station": "板橋",
+            "arrival": "20:31",
+            "departure": "20:32"
+          },
+          {
+            "station": "桃園",
+            "arrival": "20:49",
+            "departure": "20:50"
+          },
+          {
+            "station": "中壢",
+            "arrival": "20:58",
+            "departure": "20:59"
+          },
+          {
+            "station": "新竹",
+            "arrival": "21:26",
+            "departure": "21:30"
+          },
+          {
+            "station": "竹南",
+            "arrival": "21:46",
+            "departure": "21:47"
+          },
+          {
+            "station": "苗栗",
+            "arrival": "21:58",
+            "departure": "21:59"
+          },
+          {
+            "station": "豐原",
+            "arrival": "22:23",
+            "departure": "22:24"
+          },
+          {
+            "station": "臺中",
+            "arrival": "22:35",
+            "departure": "22:35"
           }
         ]
       },
@@ -4642,6 +4787,81 @@
             "station": "彰化",
             "arrival": "14:30",
             "departure": "14:30"
+          }
+        ]
+      },
+      "5437": {
+        "type": "區間快",
+        "note": "",
+        "dates": [
+          "10/26+"
+        ],
+        "route": "南港 20:40 -> 彰化 23:28",
+        "stops": [
+          {
+            "station": "南港",
+            "arrival": "20:40",
+            "departure": "20:40"
+          },
+          {
+            "station": "松山",
+            "arrival": "20:44",
+            "departure": "20:45"
+          },
+          {
+            "station": "臺北",
+            "arrival": "20:52",
+            "departure": "20:55"
+          },
+          {
+            "station": "板橋",
+            "arrival": "21:02",
+            "departure": "21:04"
+          },
+          {
+            "station": "桃園",
+            "arrival": "21:20",
+            "departure": "21:22"
+          },
+          {
+            "station": "中壢",
+            "arrival": "21:30",
+            "departure": "21:31"
+          },
+          {
+            "station": "新竹",
+            "arrival": "21:58",
+            "departure": "22:00"
+          },
+          {
+            "station": "竹南",
+            "arrival": "22:16",
+            "departure": "22:17"
+          },
+          {
+            "station": "苗栗",
+            "arrival": "22:28",
+            "departure": "22:29"
+          },
+          {
+            "station": "豐原",
+            "arrival": "22:53",
+            "departure": "22:55"
+          },
+          {
+            "station": "臺中",
+            "arrival": "23:05",
+            "departure": "23:09"
+          },
+          {
+            "station": "新烏日",
+            "arrival": "23:15",
+            "departure": "23:17"
+          },
+          {
+            "station": "彰化",
+            "arrival": "23:28",
+            "departure": "23:28"
           }
         ]
       },
