@@ -5,18 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>臺鐵45天內加班車資訊</title>
   <style>
-    /* --- 1. 線上引入思源黑體 (Noto Sans TC) 與 思源等寬數字 (Noto Sans Mono) --- */
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
+    /* --- 1. 全域極致暗黑/自適應風格與系統原生字體 --- */
+    * { box-sizing: border-box; }
 
-    /* 全局與全元件強制套用思源黑體 */
-    *, *::before, *::after, body, input, button, select, textarea {
-      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
-      box-sizing: border-box;
+    body {
+      margin: 0;
+      background: var(--bg-color);
+      color: var(--text-color);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+      transition: background 0.3s, color 0.3s;
     }
 
-    /* 數字、時間、車次與關鍵數據專用：疊加思源等寬數字（防止數字變動時跳動） */
-    .train-no, .time-info, .update-time, .search-input {
-      font-family: 'Noto Sans Mono', 'Noto Sans TC', monospace !important;
+    /* 時間與數字採用等寬字體 */
+    .time-info, .update-time {
+      font-family: monospace;
     }
 
     /* --- 2. 顏色變數設定（預設為深色模式） --- */
@@ -65,16 +70,6 @@
       --toggle-btn-text: #ffffff;
     }
 
-    body {
-      margin: 0;
-      background: var(--bg-color);
-      color: var(--text-color);
-      padding: 16px;
-      display: flex;
-      justify-content: center;
-      transition: background 0.3s, color 0.3s;
-    }
-
     .container {
       width: 100%;
       max-width: 1200px;
@@ -97,7 +92,7 @@
       border-radius: 50%;
       font-size: 0.85rem;
       cursor: pointer;
-      font-weight: 700;
+      font-weight: bold;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -125,7 +120,7 @@
       margin: 0;
       font-size: 1.4rem;
       color: var(--accent-color);
-      font-weight: 900;
+      font-weight: 800;
     }
 
     .update-time {
@@ -152,7 +147,7 @@
     .filter-label {
       font-size: 0.85rem;
       color: var(--accent-color);
-      font-weight: 700;
+      font-weight: bold;
     }
 
     /* 搜尋輸入框 */
@@ -186,7 +181,7 @@
       padding: 10px 12px;
       border-radius: 8px;
       font-size: 0.85rem;
-      font-weight: 700;
+      font-weight: bold;
       cursor: pointer;
       transition: all 0.2s ease;
       text-align: center;
@@ -242,7 +237,7 @@
       padding: 4px 10px;
       border-radius: 4px;
       font-size: 0.82rem;
-      font-weight: 700;
+      font-weight: bold;
       width: fit-content;
       max-width: 100%;
       color: #ffffff;
@@ -305,7 +300,7 @@
     }
     
     .station-name {
-      font-weight: 700;
+      font-weight: bold;
       color: var(--text-main);
       margin-right: 6px;
       flex-shrink: 0;
@@ -346,7 +341,7 @@
         border-radius: 6px;
         padding: 8px 12px;
         font-size: 0.85rem;
-        font-weight: 700;
+        font-weight: bold;
         cursor: pointer;
         justify-content: space-between;
         align-items: center;
@@ -403,7 +398,7 @@
     <header>
       <div>
         <h1>臺鐵45天內加班車時刻表</h1>
-        <div class="date-range" id="date-range" style="font-size: 0.9rem; color: var(--accent-color); font-weight: 700; margin-top: 4px;"></div>
+        <div class="date-range" id="date-range" style="font-size: 0.9rem; color: var(--accent-color); font-weight: bold; margin-top: 4px;"></div>
       </div>
       <div class="update-time" id="last-updated">載入中...</div>
     </header>
