@@ -12,7 +12,7 @@
     "results": []
   },
   "2026-10-23": {
-    "last_modified": "Wed, 21 Oct 2026 23:25:05 GMT",
+    "last_modified": "Fri, 23 Oct 2026 00:25:03 GMT",
     "results": [
       [
         "4542",
@@ -5876,7 +5876,7 @@
     "results": []
   },
   "2026-11-06": {
-    "last_modified": "Wed, 21 Oct 2026 23:25:05 GMT",
+    "last_modified": "Fri, 23 Oct 2026 00:25:03 GMT",
     "results": []
   },
   "2026-11-07": {
@@ -5884,7 +5884,7 @@
     "results": []
   },
   "2026-11-08": {
-    "last_modified": "Wed, 21 Oct 2026 23:25:05 GMT",
+    "last_modified": "Fri, 23 Oct 2026 00:25:03 GMT",
     "results": [
       [
         "2008",
@@ -6521,7 +6521,7 @@
     ]
   },
   "2026-11-09": {
-    "last_modified": "Wed, 21 Oct 2026 23:25:05 GMT",
+    "last_modified": "Fri, 23 Oct 2026 00:25:03 GMT",
     "results": [
       [
         "1214",
@@ -6709,7 +6709,7 @@
     "results": []
   },
   "2026-11-11": {
-    "last_modified": "Wed, 21 Oct 2026 23:25:05 GMT",
+    "last_modified": "Fri, 23 Oct 2026 00:25:03 GMT",
     "results": []
   },
   "2026-11-12": {
@@ -6717,15 +6717,15 @@
     "results": []
   },
   "2026-11-13": {
-    "last_modified": "Wed, 21 Oct 2026 23:25:05 GMT",
+    "last_modified": "Fri, 23 Oct 2026 00:25:03 GMT",
     "results": []
   },
   "2026-11-14": {
-    "last_modified": "Wed, 21 Oct 2026 23:25:05 GMT",
+    "last_modified": "Fri, 23 Oct 2026 00:25:03 GMT",
     "results": []
   },
   "2026-11-15": {
-    "last_modified": "Wed, 21 Oct 2026 23:25:05 GMT",
+    "last_modified": "Fri, 23 Oct 2026 00:25:03 GMT",
     "results": []
   },
   "2026-11-16": {
@@ -6745,7 +6745,7 @@
     "results": []
   },
   "2026-11-20": {
-    "last_modified": "Wed, 21 Oct 2026 23:25:05 GMT",
+    "last_modified": "Fri, 23 Oct 2026 00:25:03 GMT",
     "results": []
   },
   "2026-11-21": {
@@ -6773,8 +6773,424 @@
     "results": []
   },
   "2026-11-27": {
-    "last_modified": "Wed, 21 Oct 2026 23:25:05 GMT",
-    "results": []
+    "last_modified": "Fri, 23 Oct 2026 00:25:03 GMT",
+    "results": [
+      [
+        "5142",
+        5142,
+        "11/27",
+        "潮州",
+        "16:05",
+        "七堵",
+        "21:48",
+        "+",
+        [
+          {
+            "station": "潮州",
+            "arrival": "15:56",
+            "departure": "16:05"
+          },
+          {
+            "station": "屏東",
+            "arrival": "16:17",
+            "departure": "16:18"
+          },
+          {
+            "station": "鳳山",
+            "arrival": "16:29",
+            "departure": "16:31"
+          },
+          {
+            "station": "高雄",
+            "arrival": "16:37",
+            "departure": "16:40"
+          },
+          {
+            "station": "新左營",
+            "arrival": "16:48",
+            "departure": "16:49"
+          },
+          {
+            "station": "臺南",
+            "arrival": "17:14",
+            "departure": "17:16"
+          },
+          {
+            "station": "嘉義",
+            "arrival": "17:52",
+            "departure": "17:54"
+          },
+          {
+            "station": "彰化",
+            "arrival": "18:48",
+            "departure": "18:51"
+          },
+          {
+            "station": "臺中",
+            "arrival": "19:05",
+            "departure": "19:07"
+          },
+          {
+            "station": "新竹",
+            "arrival": "20:02",
+            "departure": "20:03"
+          },
+          {
+            "station": "中壢",
+            "arrival": "20:31",
+            "departure": "20:32"
+          },
+          {
+            "station": "桃園",
+            "arrival": "20:41",
+            "departure": "20:42"
+          },
+          {
+            "station": "板橋",
+            "arrival": "21:02",
+            "departure": "21:04"
+          },
+          {
+            "station": "臺北",
+            "arrival": "21:13",
+            "departure": "21:18"
+          },
+          {
+            "station": "松山",
+            "arrival": "21:25",
+            "departure": "21:26"
+          },
+          {
+            "station": "汐止",
+            "arrival": "21:36",
+            "departure": "21:38"
+          },
+          {
+            "station": "七堵",
+            "arrival": "21:48",
+            "departure": "21:48"
+          }
+        ],
+        "自強(3000)(EMU3000 型電車)",
+        "本列次不發售無座票，非持本班次車票旅客，請勿搭乘。 第6節為騰雲座艙，為本公司公告指定不發售無座位車票之車廂，持當日當次騰雲座艙車票旅客始可搭乘。"
+      ],
+      [
+        "5145",
+        5145,
+        "11/27",
+        "七堵",
+        "16:31",
+        "潮州",
+        "22:19",
+        "+",
+        [
+          {
+            "station": "七堵",
+            "arrival": "16:31",
+            "departure": "16:31"
+          },
+          {
+            "station": "汐止",
+            "arrival": "16:39",
+            "departure": "16:41"
+          },
+          {
+            "station": "松山",
+            "arrival": "16:52",
+            "departure": "16:53"
+          },
+          {
+            "station": "臺北",
+            "arrival": "17:00",
+            "departure": "17:03"
+          },
+          {
+            "station": "板橋",
+            "arrival": "17:12",
+            "departure": "17:13"
+          },
+          {
+            "station": "新竹",
+            "arrival": "18:09",
+            "departure": "18:12"
+          },
+          {
+            "station": "豐原",
+            "arrival": "18:59",
+            "departure": "19:01"
+          },
+          {
+            "station": "臺中",
+            "arrival": "19:11",
+            "departure": "19:14"
+          },
+          {
+            "station": "彰化",
+            "arrival": "19:28",
+            "departure": "19:31"
+          },
+          {
+            "station": "嘉義",
+            "arrival": "20:24",
+            "departure": "20:26"
+          },
+          {
+            "station": "臺南",
+            "arrival": "21:02",
+            "departure": "21:04"
+          },
+          {
+            "station": "新左營",
+            "arrival": "21:32",
+            "departure": "21:35"
+          },
+          {
+            "station": "高雄",
+            "arrival": "21:44",
+            "departure": "21:46"
+          },
+          {
+            "station": "鳳山",
+            "arrival": "21:51",
+            "departure": "21:53"
+          },
+          {
+            "station": "屏東",
+            "arrival": "22:05",
+            "departure": "22:06"
+          },
+          {
+            "station": "潮州",
+            "arrival": "22:19",
+            "departure": "22:22"
+          }
+        ],
+        "自強(3000)(EMU3000 型電車)",
+        "本列次不發售無座票，非持本班次車票旅客，請勿搭乘。 第6節為騰雲座艙，為本公司公告指定不發售無座位車票之車廂，持當日當次騰雲座艙車票旅客始可搭乘。"
+      ],
+      [
+        "5235",
+        5235,
+        "11/27",
+        "臺東",
+        "12:00",
+        "樹林",
+        "16:54",
+        "+",
+        [
+          {
+            "station": "臺東",
+            "arrival": "12:00",
+            "departure": "12:00"
+          },
+          {
+            "station": "關山",
+            "arrival": "12:25",
+            "departure": "12:27"
+          },
+          {
+            "station": "池上",
+            "arrival": "12:52",
+            "departure": "12:53"
+          },
+          {
+            "station": "玉里",
+            "arrival": "13:08",
+            "departure": "13:10"
+          },
+          {
+            "station": "花蓮",
+            "arrival": "13:59",
+            "departure": "14:05"
+          },
+          {
+            "station": "羅東",
+            "arrival": "15:03",
+            "departure": "15:05"
+          },
+          {
+            "station": "宜蘭",
+            "arrival": "15:12",
+            "departure": "15:14"
+          },
+          {
+            "station": "松山",
+            "arrival": "16:27",
+            "departure": "16:28"
+          },
+          {
+            "station": "臺北",
+            "arrival": "16:35",
+            "departure": "16:38"
+          },
+          {
+            "station": "板橋",
+            "arrival": "16:45",
+            "departure": "16:47"
+          },
+          {
+            "station": "樹林",
+            "arrival": "16:54",
+            "departure": "17:01"
+          }
+        ],
+        "自強(3000)(EMU3000 型電車)",
+        "本列次不發售無座票，非持本班次車票旅客，請勿搭乘。 第6節為騰雲座艙，為本公司公告指定不發售無座位車票之車廂，持當日當次騰雲座艙車票旅客始可搭乘。"
+      ],
+      [
+        "5254",
+        5254,
+        "11/27",
+        "樹林",
+        "19:10",
+        "臺東",
+        "23:41",
+        "+",
+        [
+          {
+            "station": "樹林",
+            "arrival": "19:05",
+            "departure": "19:10"
+          },
+          {
+            "station": "板橋",
+            "arrival": "19:17",
+            "departure": "19:18"
+          },
+          {
+            "station": "臺北",
+            "arrival": "19:26",
+            "departure": "19:29"
+          },
+          {
+            "station": "松山",
+            "arrival": "19:35",
+            "departure": "19:36"
+          },
+          {
+            "station": "南港",
+            "arrival": "19:39",
+            "departure": "19:40"
+          },
+          {
+            "station": "花蓮",
+            "arrival": "21:47",
+            "departure": "21:49"
+          },
+          {
+            "station": "鳳林",
+            "arrival": "22:09",
+            "departure": "22:10"
+          },
+          {
+            "station": "光復",
+            "arrival": "22:18",
+            "departure": "22:19"
+          },
+          {
+            "station": "瑞穗",
+            "arrival": "22:31",
+            "departure": "22:32"
+          },
+          {
+            "station": "玉里",
+            "arrival": "22:45",
+            "departure": "22:47"
+          },
+          {
+            "station": "富里",
+            "arrival": "22:58",
+            "departure": "22:59"
+          },
+          {
+            "station": "池上",
+            "arrival": "23:05",
+            "departure": "23:06"
+          },
+          {
+            "station": "關山",
+            "arrival": "23:15",
+            "departure": "23:16"
+          },
+          {
+            "station": "鹿野",
+            "arrival": "23:27",
+            "departure": "23:29"
+          },
+          {
+            "station": "臺東",
+            "arrival": "23:41",
+            "departure": "23:41"
+          }
+        ],
+        "自強(3000)(EMU3000 型電車)",
+        "本列次不發售無座票，非持本班次車票旅客，請勿搭乘。 第6節為騰雲座艙，為本公司公告指定不發售無座位車票之車廂，持當日當次騰雲座艙車票旅客始可搭乘。"
+      ],
+      [
+        "5341",
+        5341,
+        "11/27",
+        "新左營",
+        "19:10",
+        "花蓮",
+        "23:48",
+        "+",
+        [
+          {
+            "station": "新左營",
+            "arrival": "19:10",
+            "departure": "19:10"
+          },
+          {
+            "station": "高雄",
+            "arrival": "19:19",
+            "departure": "19:23"
+          },
+          {
+            "station": "屏東",
+            "arrival": "19:40",
+            "departure": "19:42"
+          },
+          {
+            "station": "潮州",
+            "arrival": "19:54",
+            "departure": "19:57"
+          },
+          {
+            "station": "枋寮",
+            "arrival": "20:24",
+            "departure": "20:26"
+          },
+          {
+            "station": "臺東",
+            "arrival": "21:45",
+            "departure": "21:53"
+          },
+          {
+            "station": "關山",
+            "arrival": "22:16",
+            "departure": "22:20"
+          },
+          {
+            "station": "池上",
+            "arrival": "22:29",
+            "departure": "22:30"
+          },
+          {
+            "station": "玉里",
+            "arrival": "22:46",
+            "departure": "22:48"
+          },
+          {
+            "station": "花蓮",
+            "arrival": "23:48",
+            "departure": "23:48"
+          }
+        ],
+        "自強(3000)(EMU3000 型電車)",
+        "本列次不發售無座票，非持本班次車票旅客，請勿搭乘。 第6節為騰雲座艙，為本公司公告指定不發售無座位車票之車廂，持當日當次騰雲座艙車票旅客始可搭乘。"
+      ]
+    ]
   },
   "2026-11-28": {
     "last_modified": "Wed, 21 Oct 2026 23:25:05 GMT",
@@ -6785,8 +7201,202 @@
     "results": []
   },
   "2026-11-30": {
-    "last_modified": "Wed, 21 Oct 2026 23:25:05 GMT",
-    "results": []
+    "last_modified": "Fri, 23 Oct 2026 00:25:03 GMT",
+    "results": [
+      [
+        "5107",
+        5107,
+        "11/30",
+        "七堵",
+        "08:20",
+        "潮州",
+        "14:06",
+        "+",
+        [
+          {
+            "station": "七堵",
+            "arrival": "08:20",
+            "departure": "08:20"
+          },
+          {
+            "station": "松山",
+            "arrival": "08:37",
+            "departure": "08:38"
+          },
+          {
+            "station": "臺北",
+            "arrival": "08:45",
+            "departure": "08:47"
+          },
+          {
+            "station": "板橋",
+            "arrival": "08:55",
+            "departure": "08:57"
+          },
+          {
+            "station": "桃園",
+            "arrival": "09:17",
+            "departure": "09:19"
+          },
+          {
+            "station": "中壢",
+            "arrival": "09:28",
+            "departure": "09:30"
+          },
+          {
+            "station": "新竹",
+            "arrival": "09:58",
+            "departure": "10:00"
+          },
+          {
+            "station": "豐原",
+            "arrival": "10:47",
+            "departure": "10:49"
+          },
+          {
+            "station": "臺中",
+            "arrival": "10:59",
+            "departure": "11:01"
+          },
+          {
+            "station": "彰化",
+            "arrival": "11:15",
+            "departure": "11:19"
+          },
+          {
+            "station": "嘉義",
+            "arrival": "12:10",
+            "departure": "12:12"
+          },
+          {
+            "station": "臺南",
+            "arrival": "12:48",
+            "departure": "12:52"
+          },
+          {
+            "station": "新左營",
+            "arrival": "13:18",
+            "departure": "13:21"
+          },
+          {
+            "station": "高雄",
+            "arrival": "13:30",
+            "departure": "13:32"
+          },
+          {
+            "station": "鳳山",
+            "arrival": "13:37",
+            "departure": "13:38"
+          },
+          {
+            "station": "屏東",
+            "arrival": "13:51",
+            "departure": "13:53"
+          },
+          {
+            "station": "潮州",
+            "arrival": "14:06",
+            "departure": "14:09"
+          }
+        ],
+        "自強(3000)(EMU3000 型電車)",
+        "本列次不發售無座票，非持本班次車票旅客，請勿搭乘。 第6節為騰雲座艙，為本公司公告指定不發售無座位車票之車廂，持當日當次騰雲座艙車票旅客始可搭乘。"
+      ],
+      [
+        "5321",
+        5321,
+        "11/30",
+        "新左營",
+        "06:02",
+        "花蓮",
+        "10:55",
+        "+",
+        [
+          {
+            "station": "新左營",
+            "arrival": "06:02",
+            "departure": "06:02"
+          },
+          {
+            "station": "高雄",
+            "arrival": "06:11",
+            "departure": "06:15"
+          },
+          {
+            "station": "鳳山",
+            "arrival": "06:21",
+            "departure": "06:23"
+          },
+          {
+            "station": "屏東",
+            "arrival": "06:35",
+            "departure": "06:38"
+          },
+          {
+            "station": "潮州",
+            "arrival": "06:50",
+            "departure": "06:58"
+          },
+          {
+            "station": "枋寮",
+            "arrival": "07:25",
+            "departure": "07:28"
+          },
+          {
+            "station": "大武",
+            "arrival": "08:00",
+            "departure": "08:07"
+          },
+          {
+            "station": "金崙",
+            "arrival": "08:22",
+            "departure": "08:24"
+          },
+          {
+            "station": "太麻里",
+            "arrival": "08:32",
+            "departure": "08:33"
+          },
+          {
+            "station": "知本",
+            "arrival": "08:42",
+            "departure": "08:48"
+          },
+          {
+            "station": "臺東",
+            "arrival": "08:59",
+            "departure": "09:05"
+          },
+          {
+            "station": "鹿野",
+            "arrival": "09:16",
+            "departure": "09:18"
+          },
+          {
+            "station": "關山",
+            "arrival": "09:28",
+            "departure": "09:29"
+          },
+          {
+            "station": "池上",
+            "arrival": "09:41",
+            "departure": "09:43"
+          },
+          {
+            "station": "玉里",
+            "arrival": "09:59",
+            "departure": "10:04"
+          },
+          {
+            "station": "花蓮",
+            "arrival": "10:55",
+            "departure": "10:55"
+          }
+        ],
+        "普悠瑪(普悠瑪)",
+        "本班次不發售無座票，非持本班次車票旅客，請勿搭乘。"
+      ]
+    ]
   },
   "2026-12-01": {
     "last_modified": "Wed, 21 Oct 2026 23:25:05 GMT",
@@ -6801,7 +7411,7 @@
     "results": []
   },
   "2026-12-04": {
-    "last_modified": "Wed, 21 Oct 2026 23:25:05 GMT",
+    "last_modified": "Fri, 23 Oct 2026 00:25:03 GMT",
     "results": []
   },
   "2026-12-05": {
