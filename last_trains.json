@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-10-25 02:31:21",
+  "last_updated": "2026-10-25 15:06:34",
   "data": {
     "shun": {
       "3040": {
@@ -3731,6 +3731,56 @@
             "station": "彰化",
             "arrival": "23:28",
             "departure": "23:28"
+          }
+        ]
+      },
+      "6447": {
+        "type": "自強(3000)(EMU3000 型電車)",
+        "note": "臨時加開。在七堵跨日。※乘車當日限量發售無座票 ，非持本班次車票旅客，請勿搭乘。",
+        "dates": [
+          "10/26"
+        ],
+        "route": "花蓮 22:23 -> 樹林 01:02",
+        "stops": [
+          {
+            "station": "花蓮",
+            "arrival": "22:23",
+            "departure": "22:23"
+          },
+          {
+            "station": "羅東",
+            "arrival": "23:19",
+            "departure": "23:22"
+          },
+          {
+            "station": "宜蘭",
+            "arrival": "23:28",
+            "departure": "23:30"
+          },
+          {
+            "station": "七堵",
+            "arrival": "00:21",
+            "departure": "00:23"
+          },
+          {
+            "station": "松山",
+            "arrival": "00:36",
+            "departure": "00:38"
+          },
+          {
+            "station": "臺北",
+            "arrival": "00:45",
+            "departure": "00:48"
+          },
+          {
+            "station": "板橋",
+            "arrival": "00:54",
+            "departure": "00:56"
+          },
+          {
+            "station": "樹林",
+            "arrival": "01:02",
+            "departure": "01:02"
           }
         ]
       },
