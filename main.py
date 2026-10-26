@@ -216,8 +216,8 @@ def get_line_type(stops):
     if any(stn in station_names for stn in mountain_indicators):
         return "山線"
 
-    # 南迴線指標站
-    nanhuai_indicators = ["枋寮", "加祿", "內獅", "古莊", "大武"]
+    # 南迴線指標站（嚴格限縮為知本、加祿、內獅、枋山）
+    nanhuai_indicators = ["知本", "加祿", "內獅", "枋山"]
     if any(stn in station_names for stn in nanhuai_indicators):
         return "南迴線"
 
@@ -451,7 +451,6 @@ def compare_new_trains(prev_data, current_train_dates):
             curr_dates = curr_info["dates"]
             route = curr_info["route"]
 
-            # 已移除 Telegram 訊息中的 line_type 標籤
             if train_no not in prev_dict:
                 sorted_dates = ", ".join(sorted(list(curr_dates)))
                 new_items.append(
@@ -544,7 +543,6 @@ def format_telegram_report(start_str, end_str, total_found, train_dates, new_ite
             dates_str = ", ".join(dates)
             route = info["route"]
             
-            # 已移除 Telegram 訊息中的 line_type 標籤
             line = f"• *{train_no}次* ({route})：{dates_str}\n"
 
             if len(current_msg) + len(line) > 3800:
