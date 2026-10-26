@@ -1,12 +1,12 @@
 import collections
 import json
 import os
+import re
 import sys
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timedelta, timezone
 import requests
-import re
 
 # 強制 Log 即時印出，不等待 Buffer
 sys.stdout.reconfigure(line_buffering=True)
@@ -174,22 +174,73 @@ def process_note(raw_note):
     """
     if not raw_note:
         return ""
-    
+
     note = raw_note.strip()
-    
-    # 檢查是否包含「民國」與「行駛」
+
     if "民國" in note and "行駛" in note:
-        # 移除「民國...行駛。」區段
         cleaned = re.sub(r"民國.*?行駛。", "", note).strip()
-        # 移除可能殘留的標點符號與空白（如逗號、分號、空格等）
         cleaned = re.sub(r"^[,，、\s]+|[,，、\s]+$", "", cleaned)
         return cleaned
-    
+
     return note
 
 
+def get_line_type(stops):
+    """根據停靠站清單判斷經由線路"""
+    station_names = [s.get("station", "") for s in stops]
+
+    # 海線指標站
+    coast_indicators = [
+        "大甲",
+        "清水",
+        "沙鹿",
+        "龍井",
+        "大肚",
+        "後龍",
+        "通霄",
+        "苑裡",
+    ]
+    if any(stn in station_names for stn in coast_indicators):
+        return "海線"
+
+    # 山線指標站
+    mountain_indicators = [
+        "豐原",
+        "潭子",
+        "臺中",
+        "大慶",
+        "成功",
+        "三義",
+        "銅鑼",
+    ]
+    if any(stn in station_names for stn in mountain_indicators):
+        return "山線"
+
+    # 南迴線指標站
+    nanhuai_indicators = ["枋寮", "加祿", "內獅", "古莊", "大武"]
+    if any(stn in station_names for stn in nanhuai_indicators):
+        return "南迴線"
+
+    # 東部幹線指標站
+    east_indicators = [
+        "花蓮",
+        "臺東",
+        "宜蘭",
+        "羅東",
+        "蘇澳",
+        "玉里",
+        "關山",
+        "池上",
+        "瑞穗",
+    ]
+    if any(stn in station_names for stn in east_indicators):
+        return "東部幹線"
+
+    return "西部幹線"
+
+
 def parse_train_data(data, date_str):
-    """將 API 回傳的原始資料解析為加班車清單（含車種、處理後的備註與全車站時刻）"""
+    """解析 API 回傳資料為加班車資訊（含車種、處理後備註、站點與線路）"""
     results = []
     for item in data.get("TrainTimetables", []):
         train_info = item.get("TrainInfo", {})
@@ -203,7 +254,7 @@ def parse_train_data(data, date_str):
                 if isinstance(raw_note, dict)
                 else str(raw_note or "")
             )
-            
+
             train_type_dict = train_info.get("TrainTypeName", {})
             train_type = (
                 train_type_dict.get("Zh_tw", "")
@@ -216,13 +267,14 @@ def parse_train_data(data, date_str):
                 and train_no not in EXCLUDE_TRAINS
             ):
                 status_sign = (
-                    "+" if "行駛" in note_str else ("-" if "停駛" in note_str else "")
+                    "+"
+                    if "行駛" in note_str
+                    else ("-" if "停駛" in note_str else "")
                 )
-                
-                # 處理備註條件
-                processed_note = process_note(note_str)
 
+                processed_note = process_note(note_str)
                 stop_times = item.get("StopTimes", [])
+
                 start_station, end_station, start_time, end_time = (
                     "",
                     "",
@@ -241,6 +293,7 @@ def parse_train_data(data, date_str):
                         else str(s_name)
                     )
                     start_time = first_stop.get("DepartureTime", "")[:5]
+
                     e_name = last_stop.get("StationName", {})
                     end_station = (
                         e_name.get("Zh_tw", "")
@@ -264,6 +317,8 @@ def parse_train_data(data, date_str):
                             "departure": dep_time,
                         })
 
+                line_type = get_line_type(stops)
+
                 results.append([
                     train_no,
                     train_num,
@@ -274,8 +329,9 @@ def parse_train_data(data, date_str):
                     end_time,
                     status_sign,
                     stops,
-                    train_type,     # 車種資訊
-                    processed_note, # 處理後的備註
+                    train_type,
+                    processed_note,
+                    line_type,
                 ])
     return results
 
@@ -353,7 +409,7 @@ def load_previous_trains():
 
 
 def save_current_trains(train_dates):
-    """儲存含車種、過濾後備註、站點與更新時間的 JSON"""
+    """儲存含線路、車種、過濾後備註與站點的 JSON（網頁端仍會使用 line_type）"""
     tz_taipei = timezone(timedelta(hours=8))
     now_str = datetime.now(tz_taipei).strftime("%Y-%m-%d %H:%M:%S")
 
@@ -363,7 +419,8 @@ def save_current_trains(train_dates):
         for train_no, info in trains.items():
             serializable[dir_key][train_no] = {
                 "type": info.get("type", ""),
-                "note": info.get("note", ""),  # 寫入處理後的備註供網頁渲染
+                "note": info.get("note", ""),
+                "line_type": info.get("line_type", "西部幹線"),
                 "dates": sorted(list(info["dates"])),
                 "route": info["route"],
                 "stops": info.get("stops", []),
@@ -394,6 +451,7 @@ def compare_new_trains(prev_data, current_train_dates):
             curr_dates = curr_info["dates"]
             route = curr_info["route"]
 
+            # 已移除 Telegram 訊息中的 line_type 標籤
             if train_no not in prev_dict:
                 sorted_dates = ", ".join(sorted(list(curr_dates)))
                 new_items.append(
@@ -485,6 +543,8 @@ def format_telegram_report(start_str, end_str, total_found, train_dates, new_ite
             dates = sorted(list(info["dates"]))
             dates_str = ", ".join(dates)
             route = info["route"]
+            
+            # 已移除 Telegram 訊息中的 line_type 標籤
             line = f"• *{train_no}次* ({route})：{dates_str}\n"
 
             if len(current_msg) + len(line) > 3800:
@@ -554,7 +614,8 @@ def main():
                             status_sign,
                             stops,
                             train_type,
-                            note,  # 接收處理後的備註
+                            note,
+                            line_type,
                         ) = item
                         total_found += 1
                         dir_key = "shun" if train_num % 2 == 0 else "ni"
@@ -578,7 +639,8 @@ def main():
 
                             train_dates[dir_key][train_no] = {
                                 "type": train_type,
-                                "note": note,  # 寫入備註
+                                "note": note,
+                                "line_type": line_type,
                                 "dates": set(),
                                 "route": route_str,
                                 "stops": stops,
