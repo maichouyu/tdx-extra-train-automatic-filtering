@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>臺鐵45天內加班車資訊</title>
   <style>
-    /* --- 1. 全域極致暗黑/自適應風格與系統原生字體 --- */
+    /* --- 1. 全域風格與系統原生字體 --- */
     * { box-sizing: border-box; }
 
     body {
@@ -19,12 +19,11 @@
       transition: background 0.3s, color 0.3s;
     }
 
-    /* 時間與數字採用等寬字體 */
     .time-info, .update-time {
       font-family: monospace;
     }
 
-    /* --- 2. 顏色變數設定（預設為深色模式） --- */
+    /* --- 2. 顏色變數（深色模式預設） --- */
     :root {
       --bg-color: #121212;
       --card-bg: #1e1e1e;
@@ -40,9 +39,6 @@
       --input-bg: #252525;
       --input-border: #444;
       
-      --tag-bg: #2a2a2a;
-      
-      /* 深色模式下的切換按鈕：白底黑字無邊框 */
       --toggle-btn-bg: #ffffff;
       --toggle-btn-text: #121212;
     }
@@ -63,9 +59,6 @@
       --input-bg: #fdfdfd;
       --input-border: #cccccc;
       
-      --tag-bg: #fff3e0;
-      
-      /* 淺色模式下的切換按鈕：黑底白字無邊框 */
       --toggle-btn-bg: #111111;
       --toggle-btn-text: #ffffff;
     }
@@ -75,14 +68,12 @@
       max-width: 1200px;
     }
 
-    /* 頂部控制列（支援右上角圓形按鈕配置） */
     .top-controls {
       display: flex;
       justify-content: flex-end;
       margin-bottom: -5px;
     }
 
-    /* 圓形切換主題按鈕（4.1.6 簡潔單字樣式：「深 / 淺」） */
     .theme-toggle-btn {
       background: var(--toggle-btn-bg);
       color: var(--toggle-btn-text);
@@ -104,7 +95,6 @@
       transform: scale(0.9);
     }
 
-    /* 頁首標題區 */
     header {
       display: flex;
       justify-content: space-between;
@@ -128,7 +118,6 @@
       color: var(--text-hint);
     }
 
-    /* 搜尋與排序工具列 */
     .filter-bar {
       display: flex;
       gap: 16px;
@@ -150,7 +139,6 @@
       font-weight: bold;
     }
 
-    /* 搜尋輸入框 */
     .search-input {
       width: 100%;
       background: var(--input-bg);
@@ -167,7 +155,6 @@
       border-color: var(--accent-color);
     }
 
-    /* 排序按鈕群組樣式 */
     .sort-btn-group {
       display: flex;
       gap: 8px;
@@ -192,7 +179,6 @@
       color: var(--text-main);
     }
 
-    /* 選中時的高亮樣式 */
     .sort-btn.active {
       background: var(--accent-color);
       border-color: var(--accent-color);
@@ -214,10 +200,9 @@
       transition: background 0.3s, border-color 0.3s;
     }
     
-    /* 左側車次資訊區 */
     .train-info-sidebar {
-      width: 245px;
-      min-width: 245px;
+      width: 255px;
+      min-width: 255px;
       flex-shrink: 0;
       display: flex;
       flex-direction: column;
@@ -232,17 +217,24 @@
       line-height: 1.1;
     }
 
-    .train-type-badge {
+    .badge-group {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .train-type-badge, .line-type-badge {
       display: inline-block;
-      padding: 4px 10px;
+      padding: 4px 8px;
       border-radius: 4px;
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       font-weight: bold;
-      width: fit-content;
-      max-width: 100%;
       color: #ffffff;
       line-height: 1.3;
-      word-break: break-word;
+    }
+
+    .line-type-badge {
+      background: #555555;
     }
     
     .train-route {
@@ -263,7 +255,6 @@
       word-break: break-all;
     }
 
-    /* 備註區塊樣式 */
     .train-note {
       font-size: 0.75rem;
       color: var(--accent-color);
@@ -276,7 +267,6 @@
       line-height: 1.4;
     }
 
-    /* 右側停靠站網格區 */
     .stops-wrapper {
       flex: 1;
       width: 100%;
@@ -390,7 +380,6 @@
 <body>
 
   <div class="container">
-    <!-- 頂部獨立控制列：放置圓形主題切換按鈕 -->
     <div class="top-controls">
       <button type="button" id="themeToggle" class="theme-toggle-btn" onclick="toggleTheme()">淺</button>
     </div>
@@ -403,15 +392,12 @@
       <div class="update-time" id="last-updated">載入中...</div>
     </header>
 
-    <!-- 搜尋與排序工具列 -->
     <div class="filter-bar">
-      <!-- 搜尋車次號碼 -->
       <div class="filter-group">
         <span class="filter-label">搜尋車次：</span>
         <input type="text" id="search-input" class="search-input" placeholder="輸入車次號碼 (例如: 5210)" oninput="filterAndRender()">
       </div>
 
-      <!-- 排序方式按鈕群組 -->
       <div class="filter-group">
         <span class="filter-label">排序方式：</span>
         <div class="sort-btn-group">
@@ -428,9 +414,8 @@
 
   <script>
     let cachedTrains = [];
-    let currentSortType = 'date-first'; // 預設排序模式
+    let currentSortType = 'date-first';
 
-    // --- 4.1.6 版 主題切換與系統自動監聽機制 ---
     function toggleTheme() {
       const body = document.body;
       const themeBtn = document.getElementById('themeToggle');
@@ -439,15 +424,14 @@
       body.classList.toggle('light-mode');
       
       if (body.classList.contains('light-mode')) {
-        themeBtn.innerText = '深'; // 切換至淺色模式時，按鈕顯示「深」提示切回深色
+        themeBtn.innerText = '深';
         localStorage.setItem('calculator-theme', 'light');
       } else {
-        themeBtn.innerText = '淺'; // 切換至深色模式時，按鈕顯示「淺」提示切回淺色
+        themeBtn.innerText = '淺';
         localStorage.setItem('calculator-theme', 'dark');
       }
     }
 
-    // 更新主題 UI 呈現
     function applyTheme(isLight) {
       const btn = document.getElementById('themeToggle');
       if (isLight) {
@@ -459,7 +443,6 @@
       }
     }
 
-    // 初始化主題並掛載系統偏好動態監聽器
     function initTheme() {
       const savedTheme = localStorage.getItem('calculator-theme');
       const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
@@ -469,11 +452,9 @@
       } else if (savedTheme === 'dark') {
         applyTheme(false);
       } else {
-        // 第一次訪問：自動跟隨系統偏好
         applyTheme(!darkModeMediaQuery.matches);
       }
 
-      // 【4.1.6 核心亮點】自動監聽作業系統或瀏覽器主題之動態切換
       const handleSystemThemeChange = (e) => {
         if (!localStorage.getItem('calculator-theme')) {
           applyTheme(!e.matches);
@@ -483,7 +464,7 @@
       if (darkModeMediaQuery.addEventListener) {
         darkModeMediaQuery.addEventListener('change', handleSystemThemeChange);
       } else if (darkModeMediaQuery.addListener) {
-        darkModeMediaQuery.addListener(handleSystemThemeChange); // 兼容舊版瀏覽器
+        darkModeMediaQuery.addListener(handleSystemThemeChange);
       }
     }
 
@@ -499,7 +480,6 @@
       return '#4BE13A';
     }
 
-    // 切換排序並更新按鈕高亮狀態
     function setSortType(type) {
       currentSortType = type;
 
@@ -618,6 +598,10 @@
           ? `<span class="train-type-badge" style="background:${themeColor};">${train.type}</span>` 
           : '';
 
+        const lineBadge = train.line_type
+          ? `<span class="line-type-badge">${train.line_type}</span>`
+          : '';
+
         const noteHTML = train.note 
           ? `<div class="train-note">備註：${train.note}</div>` 
           : '';
@@ -627,7 +611,10 @@
         card.innerHTML = `
           <div class="train-info-sidebar">
             <span class="train-no" style="color:${themeColor};">${train.trainNo} 次</span>
-            ${typeBadge}
+            <div class="badge-group">
+              ${typeBadge}
+              ${lineBadge}
+            </div>
             <div class="train-route">${train.route}</div>
             <div class="train-dates">開行日期：${train.cleanDates.join(', ')}</div>
             ${noteHTML}
@@ -663,7 +650,7 @@
     }
 
     async function initApp() {
-      initTheme(); // 初始化主題與監聽
+      initTheme();
       try {
         const cacheBuster = new Date().getTime();
         const response = await fetch(`./last_trains.json?v=${cacheBuster}`);
