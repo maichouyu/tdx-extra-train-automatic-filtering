@@ -65,7 +65,7 @@
 
     .container {
       width: 100%;
-      max-width: 1350px; /* 稍微放寬以確保 4 欄有足夠空間展開 */
+      max-width: 1350px;
     }
 
     .top-controls {
@@ -196,7 +196,7 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
       display: flex;
       gap: 20px;
-      align-items: flex-start; /* 改為 flex-start 讓多行站名垂直對齊更自然 */
+      align-items: flex-start;
       transition: background 0.3s, border-color 0.3s;
     }
     
@@ -270,12 +270,11 @@
     .stops-wrapper {
       flex: 1;
       width: 100%;
-      min-width: 0; /* 防止彈性容器撐爆 */
+      min-width: 0;
     }
 
     .stops-grid {
       display: grid;
-      /* 強制維持 4 欄，並用 minmax(0, 1fr) 防止內容過長時爆框 */
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 8px;
     }
@@ -290,7 +289,7 @@
       justify-content: space-between;
       align-items: center;
       gap: 4px;
-      min-width: 0; /* 允許內部文字正確收縮換行 */
+      min-width: 0;
     }
     
     .station-name {
@@ -359,7 +358,7 @@
       }
 
       .stops-grid {
-        grid-template-columns: repeat(2, 1fr); /* 手機版維持 2 欄 */
+        grid-template-columns: repeat(2, 1fr);
         gap: 6px;
       }
 
@@ -576,7 +575,12 @@
         const themeColor = getTrainTypeColor(train.type);
         card.style.borderLeft = `6px solid ${themeColor}`;
 
-        const totalStops = train.stops || [];
+        // 複製一份 stops 並依據時間（departure 或 arrival）進行排序，避免站序錯亂
+        const totalStops = [...(train.stops || [])].sort((a, b) => {
+          const timeA = a.departure || a.arrival || '';
+          const timeB = b.departure || b.arrival || '';
+          return timeA.localeCompare(timeB);
+        });
         
         const stopsHTML = totalStops.map((st, idx) => {
           let timeText = '';
