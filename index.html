@@ -65,7 +65,7 @@
 
     .container {
       width: 100%;
-      max-width: 1400px; /* 需求二：依據格線長度與其他元素總和彈性調整頁面寬度上限 */
+      max-width: 1350px; /* 稍微放寬以確保 4 欄有足夠空間展開 */
     }
 
     .top-controls {
@@ -196,7 +196,7 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
       display: flex;
       gap: 20px;
-      align-items: flex-start; /* 改為 flex-start 避免多行停靠站時垂直對齊異常 */
+      align-items: flex-start; /* 改為 flex-start 讓多行站名垂直對齊更自然 */
       transition: background 0.3s, border-color 0.3s;
     }
     
@@ -270,13 +270,13 @@
     .stops-wrapper {
       flex: 1;
       width: 100%;
-      min-width: 0; /* 確保彈性佈局正常運作 */
+      min-width: 0; /* 防止彈性容器撐爆 */
     }
 
     .stops-grid {
       display: grid;
-      /* 需求一：格線由文字自動化調整，使用 auto-fill 與 minmax 確保不爆格 */
-      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      /* 強制維持 4 欄，並用 minmax(0, 1fr) 防止內容過長時爆框 */
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 8px;
     }
 
@@ -284,13 +284,13 @@
       background: var(--input-bg);
       border: 1px solid var(--border-color);
       border-radius: 6px;
-      padding: 8px 10px;
-      font-size: 0.85rem;
+      padding: 8px 8px;
+      font-size: 0.82rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 6px;
-      min-width: 0;
+      gap: 4px;
+      min-width: 0; /* 允許內部文字正確收縮換行 */
     }
     
     .station-name {
@@ -301,7 +301,7 @@
     }
 
     .time-info {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       white-space: nowrap;
     }
 
@@ -359,7 +359,7 @@
       }
 
       .stops-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr); /* 手機版維持 2 欄 */
         gap: 6px;
       }
 
