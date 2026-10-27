@@ -17,7 +17,7 @@
       display: flex;
       justify-content: center;
       transition: background 0.3s, color 0.3s;
-      overflow-x: auto; /* 確保窄螢幕時可橫向滾動 */
+      overflow-x: auto; /* 確保內容過寬時，畫面可平滑橫向滾動 */
     }
 
     .time-info, .update-time {
@@ -64,14 +64,15 @@
       --toggle-btn-text: #ffffff;
     }
 
-    /* 容器寬度根據最寬卡片自動調整 */
+    /* 容器寬度：由「最長的卡片」自動撐開整體寬度 */
     .container {
       width: max-content;
       min-width: 100%;
-      max-width: none;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch; /* 強制所有子元素（標題、搜尋列、每張卡片）寬度完全一致 */
     }
 
-    /* 頂部控制項：隨最寬卡片對齊最右側 */
     .top-controls {
       display: flex;
       justify-content: flex-end;
@@ -100,7 +101,7 @@
       transform: scale(0.9);
     }
 
-    /* 標題列：寬度 100% 自動隨卡片伸縮，橘色底線完整延伸 */
+    /* 頂部標題：自動跟隨最長的卡片延伸寬度 */
     header {
       display: flex;
       justify-content: space-between;
@@ -124,7 +125,7 @@
       color: var(--text-hint);
     }
 
-    /* 搜尋與排序列：隨最寬卡片彈性延伸 */
+    /* 搜尋列：自動跟隨最長的卡片延伸寬度 */
     .filter-bar {
       display: flex;
       gap: 16px;
@@ -193,12 +194,11 @@
       box-shadow: 0 0 10px rgba(255, 152, 0, 0.4);
     }
 
-    /* 車次列表區塊 */
     #train-list {
       width: 100%;
     }
 
-    /* 車次卡片：寬度跟隨內部總長度自動延伸 */
+    /* 車次卡片：每一張卡片寬度都 100% 填滿，自動對齊最長的那張卡片 */
     .train-card {
       background: var(--card-bg);
       border: 1px solid var(--border-color);
@@ -209,8 +209,7 @@
       display: flex;
       gap: 20px;
       align-items: flex-start;
-      width: max-content;
-      min-width: 100%;
+      width: 100%; /* 強制對齊最長卡片 */
       transition: background 0.3s, border-color 0.3s;
     }
     
@@ -285,7 +284,7 @@
       flex: 1;
     }
 
-    /* 4欄格線：寬度完全根據內文自動伸長 */
+    /* 4 欄格線：單個格子完全根據內部「4字站名+時間」自動撐開 */
     .stops-grid {
       display: grid;
       grid-template-columns: repeat(4, max-content);
@@ -302,7 +301,7 @@
       justify-content: space-between;
       align-items: center;
       gap: 10px;
-      white-space: nowrap;
+      white-space: nowrap; /* 不折行，確保格子由文字內容撐到最完美的寬度 */
     }
     
     .station-name {
@@ -324,7 +323,7 @@
         padding: 12px;
       }
 
-      .container, .train-card {
+      .container {
         width: 100%;
       }
 
