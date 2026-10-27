@@ -17,6 +17,7 @@
       display: flex;
       justify-content: center;
       transition: background 0.3s, color 0.3s;
+      overflow-x: auto; /* 確保內容過寬時可平滑橫向滾動 */
     }
 
     .time-info, .update-time {
@@ -63,9 +64,11 @@
       --toggle-btn-text: #ffffff;
     }
 
+    /* 需求二：容器寬度根據內部元素總和自動調整 */
     .container {
-      width: 100%;
-      max-width: 1550px; /* 大幅放寬外層容器，確保 4 欄寬格子連同背景完美包覆 */
+      width: max-content;
+      min-width: 100%;
+      max-width: none;
     }
 
     .top-controls {
@@ -186,7 +189,7 @@
       box-shadow: 0 0 10px rgba(255, 152, 0, 0.4);
     }
 
-    /* 車次卡片 */
+    /* 車次卡片：寬度跟隨內部總長度自動延伸 */
     .train-card {
       background: var(--card-bg);
       border: 1px solid var(--border-color);
@@ -197,6 +200,8 @@
       display: flex;
       gap: 20px;
       align-items: flex-start;
+      width: max-content;
+      min-width: 100%;
       transition: background 0.3s, border-color 0.3s;
     }
     
@@ -269,14 +274,12 @@
 
     .stops-wrapper {
       flex: 1;
-      width: 100%;
-      min-width: 0; /* 確保彈性區域正確填滿卡片右側 */
     }
 
+    /* 需求一：4欄格線，每一個格子的寬度完全由內文（4字站名+時間）撐開 */
     .stops-grid {
       display: grid;
-      /* 嚴格 4 欄，每欄最小寬度設為 215px，完美容納 4 字站名與長時間，絕不凸出 */
-      grid-template-columns: repeat(4, minmax(215px, 1fr));
+      grid-template-columns: repeat(4, max-content);
       gap: 8px;
     }
 
@@ -284,27 +287,22 @@
       background: var(--input-bg);
       border: 1px solid var(--border-color);
       border-radius: 6px;
-      padding: 8px 10px;
+      padding: 8px 12px;
       font-size: 0.85rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 6px;
-      min-width: 0;
-      overflow: hidden;
+      gap: 10px;
+      white-space: nowrap; /* 強制內容不折行，保持單格極致整齊 */
     }
     
     .station-name {
       font-weight: bold;
       color: var(--text-main);
-      flex-shrink: 0;
-      white-space: nowrap;
     }
 
     .time-info {
       font-size: 0.75rem;
-      white-space: nowrap;
-      flex-shrink: 0;
     }
 
     .toggle-btn {
@@ -313,6 +311,10 @@
 
     /* 手機版 RWD */
     @media (max-width: 768px) {
+      .container, .train-card {
+        width: 100%;
+      }
+
       .train-card {
         flex-direction: column;
         align-items: stretch;
@@ -368,6 +370,7 @@
       .stop-item {
         padding: 6px 8px;
         font-size: 0.78rem;
+        white-space: normal;
       }
 
       .time-info {
