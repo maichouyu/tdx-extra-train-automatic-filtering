@@ -17,7 +17,7 @@
       display: flex;
       justify-content: center;
       transition: background 0.3s, color 0.3s;
-      overflow-x: auto; /* 確保內容過寬時，畫面可平滑橫向滾動 */
+      overflow-x: auto;
     }
 
     .time-info, .update-time {
@@ -64,13 +64,11 @@
       --toggle-btn-text: #ffffff;
     }
 
-    /* 容器寬度：由「最長的卡片」自動撐開整體寬度 */
+    /* 容器寬度由內部最長的卡片（左側欄 + 4個車站格線總和）自動撐開，並設定最小寬度確保畫面扎實 */
     .container {
-      width: max-content;
-      min-width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: stretch; /* 強制所有子元素（標題、搜尋列、每張卡片）寬度完全一致 */
+      width: fit-content;
+      min-width: 1000px;
+      margin: 0 auto;
     }
 
     .top-controls {
@@ -101,7 +99,7 @@
       transform: scale(0.9);
     }
 
-    /* 頂部標題：自動跟隨最長的卡片延伸寬度 */
+    /* 標題列：精確與最長卡片等寬對齊，橘色底線完美延伸 */
     header {
       display: flex;
       justify-content: space-between;
@@ -110,7 +108,7 @@
       padding-bottom: 12px;
       margin-bottom: 16px;
       width: 100%;
-      gap: 10px;
+      gap: 20px;
     }
 
     h1 {
@@ -123,9 +121,10 @@
     .update-time {
       font-size: 0.8rem;
       color: var(--text-hint);
+      white-space: nowrap;
     }
 
-    /* 搜尋列：自動跟隨最長的卡片延伸寬度 */
+    /* 搜尋與排序列：與卡片總寬度完美對齊 */
     .filter-bar {
       display: flex;
       gap: 16px;
@@ -180,6 +179,7 @@
       cursor: pointer;
       transition: all 0.2s ease;
       text-align: center;
+      white-space: nowrap;
     }
 
     .sort-btn:hover {
@@ -198,7 +198,7 @@
       width: 100%;
     }
 
-    /* 車次卡片：每一張卡片寬度都 100% 填滿，自動對齊最長的那張卡片 */
+    /* 車次卡片：寬度精確等於 左邊側邊欄寬度 + 4個車站格線總和 */
     .train-card {
       background: var(--card-bg);
       border: 1px solid var(--border-color);
@@ -209,7 +209,7 @@
       display: flex;
       gap: 20px;
       align-items: flex-start;
-      width: 100%; /* 強制對齊最長卡片 */
+      width: fit-content;
       transition: background 0.3s, border-color 0.3s;
     }
     
@@ -284,7 +284,7 @@
       flex: 1;
     }
 
-    /* 4 欄格線：單個格子完全根據內部「4字站名+時間」自動撐開 */
+    /* 4欄格線：格子寬度完全由內文（4字站名+時間）自適應撐開 */
     .stops-grid {
       display: grid;
       grid-template-columns: repeat(4, max-content);
@@ -301,7 +301,7 @@
       justify-content: space-between;
       align-items: center;
       gap: 10px;
-      white-space: nowrap; /* 不折行，確保格子由文字內容撐到最完美的寬度 */
+      white-space: nowrap;
     }
     
     .station-name {
@@ -324,6 +324,7 @@
       }
 
       .container {
+        min-width: 100%;
         width: 100%;
       }
 
@@ -333,6 +334,7 @@
       }
 
       .train-card {
+        width: 100%;
         flex-direction: column;
         align-items: stretch;
         gap: 12px;
@@ -405,7 +407,7 @@
 </head>
 <body>
 
-  <div class="container">
+  <div class="container" id="main-container">
     <div class="top-controls">
       <button type="button" id="themeToggle" class="theme-toggle-btn" onclick="toggleTheme()">淺</button>
     </div>
@@ -660,6 +662,18 @@
 
         container.appendChild(card);
       });
+
+      // 動態將整個外層容器的最小寬度與最寬的卡片保持一致，確保標題列完美對齊最長卡片
+      setTimeout(() => {
+        const cards = document.querySelectorAll('.train-card');
+        let maxWidth = 1000;
+        cards.forEach(c => {
+          if (c.offsetWidth > maxWidth) {
+            maxWidth = c.offsetWidth;
+          }
+        });
+        document.getElementById('main-container').style.minWidth = maxWidth + 'px';
+      }, 50);
     }
 
     function toggleStops(wrapperId, btn) {
