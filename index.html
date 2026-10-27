@@ -65,7 +65,7 @@
 
     .container {
       width: 100%;
-      max-width: 1200px;
+      max-width: 1400px; /* 需求二：依據格線長度與其他元素總和彈性調整頁面寬度上限 */
     }
 
     .top-controls {
@@ -196,7 +196,7 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
       display: flex;
       gap: 20px;
-      align-items: center;
+      align-items: flex-start; /* 改為 flex-start 避免多行停靠站時垂直對齊異常 */
       transition: background 0.3s, border-color 0.3s;
     }
     
@@ -270,11 +270,13 @@
     .stops-wrapper {
       flex: 1;
       width: 100%;
+      min-width: 0; /* 確保彈性佈局正常運作 */
     }
 
     .stops-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      /* 需求一：格線由文字自動化調整，使用 auto-fill 與 minmax 確保不爆格 */
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
       gap: 8px;
     }
 
@@ -287,13 +289,15 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 6px;
+      min-width: 0;
     }
     
     .station-name {
       font-weight: bold;
       color: var(--text-main);
-      margin-right: 6px;
       flex-shrink: 0;
+      white-space: nowrap;
     }
 
     .time-info {
