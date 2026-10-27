@@ -65,7 +65,7 @@
 
     .container {
       width: 100%;
-      max-width: 1450px; /* 加長格子後同步放寬頁面容器上限，確保 4 欄完美展開 */
+      max-width: 1550px; /* 大幅放寬外層容器，確保 4 欄寬格子連同背景完美包覆 */
     }
 
     .top-controls {
@@ -270,13 +270,13 @@
     .stops-wrapper {
       flex: 1;
       width: 100%;
-      min-width: 0;
+      min-width: 0; /* 確保彈性區域正確填滿卡片右側 */
     }
 
     .stops-grid {
       display: grid;
-      /* 維持 4 欄，並將每欄最小寬度加長至 200px，完美容納 4 字站名與長時間 */
-      grid-template-columns: repeat(4, minmax(200px, 1fr));
+      /* 嚴格 4 欄，每欄最小寬度設為 215px，完美容納 4 字站名與長時間，絕不凸出 */
+      grid-template-columns: repeat(4, minmax(215px, 1fr));
       gap: 8px;
     }
 
@@ -284,7 +284,7 @@
       background: var(--input-bg);
       border: 1px solid var(--border-color);
       border-radius: 6px;
-      padding: 8px 10px; /* 恢復舒適的 padding */
+      padding: 8px 10px;
       font-size: 0.85rem;
       display: flex;
       justify-content: space-between;
@@ -302,7 +302,7 @@
     }
 
     .time-info {
-      font-size: 0.75rem; /* 讓時間字體保持清晰易讀 */
+      font-size: 0.75rem;
       white-space: nowrap;
       flex-shrink: 0;
     }
