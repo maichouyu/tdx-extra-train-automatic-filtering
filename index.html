@@ -275,6 +275,7 @@
 
     .stops-grid {
       display: grid;
+      /*維持嚴格 4 欄，並用 minmax(0, 1fr) 確保每欄平均且不被撐破*/
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 8px;
     }
@@ -283,13 +284,14 @@
       background: var(--input-bg);
       border: 1px solid var(--border-color);
       border-radius: 6px;
-      padding: 8px 8px;
-      font-size: 0.82rem;
+      padding: 8px 6px; /* 稍微縮減左右 padding 讓長文字有更多空間 */
+      font-size: 0.8rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 4px;
       min-width: 0;
+      overflow: hidden; /* 防止任何內容突出方格外 */
     }
     
     .station-name {
@@ -300,8 +302,9 @@
     }
 
     .time-info {
-      font-size: 0.72rem;
+      font-size: 0.68rem; /* 微調時間字體大小，確保「XX:XX到→XX:XX開」完美容納不突出 */
       white-space: nowrap;
+      flex-shrink: 1;
     }
 
     .toggle-btn {
@@ -575,12 +578,7 @@
         const themeColor = getTrainTypeColor(train.type);
         card.style.borderLeft = `6px solid ${themeColor}`;
 
-        // 複製一份 stops 並依據時間（departure 或 arrival）進行排序，避免站序錯亂
-        const totalStops = [...(train.stops || [])].sort((a, b) => {
-          const timeA = a.departure || a.arrival || '';
-          const timeB = b.departure || b.arrival || '';
-          return timeA.localeCompare(timeB);
-        });
+        const totalStops = train.stops || [];
         
         const stopsHTML = totalStops.map((st, idx) => {
           let timeText = '';
@@ -685,3 +683,4 @@
 
 </body>
 </html>
+q
