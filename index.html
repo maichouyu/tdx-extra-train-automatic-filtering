@@ -17,7 +17,7 @@
       display: flex;
       justify-content: center;
       transition: background 0.3s, color 0.3s;
-      overflow-x: auto; /* 確保內容過寬時可平滑橫向滾動 */
+      overflow-x: auto; /* 確保窄螢幕時可橫向滾動 */
     }
 
     .time-info, .update-time {
@@ -64,17 +64,19 @@
       --toggle-btn-text: #ffffff;
     }
 
-    /* 需求二：容器寬度根據內部元素總和自動調整 */
+    /* 容器寬度根據最寬卡片自動調整 */
     .container {
       width: max-content;
       min-width: 100%;
       max-width: none;
     }
 
+    /* 頂部控制項：隨最寬卡片對齊最右側 */
     .top-controls {
       display: flex;
       justify-content: flex-end;
       margin-bottom: -5px;
+      width: 100%;
     }
 
     .theme-toggle-btn {
@@ -98,14 +100,15 @@
       transform: scale(0.9);
     }
 
+    /* 標題列：寬度 100% 自動隨卡片伸縮，橘色底線完整延伸 */
     header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-end;
       border-bottom: 2px solid var(--accent-color);
       padding-bottom: 12px;
       margin-bottom: 16px;
-      flex-wrap: wrap;
+      width: 100%;
       gap: 10px;
     }
 
@@ -121,11 +124,12 @@
       color: var(--text-hint);
     }
 
+    /* 搜尋與排序列：隨最寬卡片彈性延伸 */
     .filter-bar {
       display: flex;
       gap: 16px;
       margin-bottom: 20px;
-      flex-wrap: wrap;
+      width: 100%;
     }
 
     .filter-group {
@@ -133,7 +137,6 @@
       flex-direction: column;
       gap: 6px;
       flex: 1;
-      min-width: 250px;
     }
 
     .filter-label {
@@ -161,6 +164,7 @@
     .sort-btn-group {
       display: flex;
       gap: 8px;
+      width: 100%;
     }
 
     .sort-btn {
@@ -187,6 +191,11 @@
       border-color: var(--accent-color);
       color: #121212;
       box-shadow: 0 0 10px rgba(255, 152, 0, 0.4);
+    }
+
+    /* 車次列表區塊 */
+    #train-list {
+      width: 100%;
     }
 
     /* 車次卡片：寬度跟隨內部總長度自動延伸 */
@@ -276,7 +285,7 @@
       flex: 1;
     }
 
-    /* 需求一：4欄格線，每一個格子的寬度完全由內文（4字站名+時間）撐開 */
+    /* 4欄格線：寬度完全根據內文自動伸長 */
     .stops-grid {
       display: grid;
       grid-template-columns: repeat(4, max-content);
@@ -293,7 +302,7 @@
       justify-content: space-between;
       align-items: center;
       gap: 10px;
-      white-space: nowrap; /* 強制內容不折行，保持單格極致整齊 */
+      white-space: nowrap;
     }
     
     .station-name {
@@ -311,8 +320,17 @@
 
     /* 手機版 RWD */
     @media (max-width: 768px) {
+      body {
+        padding: 12px;
+      }
+
       .container, .train-card {
         width: 100%;
+      }
+
+      header, .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
       }
 
       .train-card {
