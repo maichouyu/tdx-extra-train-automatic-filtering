@@ -17,7 +17,7 @@
       display: flex;
       justify-content: center;
       transition: background 0.3s, color 0.3s;
-      overflow-x: auto; /* 允許橫向滑動以完美檢視完整站名與時間 */
+      overflow-x: auto; /* 寬度超出螢幕時可滑動 */
     }
 
     .time-info, .update-time {
@@ -64,9 +64,11 @@
       --toggle-btn-text: #ffffff;
     }
 
+    /* 容器寬度會由 JS 動態設為最寬卡片長度 */
     .container {
       width: fit-content;
       min-width: 100%;
+      margin: 0 auto;
     }
 
     .top-controls {
@@ -97,6 +99,7 @@
       transform: scale(0.9);
     }
 
+    /* 標題列：寬度 100% 自動跟進最寬卡片長度 */
     header {
       display: flex;
       justify-content: space-between;
@@ -121,6 +124,7 @@
       white-space: nowrap;
     }
 
+    /* 搜尋與排序列：跟進延伸與卡片等寬 */
     .filter-bar {
       display: flex;
       gap: 16px;
@@ -194,7 +198,7 @@
       width: 100%;
     }
 
-    /* 車次卡片：寬度完全由左側資訊與右側自動調整的格線總和決定 */
+    /* 車次卡片：寬度由內部左側側邊欄與右側 4 個車站格線自動撐大 */
     .train-card {
       background: var(--card-bg);
       border: 1px solid var(--border-color);
@@ -281,7 +285,7 @@
       flex: 1;
     }
 
-    /* 核心修改：4欄格線寬度完全依據文字長度自動調整（max-content），絕不擠壓爆框 */
+    /* 需求一：4欄格線由內文（站名+時間）最大寬度自動撐大 */
     .stops-grid {
       display: grid;
       grid-template-columns: repeat(4, max-content);
@@ -298,7 +302,7 @@
       justify-content: space-between;
       align-items: center;
       gap: 12px;
-      white-space: nowrap; /* 強制文字不折行，讓格子完全依據文字自動放大 */
+      white-space: nowrap; /* 不折行，確保格子由文字自動調整長度 */
     }
     
     .station-name {
@@ -321,7 +325,8 @@
       }
 
       .container {
-        min-width: 100%;
+        min-width: 100% !important;
+        width: 100% !important;
       }
 
       header, .filter-bar {
@@ -403,7 +408,7 @@
 </head>
 <body>
 
-  <div class="container">
+  <div class="container" id="main-container">
     <div class="top-controls">
       <button type="button" id="themeToggle" class="theme-toggle-btn" onclick="toggleTheme()">淺</button>
     </div>
@@ -558,6 +563,34 @@
       filterAndRender();
     }
 
+    /* 自動計算最長卡片寬度並調整容器 width/min-width 的關鍵函式 */
+    function adjustContainerWidth() {
+      if (window.innerWidth <= 768) return; // 手機版不執行適應計算
+      
+      const mainContainer = document.getElementById('main-container');
+      if (!mainContainer) return;
+
+      // 歸零 reset 重新計算真正的內容長度
+      mainContainer.style.width = 'fit-content';
+      
+      requestAnimationFrame(() => {
+        const cards = document.querySelectorAll('.train-card');
+        let maxCardWidth = 0;
+
+        cards.forEach(card => {
+          const w = card.getBoundingClientRect().width;
+          if (w > maxCardWidth) {
+            maxCardWidth = w;
+          }
+        });
+
+        if (maxCardWidth > 0) {
+          // 精準將容器與標題欄動態設為最寬卡片長度
+          mainContainer.style.width = `${maxCardWidth}px`;
+        }
+      });
+    }
+
     function filterAndRender() {
       const container = document.getElementById('train-list');
       const searchKeyword = document.getElementById('search-input').value.trim();
@@ -658,6 +691,9 @@
 
         container.appendChild(card);
       });
+
+      // 渲染完畢後呼叫寬度調整，確保頂部標題與最寬卡片對齊
+      adjustContainerWidth();
     }
 
     function toggleStops(wrapperId, btn) {
@@ -697,6 +733,8 @@
     } else {
       initApp();
     }
+
+    window.addEventListener('resize', adjustContainerWidth);
   </script>
 
 </body>
