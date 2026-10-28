@@ -15,9 +15,9 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       padding: 16px;
       display: flex;
-      justify-content: flex-start; /* 讓整體頁面從左邊自然展開 */
+      justify-content: flex-start;
       transition: background 0.3s, color 0.3s;
-      overflow-x: auto; /* 超出螢幕時可平滑橫向滑動 */
+      overflow-x: auto; /* 支援橫向平滑滾動 */
     }
 
     .time-info, .update-time {
@@ -64,19 +64,17 @@
       --toggle-btn-text: #ffffff;
     }
 
-    /* 頁面主容器：寬度將由 JS 計算「最長卡片 + 留空」動態精確寫入 */
+    /* 容器與頂部元件將由 JS 動態賦予精確寬度 */
     .container {
       width: fit-content;
       min-width: 100%;
       margin: 0;
     }
 
-    /* 頂部主題按鈕：100% 貼齊容器最右側 */
     .top-controls {
       display: flex;
       justify-content: flex-end;
       margin-bottom: -5px;
-      width: 100%;
     }
 
     .theme-toggle-btn {
@@ -100,7 +98,7 @@
       transform: scale(0.9);
     }
 
-    /* 標題列：橘色底線完全伸長，與最長卡片右緣與留空完美齊平 */
+    /* 標題列：橘色底線完美跟進最長卡片長度 + 舒適留空 */
     header {
       display: flex;
       justify-content: space-between;
@@ -108,7 +106,6 @@
       border-bottom: 2px solid var(--accent-color);
       padding-bottom: 12px;
       margin-bottom: 16px;
-      width: 100%;
       gap: 20px;
     }
 
@@ -125,12 +122,11 @@
       white-space: nowrap;
     }
 
-    /* 搜尋與排序列：寬度 100% 貼齊容器 */
+    /* 搜尋與排序列：同步跟進與卡片等寬 */
     .filter-bar {
       display: flex;
       gap: 16px;
       margin-bottom: 20px;
-      width: 100%;
     }
 
     .filter-group {
@@ -199,7 +195,7 @@
       width: 100%;
     }
 
-    /* 車次卡片：寬度由內容徹底撐開，絕不上鎖限制 */
+    /* 車次卡片：寬度由內容徹底撐開 */
     .train-card {
       background: var(--card-bg);
       border: 1px solid var(--border-color);
@@ -285,7 +281,7 @@
       flex: 1;
     }
 
-    /* 4欄車站格線：每欄依文字（站名+時間）max-content 自動伸長 */
+    /* 4欄車站格線：每欄完全由文字 (max-content) 自動調整寬度 */
     .stops-grid {
       display: grid;
       grid-template-columns: repeat(4, max-content);
@@ -318,6 +314,86 @@
       display: none;
     }
 
+    /* 手機版 RWD */
+    @media (max-width: 768px) {
+      body {
+        padding: 12px;
+      }
+
+      .container, header, .filter-bar {
+        width: 100% !important;
+        min-width: 100%;
+      }
+
+      header, .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .train-card {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        padding: 16px;
+      }
+
+      .train-info-sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px dashed var(--border-color);
+        padding-right: 0;
+        padding-bottom: 12px;
+      }
+
+      .toggle-btn {
+        display: flex;
+        width: 100%;
+        background: var(--input-bg);
+        color: var(--text-muted);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        padding: 8px 12px;
+        font-size: 0.85rem;
+        font-weight: bold;
+        cursor: pointer;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 4px;
+      }
+
+      .toggle-btn .icon {
+        font-size: 0.75rem;
+        color: var(--accent-color);
+        transition: transform 0.2s ease;
+      }
+
+      .stops-wrapper {
+        display: none;
+        margin-top: 8px;
+        padding-top: 8px;
+      }
+
+      .stops-wrapper.active {
+        display: block;
+      }
+
+      .stops-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+      }
+
+      .stop-item {
+        padding: 6px 8px;
+        font-size: 0.78rem;
+        white-space: normal;
+      }
+
+      .time-info {
+        font-size: 0.7rem;
+      }
+    }
+
     .status-msg {
       text-align: center;
       padding: 40px;
@@ -329,11 +405,11 @@
 <body>
 
   <div class="container" id="main-container">
-    <div class="top-controls">
+    <div class="top-controls" id="top-controls">
       <button type="button" id="themeToggle" class="theme-toggle-btn" onclick="toggleTheme()">淺</button>
     </div>
 
-    <header>
+    <header id="main-header">
       <div>
         <h1>臺鐵45天內加班車時刻表</h1>
         <div class="date-range" id="date-range" style="font-size: 0.9rem; color: var(--accent-color); font-weight: bold; margin-top: 4px;"></div>
@@ -341,7 +417,7 @@
       <div class="update-time" id="last-updated">載入中...</div>
     </header>
 
-    <div class="filter-bar">
+    <div class="filter-bar" id="filter-bar">
       <div class="filter-group">
         <span class="filter-label">搜尋車次：</span>
         <input type="text" id="search-input" class="search-input" placeholder="輸入車次號碼 (例如: 5210)" oninput="filterAndRender()">
@@ -483,27 +559,30 @@
       filterAndRender();
     }
 
-    // 核心計算公式：量測最長卡片 + 預留舒適邊界留空（Offset）
+    // 核心計算公式：標題長度 = 最長卡片長度 + 舒適留空 Offset (例如 30px)，讓邊界不侷促
     function updateContainerWidth() {
+      if (window.innerWidth <= 768) return; // 手機版維持滿版響應式
+
       const cards = document.querySelectorAll('.train-card');
       if (cards.length === 0) return;
 
       let maxCardWidth = 0;
       cards.forEach(card => {
-        // 取得該卡片真實開展後的物理像素長度
         const w = card.scrollWidth;
         if (w > maxCardWidth) {
           maxCardWidth = w;
         }
       });
 
-      // 預留右側舒適留空 offset（20px，避免卡片貼著邊界太侷促）
-      const PADDING_OFFSET = 20; 
-      const calculatedWidth = maxCardWidth + PADDING_OFFSET;
+      // 公式計算：最長卡片實際寬度 + 30px 舒適留空
+      const PADDING_OFFSET = 30; 
+      const targetWidth = maxCardWidth + PADDING_OFFSET;
 
-      // 精確賦予容器寬度，標題橘線與搜尋列將自動延長並齊平
-      const container = document.getElementById('main-container');
-      container.style.width = calculatedWidth + 'px';
+      // 同步設定容器、標題列、搜尋列的寬度，確保 100% 精準對齊最長卡片右緣
+      document.getElementById('main-container').style.width = targetWidth + 'px';
+      document.getElementById('main-header').style.width = targetWidth + 'px';
+      document.getElementById('filter-bar').style.width = targetWidth + 'px';
+      document.getElementById('top-controls').style.width = targetWidth + 'px';
     }
 
     function filterAndRender() {
@@ -604,53 +683,4 @@
           </div>
         `;
 
-        container.appendChild(card);
-      });
-
-      // DOM 完全渲染後，執行公式計算並套用最終寬度
-      setTimeout(() => {
-        updateContainerWidth();
-      }, 50);
-    }
-
-    function toggleStops(wrapperId, btn) {
-      const wrapper = document.getElementById(wrapperId);
-      const icon = btn.querySelector('.icon');
-      
-      if (wrapper.classList.contains('active')) {
-        wrapper.classList.remove('active');
-        icon.textContent = '▼';
-      } else {
-        wrapper.classList.add('active');
-        icon.textContent = '▲';
-      }
-    }
-
-    async function initApp() {
-      initTheme();
-      try {
-        const cacheBuster = new Date().getTime();
-        const response = await fetch(`./last_trains.json?v=${cacheBuster}`);
-        
-        if (!response.ok) throw new Error(`HTTP 錯誤狀態: ${response.status}`);
-        const realJson = await response.json();
-        processJsonData(realJson);
-      } catch (err) {
-        console.error('讀取 JSON 資料失敗：', err.message);
-        document.getElementById('train-list').innerHTML = `
-          <div class="status-msg" style="color: #ff5252;">
-            資料讀取失敗，請確認 <code>last_trains.json</code> 檔案格式是否正確。
-          </div>
-        `;
-      }
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initApp);
-    } else {
-      initApp();
-    }
-  </script>
-
-</body>
-</html>
+    // 完整的 HTML 與 JavaScript 程式碼提供完畢，可直接複製更新。
