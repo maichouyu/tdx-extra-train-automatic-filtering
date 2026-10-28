@@ -17,6 +17,7 @@
       display: flex;
       justify-content: center;
       transition: background 0.3s, color 0.3s;
+      overflow-x: auto; /* 允許橫向滑動以完美檢視完整站名與時間 */
     }
 
     .time-info, .update-time {
@@ -63,16 +64,16 @@
       --toggle-btn-text: #ffffff;
     }
 
-    /* 容器寬度恢復正常響應式寬度，頂部與卡片自然齊平 */
     .container {
-      width: 100%;
-      max-width: 1200px;
+      width: fit-content;
+      min-width: 100%;
     }
 
     .top-controls {
       display: flex;
       justify-content: flex-end;
       margin-bottom: -5px;
+      width: 100%;
     }
 
     .theme-toggle-btn {
@@ -99,12 +100,12 @@
     header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-end;
       border-bottom: 2px solid var(--accent-color);
       padding-bottom: 12px;
       margin-bottom: 16px;
-      flex-wrap: wrap;
-      gap: 10px;
+      width: 100%;
+      gap: 20px;
     }
 
     h1 {
@@ -117,13 +118,14 @@
     .update-time {
       font-size: 0.8rem;
       color: var(--text-hint);
+      white-space: nowrap;
     }
 
     .filter-bar {
       display: flex;
       gap: 16px;
       margin-bottom: 20px;
-      flex-wrap: wrap;
+      width: 100%;
     }
 
     .filter-group {
@@ -131,7 +133,6 @@
       flex-direction: column;
       gap: 6px;
       flex: 1;
-      min-width: 250px;
     }
 
     .filter-label {
@@ -159,6 +160,7 @@
     .sort-btn-group {
       display: flex;
       gap: 8px;
+      width: 100%;
     }
 
     .sort-btn {
@@ -173,6 +175,7 @@
       cursor: pointer;
       transition: all 0.2s ease;
       text-align: center;
+      white-space: nowrap;
     }
 
     .sort-btn:hover {
@@ -187,7 +190,11 @@
       box-shadow: 0 0 10px rgba(255, 152, 0, 0.4);
     }
 
-    /* 車次卡片 */
+    #train-list {
+      width: 100%;
+    }
+
+    /* 車次卡片：寬度完全由左側資訊與右側自動調整的格線總和決定 */
     .train-card {
       background: var(--card-bg);
       border: 1px solid var(--border-color);
@@ -198,7 +205,8 @@
       display: flex;
       gap: 20px;
       align-items: flex-start;
-      width: 100%;
+      width: fit-content;
+      min-width: 100%;
       transition: background 0.3s, border-color 0.3s;
     }
     
@@ -271,51 +279,58 @@
 
     .stops-wrapper {
       flex: 1;
-      min-width: 0; /* 關鍵：讓右側停靠站能自由縮放，絕不擠爆卡片背景 */
     }
 
-    /* 嚴格 4 欄，使用 minmax(0, 1fr) 自動平分右側寬度 */
+    /* 核心修改：4欄格線寬度完全依據文字長度自動調整（max-content），絕不擠壓爆框 */
     .stops-grid {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 6px;
+      grid-template-columns: repeat(4, max-content);
+      gap: 8px;
     }
 
     .stop-item {
       background: var(--input-bg);
       border: 1px solid var(--border-color);
       border-radius: 6px;
-      padding: 6px 8px;
-      font-size: 0.82rem;
+      padding: 8px 12px;
+      font-size: 0.85rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 4px;
-      min-width: 0;
-      overflow: hidden;
+      gap: 12px;
+      white-space: nowrap; /* 強制文字不折行，讓格子完全依據文字自動放大 */
     }
     
     .station-name {
       font-weight: bold;
       color: var(--text-main);
-      flex-shrink: 0;
-      white-space: nowrap;
     }
 
-    /* 限制時間字體大小，確保「新左營 13:11到→13:13開」剛好完全顯示不凸出 */
     .time-info {
-      font-size: 0.72rem;
-      white-space: nowrap;
-      flex-shrink: 1;
+      font-size: 0.75rem;
     }
 
     .toggle-btn {
       display: none;
     }
 
-    /* 手機版 RWD (寬度小於 768px 時切換為折疊按鈕與 2 欄) */
+    /* 手機版 RWD */
     @media (max-width: 768px) {
+      body {
+        padding: 12px;
+      }
+
+      .container {
+        min-width: 100%;
+      }
+
+      header, .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
       .train-card {
+        width: 100%;
         flex-direction: column;
         align-items: stretch;
         gap: 12px;
@@ -370,6 +385,7 @@
       .stop-item {
         padding: 6px 8px;
         font-size: 0.78rem;
+        white-space: normal;
       }
 
       .time-info {
