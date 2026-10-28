@@ -15,9 +15,9 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       padding: 16px;
       display: flex;
-      justify-content: center;
+      justify-content: flex-start; /* 讓整體頁面從左邊自然展開 */
       transition: background 0.3s, color 0.3s;
-      overflow-x: auto; /* 超出螢幕寬度時允許平滑橫向滑動 */
+      overflow-x: auto; /* 超出螢幕時可平滑橫向滑動 */
     }
 
     .time-info, .update-time {
@@ -64,14 +64,14 @@
       --toggle-btn-text: #ffffff;
     }
 
-    /* 核心公式：容器寬度由內部「最長卡片」自動決定，寬度 100% 貼齊並對齊 */
+    /* 頁面主容器：寬度將由 JS 計算「最長卡片 + 留空」動態精確寫入 */
     .container {
-      width: max-content;
+      width: fit-content;
       min-width: 100%;
-      margin: 0 auto;
+      margin: 0;
     }
 
-    /* 頂部主題按鈕：寬度 100% 貼齊容器最右側 */
+    /* 頂部主題按鈕：100% 貼齊容器最右側 */
     .top-controls {
       display: flex;
       justify-content: flex-end;
@@ -100,7 +100,7 @@
       transform: scale(0.9);
     }
 
-    /* 標題列：橘色底線完美延伸至最長卡片的右緣 */
+    /* 標題列：橘色底線完全伸長，與最長卡片右緣與留空完美齊平 */
     header {
       display: flex;
       justify-content: space-between;
@@ -125,7 +125,7 @@
       white-space: nowrap;
     }
 
-    /* 搜尋與排序列：與最長卡片完全對齊 */
+    /* 搜尋與排序列：寬度 100% 貼齊容器 */
     .filter-bar {
       display: flex;
       gap: 16px;
@@ -199,7 +199,7 @@
       width: 100%;
     }
 
-    /* 車次卡片：寬度100%依據內容自動拉長，邊界預留舒適空間 */
+    /* 車次卡片：寬度由內容徹底撐開，絕不上鎖限制 */
     .train-card {
       background: var(--card-bg);
       border: 1px solid var(--border-color);
@@ -210,7 +210,7 @@
       display: flex;
       gap: 20px;
       align-items: flex-start;
-      width: 100%;
+      width: fit-content;
       transition: background 0.3s, border-color 0.3s;
     }
     
@@ -283,10 +283,9 @@
 
     .stops-wrapper {
       flex: 1;
-      padding-right: 8px; /* 預留卡片右側舒適留空，不會太侷促 */
     }
 
-    /* 4欄車站格線：長度完全由內容 (4字站名 + 時間) 自適應長大，不壓窄不爆框 */
+    /* 4欄車站格線：每欄依文字（站名+時間）max-content 自動伸長 */
     .stops-grid {
       display: grid;
       grid-template-columns: repeat(4, max-content);
@@ -303,7 +302,7 @@
       justify-content: space-between;
       align-items: center;
       gap: 12px;
-      white-space: nowrap; /* 讓格子完全依據最長文字自動伸長 */
+      white-space: nowrap;
     }
     
     .station-name {
@@ -317,87 +316,6 @@
 
     .toggle-btn {
       display: none;
-    }
-
-    /* 手機直立版 RWD */
-    @media (max-width: 600px) {
-      body {
-        padding: 12px;
-      }
-
-      .container {
-        width: 100%;
-        min-width: 100%;
-      }
-
-      header, .filter-bar {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .train-card {
-        width: 100%;
-        flex-direction: column;
-        align-items: stretch;
-        gap: 12px;
-        padding: 16px;
-      }
-
-      .train-info-sidebar {
-        width: 100%;
-        border-right: none;
-        border-bottom: 1px dashed var(--border-color);
-        padding-right: 0;
-        padding-bottom: 12px;
-      }
-
-      .toggle-btn {
-        display: flex;
-        width: 100%;
-        background: var(--input-bg);
-        color: var(--text-muted);
-        border: 1px solid var(--border-color);
-        border-radius: 6px;
-        padding: 8px 12px;
-        font-size: 0.85rem;
-        font-weight: bold;
-        cursor: pointer;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 4px;
-      }
-
-      .toggle-btn .icon {
-        font-size: 0.75rem;
-        color: var(--accent-color);
-        transition: transform 0.2s ease;
-      }
-
-      .stops-wrapper {
-        display: none;
-        margin-top: 8px;
-        padding-top: 8px;
-        padding-right: 0;
-      }
-
-      .stops-wrapper.active {
-        display: block;
-      }
-
-      .stops-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 6px;
-      }
-
-      .stop-item {
-        padding: 6px 8px;
-        font-size: 0.78rem;
-        white-space: normal;
-      }
-
-      .time-info {
-        font-size: 0.7rem;
-      }
     }
 
     .status-msg {
@@ -565,6 +483,29 @@
       filterAndRender();
     }
 
+    // 核心計算公式：量測最長卡片 + 預留舒適邊界留空（Offset）
+    function updateContainerWidth() {
+      const cards = document.querySelectorAll('.train-card');
+      if (cards.length === 0) return;
+
+      let maxCardWidth = 0;
+      cards.forEach(card => {
+        // 取得該卡片真實開展後的物理像素長度
+        const w = card.scrollWidth;
+        if (w > maxCardWidth) {
+          maxCardWidth = w;
+        }
+      });
+
+      // 預留右側舒適留空 offset（20px，避免卡片貼著邊界太侷促）
+      const PADDING_OFFSET = 20; 
+      const calculatedWidth = maxCardWidth + PADDING_OFFSET;
+
+      // 精確賦予容器寬度，標題橘線與搜尋列將自動延長並齊平
+      const container = document.getElementById('main-container');
+      container.style.width = calculatedWidth + 'px';
+    }
+
     function filterAndRender() {
       const container = document.getElementById('train-list');
       const searchKeyword = document.getElementById('search-input').value.trim();
@@ -665,6 +606,11 @@
 
         container.appendChild(card);
       });
+
+      // DOM 完全渲染後，執行公式計算並套用最終寬度
+      setTimeout(() => {
+        updateContainerWidth();
+      }, 50);
     }
 
     function toggleStops(wrapperId, btn) {
