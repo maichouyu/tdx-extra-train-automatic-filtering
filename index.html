@@ -304,17 +304,19 @@
     .station-name {
       font-weight: bold;
       color: var(--text-main);
+      white-space: nowrap;
     }
 
     .time-info {
       font-size: 0.75rem;
+      white-space: nowrap;
     }
 
     .toggle-btn {
       display: none;
     }
 
-    /* 手機版 RWD */
+    /* 手機版 RWD：強制站名與時間在一行內寫完，絕不換行 */
     @media (max-width: 768px) {
       body {
         padding: 12px;
@@ -385,12 +387,18 @@
 
       .stop-item {
         padding: 6px 8px;
-        font-size: 0.78rem;
-        white-space: normal;
+        font-size: 0.72rem;
+        white-space: nowrap;
+        gap: 4px;
+      }
+
+      .station-name {
+        white-space: nowrap;
       }
 
       .time-info {
         font-size: 0.7rem;
+        white-space: nowrap;
       }
     }
 
