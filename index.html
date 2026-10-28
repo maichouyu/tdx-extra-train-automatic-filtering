@@ -64,7 +64,7 @@
       --toggle-btn-text: #ffffff;
     }
 
-    /* 容器與頂部元件將由 JS 動態賦予精確寬度 */
+    /* 主容器與頂部元件寬度將由 JS 動態精確賦予 */
     .container {
       width: fit-content;
       min-width: 100%;
@@ -98,7 +98,7 @@
       transform: scale(0.9);
     }
 
-    /* 標題列：橘色底線完美跟進最長卡片長度 + 舒適留空 */
+    /* 標題列：橘色底線將完美跟進最長卡片長度 + 舒適留空 */
     header {
       display: flex;
       justify-content: space-between;
@@ -559,9 +559,15 @@
       filterAndRender();
     }
 
-    // 核心計算公式：標題長度 = 最長卡片長度 + 舒適留空 Offset (例如 30px)，讓邊界不侷促
+    // 核心計算公式：標題長度 = 最長卡片寬度 + 舒適留空 (30px)
     function updateContainerWidth() {
-      if (window.innerWidth <= 768) return; // 手機版維持滿版響應式
+      if (window.innerWidth <= 768) {
+        document.getElementById('main-container').style.width = '100%';
+        document.getElementById('main-header').style.width = '100%';
+        document.getElementById('filter-bar').style.width = '100%';
+        document.getElementById('top-controls').style.width = '100%';
+        return;
+      }
 
       const cards = document.querySelectorAll('.train-card');
       if (cards.length === 0) return;
@@ -574,11 +580,9 @@
         }
       });
 
-      // 公式計算：最長卡片實際寬度 + 30px 舒適留空
       const PADDING_OFFSET = 30; 
       const targetWidth = maxCardWidth + PADDING_OFFSET;
 
-      // 同步設定容器、標題列、搜尋列的寬度，確保 100% 精準對齊最長卡片右緣
       document.getElementById('main-container').style.width = targetWidth + 'px';
       document.getElementById('main-header').style.width = targetWidth + 'px';
       document.getElementById('filter-bar').style.width = targetWidth + 'px';
@@ -683,4 +687,56 @@
           </div>
         `;
 
-    // 完整的 HTML 與 JavaScript 程式碼提供完畢，可直接複製更新。
+        container.appendChild(card);
+      });
+
+      // 渲染完成後觸發寬度對齊計算
+      setTimeout(() => {
+        updateContainerWidth();
+      }, 50);
+    }
+
+    function toggleStops(wrapperId, btn) {
+      const wrapper = document.getElementById(wrapperId);
+      const icon = btn.querySelector('.icon');
+      
+      if (wrapper.classList.contains('active')) {
+        wrapper.classList.remove('active');
+        icon.textContent = '▼';
+      } else {
+        wrapper.classList.add('active');
+        icon.textContent = '▲';
+      }
+      setTimeout(updateContainerWidth, 50);
+    }
+
+    async function initApp() {
+      initTheme();
+      try {
+        const cacheBuster = new Date().getTime();
+        const response = await fetch(`./last_trains.json?v=${cacheBuster}`);
+        
+        if (!response.ok) throw new Error(`HTTP 錯誤狀態: ${response.status}`);
+        const realJson = await response.json();
+        processJsonData(realJson);
+      } catch (err) {
+        console.error('讀取 JSON 資料失敗：', err.message);
+        document.getElementById('train-list').innerHTML = `
+          <div class="status-msg" style="color: #ff5252;">
+            資料讀取失敗，請確認 <code>last_trains.json</code> 檔案格式是否正確。
+          </div>
+        `;
+      }
+    }
+
+    window.addEventListener('resize', updateContainerWidth);
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initApp);
+    } else {
+      initApp();
+    }
+  </script>
+
+</body>
+</html>
