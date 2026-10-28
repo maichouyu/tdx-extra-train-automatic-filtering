@@ -17,7 +17,7 @@
       display: flex;
       justify-content: center;
       transition: background 0.3s, color 0.3s;
-      overflow-x: auto;
+      overflow-x: auto; /* 超出螢幕寬度時允許平滑橫向滑動 */
     }
 
     .time-info, .update-time {
@@ -64,13 +64,14 @@
       --toggle-btn-text: #ffffff;
     }
 
-    /* 頁面主容器：透過 JS 根據最長卡片長度 + 留空動態設定寬度 */
+    /* 核心公式：容器寬度由內部「最長卡片」自動決定，寬度 100% 貼齊並對齊 */
     .container {
-      width: fit-content;
+      width: max-content;
       min-width: 100%;
       margin: 0 auto;
     }
 
+    /* 頂部主題按鈕：寬度 100% 貼齊容器最右側 */
     .top-controls {
       display: flex;
       justify-content: flex-end;
@@ -99,6 +100,7 @@
       transform: scale(0.9);
     }
 
+    /* 標題列：橘色底線完美延伸至最長卡片的右緣 */
     header {
       display: flex;
       justify-content: space-between;
@@ -123,6 +125,7 @@
       white-space: nowrap;
     }
 
+    /* 搜尋與排序列：與最長卡片完全對齊 */
     .filter-bar {
       display: flex;
       gap: 16px;
@@ -196,7 +199,7 @@
       width: 100%;
     }
 
-    /* 車次卡片：寬度 fit-content，由內文徹底撐開，背景與邊框完整 */
+    /* 車次卡片：寬度100%依據內容自動拉長，邊界預留舒適空間 */
     .train-card {
       background: var(--card-bg);
       border: 1px solid var(--border-color);
@@ -207,8 +210,7 @@
       display: flex;
       gap: 20px;
       align-items: flex-start;
-      width: fit-content;
-      min-width: 100%;
+      width: 100%;
       transition: background 0.3s, border-color 0.3s;
     }
     
@@ -281,9 +283,10 @@
 
     .stops-wrapper {
       flex: 1;
+      padding-right: 8px; /* 預留卡片右側舒適留空，不會太侷促 */
     }
 
-    /* 4 欄車站格線：長度完全由內容 (4字站名 + 時間) 自適應，不擠壓也不爆框 */
+    /* 4欄車站格線：長度完全由內容 (4字站名 + 時間) 自適應長大，不壓窄不爆框 */
     .stops-grid {
       display: grid;
       grid-template-columns: repeat(4, max-content);
@@ -300,7 +303,7 @@
       justify-content: space-between;
       align-items: center;
       gap: 12px;
-      white-space: nowrap;
+      white-space: nowrap; /* 讓格子完全依據最長文字自動伸長 */
     }
     
     .station-name {
@@ -316,15 +319,15 @@
       display: none;
     }
 
-    /* 手機版 RWD */
-    @media (max-width: 768px) {
+    /* 手機直立版 RWD */
+    @media (max-width: 600px) {
       body {
         padding: 12px;
       }
 
       .container {
+        width: 100%;
         min-width: 100%;
-        width: 100% !important;
       }
 
       header, .filter-bar {
@@ -374,6 +377,7 @@
         display: none;
         margin-top: 8px;
         padding-top: 8px;
+        padding-right: 0;
       }
 
       .stops-wrapper.active {
@@ -561,34 +565,6 @@
       filterAndRender();
     }
 
-    // 計算標題列與容器長度的公式函數：最長卡片實際長度 + 適當留空Offset
-    function updateContainerWidth() {
-      if (window.innerWidth <= 768) {
-        // 手機版不對齊最長卡片，採用滿版
-        document.getElementById('main-container').style.width = '100%';
-        return;
-      }
-
-      const cards = document.querySelectorAll('.train-card');
-      if (cards.length === 0) return;
-
-      let maxCardWidth = 0;
-      cards.forEach(card => {
-        // 取得卡片完全展開的真實內容長度
-        const w = card.scrollWidth;
-        if (w > maxCardWidth) {
-          maxCardWidth = w;
-        }
-      });
-
-      // 寬度公式：最長卡片長度 + 適當預留邊界（0px 到 8px offset，確保整齊留白）
-      const PADDING_OFFSET = 0; 
-      const finalWidth = maxCardWidth + PADDING_OFFSET;
-
-      // 自動將計算好的寬度動態賦予容器，使標題橘線、搜尋列 perfect align 卡片右緣
-      document.getElementById('main-container').style.width = finalWidth + 'px';
-    }
-
     function filterAndRender() {
       const container = document.getElementById('train-list');
       const searchKeyword = document.getElementById('search-input').value.trim();
@@ -689,11 +665,6 @@
 
         container.appendChild(card);
       });
-
-      // DOM 渲染完畢後，即時觸發公式計算並更新標題與容器寬度
-      requestAnimationFrame(() => {
-        updateContainerWidth();
-      });
     }
 
     function toggleStops(wrapperId, btn) {
@@ -707,9 +678,6 @@
         wrapper.classList.add('active');
         icon.textContent = '▲';
       }
-      
-      // 折疊切換時重新校準對齊
-      updateContainerWidth();
     }
 
     async function initApp() {
@@ -730,8 +698,6 @@
         `;
       }
     }
-
-    window.addEventListener('resize', updateContainerWidth);
 
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', initApp);
