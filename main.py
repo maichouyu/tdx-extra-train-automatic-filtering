@@ -162,27 +162,16 @@ def get_valid_token():
 def is_extra_train(train_type, note, train_num):
     if "專開" in train_type:
         return False
-    return "民國" in note or (6000 <= train_num <= 6999)
+    # 檢查備註中是否有「?月?日」格式（例如 12月5日），或車次在 6000~6999 之間
+    has_date = bool(re.search(r"\d+月\d+日", note))
+    return has_date or (6000 <= train_num <= 6999)
 
 
 def process_note(raw_note):
-    """
-    處理備註條件：
-    - 如果有民國字眼，且包含「民國...行駛。」：
-      - 若整個備註剛好是這段，則去掉整個備註（回傳空字串）。
-      - 若除了這段之外還有其他文字，則去掉該部分，留下剩餘的作為備註。
-    """
+    """處理備註條件（保留完整備註內容供參考）"""
     if not raw_note:
         return ""
-
-    note = raw_note.strip()
-
-    if "民國" in note and "行駛" in note:
-        cleaned = re.sub(r"民國.*?行駛。", "", note).strip()
-        cleaned = re.sub(r"^[,，、\s]+|[,，、\s]+$", "", cleaned)
-        return cleaned
-
-    return note
+    return raw_note.strip()
 
 
 def get_line_type(stops):
@@ -266,11 +255,8 @@ def parse_train_data(data, date_str):
                 is_extra_train(train_type, note_str, train_num)
                 and train_no not in EXCLUDE_TRAINS
             ):
-                status_sign = (
-                    "+"
-                    if "行駛" in note_str
-                    else ("-" if "停駛" in note_str else "")
-                )
+                # 不管行駛字眼，只要沒有停駛就視為有效運行 (+)
+                status_sign = "-" if "停駛" in note_str else "+"
 
                 processed_note = process_note(note_str)
                 stop_times = item.get("StopTimes", [])
@@ -409,7 +395,7 @@ def load_previous_trains():
 
 
 def save_current_trains(train_dates):
-    """儲存含線路、車種、過濾後備註與站點的 JSON（網頁端仍會使用 line_type）"""
+    """儲存含線路、車種、過濾後備註與站點的 JSON"""
     tz_taipei = timezone(timedelta(hours=8))
     now_str = datetime.now(tz_taipei).strftime("%Y-%m-%d %H:%M:%S")
 
