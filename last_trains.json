@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-10-29 00:59:34",
+  "last_updated": "2026-10-29 15:49:34",
   "data": {
     "shun": {
       "3348": {
@@ -1157,6 +1157,37 @@
             "departure": "20:39"
           }
         ]
+      },
+      "4458": {
+        "type": "區間",
+        "note": "",
+        "line_type": "東部幹線",
+        "dates": [
+          "12/05+"
+        ],
+        "route": "新城 18:30 -> 花蓮 18:50",
+        "stops": [
+          {
+            "station": "新城",
+            "arrival": "18:30",
+            "departure": "18:30"
+          },
+          {
+            "station": "景美",
+            "arrival": "18:35",
+            "departure": "18:36"
+          },
+          {
+            "station": "北埔",
+            "arrival": "18:41",
+            "departure": "18:42"
+          },
+          {
+            "station": "花蓮",
+            "arrival": "18:50",
+            "departure": "18:50"
+          }
+        ]
       }
     },
     "ni": {
@@ -2237,6 +2268,37 @@
             "station": "花蓮",
             "arrival": "10:55",
             "departure": "10:55"
+          }
+        ]
+      },
+      "4413": {
+        "type": "區間",
+        "note": "",
+        "line_type": "東部幹線",
+        "dates": [
+          "12/05+"
+        ],
+        "route": "花蓮 08:30 -> 新城 08:50",
+        "stops": [
+          {
+            "station": "花蓮",
+            "arrival": "08:30",
+            "departure": "08:30"
+          },
+          {
+            "station": "北埔",
+            "arrival": "08:36",
+            "departure": "08:37"
+          },
+          {
+            "station": "景美",
+            "arrival": "08:42",
+            "departure": "08:43"
+          },
+          {
+            "station": "新城",
+            "arrival": "08:50",
+            "departure": "08:50"
           }
         ]
       }
