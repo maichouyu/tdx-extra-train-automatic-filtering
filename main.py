@@ -168,10 +168,25 @@ def is_extra_train(train_type, note, train_num):
 
 
 def process_note(raw_note):
-    """處理備註條件（保留完整備註內容供參考）"""
+    """
+    處理備註條件：
+    - 如果備註中有「行駛」，就把「行駛」以及它前面的所有文字去掉。
+    - 清理殘留的標點符號或空白。
+    """
     if not raw_note:
         return ""
-    return raw_note.strip()
+
+    note = raw_note.strip()
+
+    if "行駛" in note:
+        # 切割「行駛」字眼，取其右側的文字
+        parts = note.split("行駛", 1)
+        if len(parts) > 1:
+            note = parts[1].strip()
+
+    # 清理開頭或結尾殘留的句號、逗號、空格等
+    cleaned = re.sub(r"^([。，、\s]+)", "", note).strip()
+    return cleaned
 
 
 def get_line_type(stops):
@@ -255,7 +270,6 @@ def parse_train_data(data, date_str):
                 is_extra_train(train_type, note_str, train_num)
                 and train_no not in EXCLUDE_TRAINS
             ):
-                # 不管行駛字眼，只要沒有停駛就視為有效運行 (+)
                 status_sign = "-" if "停駛" in note_str else "+"
 
                 processed_note = process_note(note_str)
@@ -650,3 +664,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+w
