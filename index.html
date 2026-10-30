@@ -324,8 +324,8 @@
       display: none;
     }
 
-    /* RWD 斷點改為 1132px：低於此寬度時切換為窄螢幕/手機版佈局 */
-    @media (max-width: 1132px) {
+    /* RWD 斷點恢復為 768px：低於此寬度時切換為手機版佈局 */
+    @media (max-width: 768px) {
       body {
         padding: 12px;
       }
@@ -577,9 +577,9 @@
       filterAndRender();
     }
 
-    // 寬度與置中計算邏輯：將 768 改為 1132，小於等於 1132px 時啟動窄螢幕捲動防護
+    // 寬度與置中計算邏輯：以 768px 為界，小於等於 768px 交由 RWD 手機版處理
     function updateContainerWidth() {
-      if (window.innerWidth <= 1132) {
+      if (window.innerWidth <= 768) {
         document.getElementById('main-container').style.width = '100%';
         document.getElementById('main-header').style.width = '100%';
         document.getElementById('filter-bar').style.width = '100%';
@@ -612,7 +612,7 @@
       const topControls = document.getElementById('top-controls');
 
       if (screenWidth <= targetWidth) {
-        // 當視窗介於 1132px 與卡片真實寬度之間時，撐開容器並靠左支援橫向捲動
+        // 當視窗介於 768px 與卡片真實寬度之間時，撐開容器並靠左支援橫向捲動
         container.style.width = targetWidth + 'px';
         header.style.width = targetWidth + 'px';
         filterBar.style.width = targetWidth + 'px';
@@ -623,7 +623,7 @@
           card.style.marginRight = 'auto';
         });
       } else {
-        // 當視窗寬度大於 1132px 且大於卡片寬度時，全螢幕滿版，卡片置中
+        // 當視窗寬度大於 768px 且大於卡片寬度時（寬螢幕模式），全螢幕滿版，卡片置中
         container.style.width = '100%';
         header.style.width = '100%';
         filterBar.style.width = '100%';
