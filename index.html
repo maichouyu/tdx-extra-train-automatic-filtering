@@ -418,6 +418,223 @@
       color: var(--text-hint);
       font-size: 1rem;
     }
+        /* --- 行駛日期熱點圖小工具樣式 --- */
+    .hm-widget {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      width: 100%;
+      box-sizing: border-box;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      user-select: none;
+      -webkit-user-select: none;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .hm-header {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .hm-header-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .hm-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      color: var(--accent-color);
+    }
+
+    .hm-toggle-btn {
+      background: var(--input-bg);
+      color: var(--text-muted);
+      border: 1px solid var(--border-color);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .hm-toggle-btn:hover {
+      color: var(--text-main);
+      border-color: var(--accent-color);
+    }
+
+    .hm-meta {
+      font-size: 0.78rem;
+      color: var(--text-hint);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0 6px;
+    }
+
+    .hm-months-container {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      width: 100%;
+    }
+
+    .hm-month-card {
+      background: var(--input-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 12px 14px;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .hm-month-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      padding: 0 4px;
+    }
+
+    .hm-month-name {
+      font-size: 0.92rem;
+      font-weight: bold;
+      color: var(--text-main);
+      font-family: monospace;
+    }
+
+    .hm-month-count {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      background: var(--card-bg);
+      padding: 2px 8px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+    }
+
+    .hm-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: bold;
+      color: var(--text-hint);
+      margin-bottom: 6px;
+    }
+
+    .hm-weekdays .sun { color: #f87171; }
+    .hm-weekdays .sat { color: #38bdf8; }
+
+    .hm-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      grid-auto-rows: 38px;
+      gap: 5px;
+    }
+
+    .hm-cell {
+      height: 38px;
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      font-family: monospace;
+      padding: 2px;
+      background: var(--input-bg);
+      border: 1px solid var(--border-color);
+      transition: transform 0.15s ease;
+    }
+
+    .hm-cell.empty {
+      background: transparent;
+      border: 1px solid transparent;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .hm-num {
+      font-size: 0.78rem;
+      font-weight: bold;
+      line-height: 1;
+      color: var(--text-hint);
+    }
+
+    .hm-cell.has-trains {
+      cursor: pointer;
+      background: var(--card-bg);
+      border-color: var(--border-color);
+    }
+
+    .hm-cell.has-trains:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent-color);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .hm-cell.has-trains .hm-num {
+      color: var(--text-main);
+    }
+
+    .hm-bars {
+      display: flex;
+      gap: 2px;
+      margin-top: 3px;
+      height: 3px;
+      width: 100%;
+      max-width: 30px;
+      justify-content: center;
+    }
+
+    .hm-bar {
+      flex: 1;
+      height: 100%;
+      border-radius: 1px;
+    }
+
+    .hm-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      justify-content: center;
+      margin-top: 14px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .hm-legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      padding: 3px 8px;
+    }
+
+    .hm-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
   </style>
 </head>
 <body>
@@ -449,6 +666,29 @@
         </div>
       </div>
     </div>
+
+        <!-- 行駛日期熱點圖小工具 -->
+    <div class="hm-widget" id="hm-widget">
+      <div class="hm-header">
+        <div class="hm-header-main">
+          <div class="hm-title"><span>📅</span><span>行駛日期熱點分佈預覽</span></div>
+          <button type="button" class="hm-toggle-btn" onclick="toggleHeatmap()" id="hm-toggle-btn">
+            <span id="hm-toggle-text">收合</span> <span id="hm-toggle-icon">▲</span>
+          </button>
+        </div>
+        <div class="hm-meta" id="hm-meta-text">載入中...</div>
+      </div>
+      <div class="hm-body" id="hm-body">
+        <div class="hm-months-container" id="hm-months-container"></div>
+        <div class="hm-legend">
+          <span class="hm-legend-item"><span class="hm-dot" style="background:#e60021;"></span> 普悠瑪/太魯閣</span>
+          <span class="hm-legend-item"><span class="hm-dot" style="background:#ff6f00;"></span> 自強號</span>
+          <span class="hm-legend-item"><span class="hm-dot" style="background:#ff9800;"></span> 莒光號</span>
+          <span class="hm-legend-item"><span class="hm-dot" style="background:#4BE13A;"></span> 區間車/區間快</span>
+        </div>
+      </div>
+    </div>
+
 
     <main id="train-list">
       <div class="status-msg">正在讀取最新的加班車資料...</div>
@@ -533,7 +773,7 @@
       filterAndRender();
     }
 
-    function processJsonData(json) {
+        function processJsonData(json) {
       const timeContainer = document.getElementById('last-updated');
       const rangeContainer = document.getElementById('date-range');
 
@@ -566,6 +806,19 @@
           });
         }
       });
+
+      if (json.start_date && json.end_date) {
+        rangeContainer.textContent = `統計區間：${json.start_date} ～ ${json.end_date}`;
+      } else if (allDatesSet.size > 0) {
+        const sortedDates = Array.from(allDatesSet).sort();
+        rangeContainer.textContent = `開行區間：${sortedDates[0]} ～ ${sortedDates[sortedDates.length - 1]}`;
+      }
+
+      cachedTrains = allTrains;
+      renderHeatmap(allTrains); // <--- 在這裡呼叫熱點圖渲染
+      filterAndRender();
+    }
+
 
       if (json.start_date && json.end_date) {
         rangeContainer.textContent = `統計區間：${json.start_date} ～ ${json.end_date}`;
@@ -787,6 +1040,127 @@
     } else {
       initApp();
     }
+
+        // 切換熱點圖收合
+    function toggleHeatmap() {
+      const body = document.getElementById('hm-body');
+      const text = document.getElementById('hm-toggle-text');
+      const icon = document.getElementById('hm-toggle-icon');
+      
+      if (body.style.display === 'none') {
+        body.style.display = 'block';
+        text.textContent = '收合';
+        icon.textContent = '▲';
+      } else {
+        body.style.display = 'none';
+        text.textContent = '展開';
+        icon.textContent = '▼';
+      }
+    }
+
+    // 點擊日期格子時自動滾動並高亮該日車次
+    function filterByDate(dateStr) {
+      const cards = document.querySelectorAll('.train-card');
+      for (let card of cards) {
+        if (card.innerHTML.includes(dateStr)) {
+          card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          card.style.borderColor = 'var(--accent-color)';
+          setTimeout(() => card.style.borderColor = '', 2000);
+          break;
+        }
+      }
+    }
+
+    // 動態產生熱點圖
+    function renderHeatmap(allTrains) {
+      const container = document.getElementById('hm-months-container');
+      const metaText = document.getElementById('hm-meta-text');
+      if (!container) return;
+      
+      const dateMap = {}; 
+      const allDatesSet = new Set();
+      
+      allTrains.forEach(train => {
+        train.cleanDates.forEach(d => {
+          allDatesSet.add(d);
+          if (!dateMap[d]) dateMap[d] = [];
+          dateMap[d].push({
+            trainNo: train.trainNo,
+            type: train.type || '區間車',
+            color: getTrainTypeColor(train.type)
+          });
+        });
+      });
+      
+      if (allDatesSet.size === 0) {
+        container.innerHTML = '<div style="color:var(--text-hint); text-align:center; padding:10px;">無行駛日期資料</div>';
+        return;
+      }
+      
+      const sortedDates = Array.from(allDatesSet).sort();
+      metaText.innerHTML = `<span>統計區間：${sortedDates[0]} ～ ${sortedDates[sortedDates.length - 1]}</span><span>·</span><span>全期共 ${sortedDates.length} 天有加班車</span>`;
+      
+      const monthMap = {}; 
+      sortedDates.forEach(d => {
+        const [year, month] = d.split('-');
+        const ymKey = `${year}-${month}`;
+        if (!monthMap[ymKey]) monthMap[ymKey] = [];
+        monthMap[ymKey].push(d);
+      });
+      
+      container.innerHTML = '';
+      
+      Object.keys(monthMap).sort().forEach(ymKey => {
+        const [year, month] = ymKey.split('-');
+        const daysInMonth = new Date(year, month, 0).getDate();
+        const firstDayOfWeek = new Date(`${ymKey}-01`).getDay();
+        
+        let monthCardHTML = `
+          <div class="hm-month-card">
+            <div class="hm-month-header">
+              <span class="hm-month-name">${year} 年 ${parseInt(month)} 月</span>
+              <span class="hm-month-count">共 ${monthMap[ymKey].length} 天有車</span>
+            </div>
+            <div class="hm-weekdays">
+              <span class="sun">日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span class="sat">六</span>
+            </div>
+            <div class="hm-grid">
+        `;
+        
+        for (let i = 0; i < firstDayOfWeek; i++) {
+          monthCardHTML += `<div class="hm-cell empty"></div>`;
+        }
+        
+        for (let day = 1; day <= daysInMonth; day++) {
+          const dayStr = String(day).padStart(2, '0');
+          const fullDateStr = `${ymKey}-${dayStr}`;
+          const trainsOnThisDay = dateMap[fullDateStr];
+          
+          if (trainsOnThisDay && trainsOnThisDay.length > 0) {
+            const barsHTML = trainsOnThisDay.slice(0, 4).map(t => 
+              `<span class="hm-bar" style="background:${t.color};" title="${t.trainNo}次 (${t.type})"></span>`
+            ).join('');
+            
+            monthCardHTML += `
+              <div class="hm-cell has-trains" onclick="filterByDate('${fullDateStr}')" title="${fullDateStr} (${trainsOnThisDay.length}班)">
+                <span class="hm-num">${day}</span>
+                <div class="hm-bars">${barsHTML}</div>
+              </div>
+            `;
+          } else {
+            monthCardHTML += `
+              <div class="hm-cell">
+                <span class="hm-num" style="opacity: 0.3;">${day}</span>
+              </div>
+            `;
+          }
+        }
+        
+        monthCardHTML += `</div></div>`;
+        container.insertAdjacentHTML('beforeend', monthCardHTML);
+      });
+    }
+
   </script>
 
 </body>
