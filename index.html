@@ -418,7 +418,8 @@
       color: var(--text-hint);
       font-size: 1rem;
     }
-        /* --- 行駛日期熱點圖小工具樣式 --- */
+
+    /* --- 行駛日期熱點圖小工具樣式 --- */
     .hm-widget {
       background: var(--card-bg);
       border: 1px solid var(--border-color);
@@ -634,7 +635,6 @@
       height: 8px;
       border-radius: 50%;
     }
-
   </style>
 </head>
 <body>
@@ -667,7 +667,7 @@
       </div>
     </div>
 
-        <!-- 行駛日期熱點圖小工具 -->
+    <!-- 行駛日期熱點圖小工具 -->
     <div class="hm-widget" id="hm-widget">
       <div class="hm-header">
         <div class="hm-header-main">
@@ -688,7 +688,6 @@
         </div>
       </div>
     </div>
-
 
     <main id="train-list">
       <div class="status-msg">正在讀取最新的加班車資料...</div>
@@ -773,7 +772,7 @@
       filterAndRender();
     }
 
-        function processJsonData(json) {
+    function processJsonData(json) {
       const timeContainer = document.getElementById('last-updated');
       const rangeContainer = document.getElementById('date-range');
 
@@ -815,19 +814,7 @@
       }
 
       cachedTrains = allTrains;
-      renderHeatmap(allTrains); // <--- 在這裡呼叫熱點圖渲染
-      filterAndRender();
-    }
-
-
-      if (json.start_date && json.end_date) {
-        rangeContainer.textContent = `統計區間：${json.start_date} ～ ${json.end_date}`;
-      } else if (allDatesSet.size > 0) {
-        const sortedDates = Array.from(allDatesSet).sort();
-        rangeContainer.textContent = `開行區間：${sortedDates[0]} ～ ${sortedDates[sortedDates.length - 1]}`;
-      }
-
-      cachedTrains = allTrains;
+      renderHeatmap(allTrains);
       filterAndRender();
     }
 
@@ -1011,37 +998,9 @@
         wrapper.classList.add('active');
         icon.textContent = '▲';
       }
-      // 移除點擊展開時觸發的寬度計算，避免版面晃動
     }
 
-    async function initApp() {
-      initTheme();
-      try {
-        const cacheBuster = new Date().getTime();
-        const response = await fetch(`./last_trains.json?v=${cacheBuster}`);
-        
-        if (!response.ok) throw new Error(`HTTP 錯誤狀態: ${response.status}`);
-        const realJson = await response.json();
-        processJsonData(realJson);
-      } catch (err) {
-        console.error('讀取 JSON 資料失敗：', err.message);
-        document.getElementById('train-list').innerHTML = `
-          <div class="status-msg" style="color: #ff5252;">
-            資料讀取失敗，請確認 <code>last_trains.json</code> 檔案格式是否正確。
-          </div>
-        `;
-      }
-    }
-
-    // 移除 window resize 事件監聽，確保頁面滾動或縮放時絕對不重新計算
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initApp);
-    } else {
-      initApp();
-    }
-
-        // 切換熱點圖收合
+    // 切換熱點圖收合
     function toggleHeatmap() {
       const body = document.getElementById('hm-body');
       const text = document.getElementById('hm-toggle-text');
@@ -1161,6 +1120,30 @@
       });
     }
 
+    async function initApp() {
+      initTheme();
+      try {
+        const cacheBuster = new Date().getTime();
+        const response = await fetch(`./last_trains.json?v=${cacheBuster}`);
+        
+        if (!response.ok) throw new Error(`HTTP 錯誤狀態: ${response.status}`);
+        const realJson = await response.json();
+        processJsonData(realJson);
+      } catch (err) {
+        console.error('讀取 JSON 資料失敗：', err.message);
+        document.getElementById('train-list').innerHTML = `
+          <div class="status-msg" style="color: #ff5252;">
+            資料讀取失敗，請確認 <code>last_trains.json</code> 檔案格式是否正確。
+          </div>
+        `;
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initApp);
+    } else {
+      initApp();
+    }
   </script>
 
 </body>
