@@ -418,6 +418,174 @@
       color: var(--text-hint);
       font-size: 1rem;
     }
+
+    /* 熱點圖小工具主容器 (對齊你頁面的卡片寬度) */
+.hm-widget {
+    background: #1e1e1e;
+    border: 1px solid #333;
+    border-radius: 12px;
+    margin: 16px 0;
+    padding: 16px;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    font-family: inherit;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.hm-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.hm-title-area {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.hm-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #ff9800; /* 呼應你頁面的橘色標題 */
+}
+
+.hm-subtitle {
+    font-size: 12px;
+    color: #aaa;
+}
+
+.hm-toggle-btn {
+    background: #2b2b2b;
+    border: 1px solid #444;
+    color: #ddd;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.hm-toggle-btn:hover {
+    background: #333;
+}
+
+.hm-body {
+    margin-top: 14px;
+    border-top: 1px solid #333;
+    padding-top: 14px;
+}
+
+.hm-months-container {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+}
+
+.hm-month-card {
+    background: #252525;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 10px;
+    min-width: 220px;
+    flex: 1;
+}
+
+.hm-month-title {
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 8px;
+    color: #ddd;
+}
+
+.hm-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-size: 11px;
+    color: #888;
+    margin-bottom: 4px;
+}
+
+.hm-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 3px;
+}
+
+.hm-cell {
+    background: #1a1a1a;
+    border-radius: 4px;
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 2px;
+    font-size: 11px;
+    cursor: default;
+    position: relative;
+}
+
+.hm-cell.is-empty {
+    background: transparent;
+    cursor: default;
+}
+
+.hm-cell.has-trains {
+    background: #2c3e50;
+    cursor: pointer;
+    border: 1px solid #34495e;
+}
+
+.hm-cell.has-trains:hover {
+    border-color: #ff9800;
+}
+
+.hm-day-num {
+    color: #ccc;
+    font-size: 10px;
+    padding-left: 2px;
+}
+
+.hm-bars {
+    display: flex;
+    gap: 1px;
+    height: 4px;
+    width: 100%;
+}
+
+.hm-bar {
+    flex: 1;
+    height: 100%;
+    border-radius: 2px;
+}
+
+.hm-legend {
+    display: flex;
+    gap: 16px;
+    margin-top: 12px;
+    font-size: 12px;
+    color: #aaa;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.hm-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.hm-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
   </style>
 </head>
 <body>
@@ -449,6 +617,46 @@
         </div>
       </div>
     </div>
+
+    <!-- 行駛日期熱點圖小工具 -->
+<div class="hm-widget" id="hm-widget">
+    <div class="hm-header" onclick="toggleHeatmap()">
+        <div class="hm-title-area">
+            <span class="hm-title">行駛日期熱點分佈預覽</span>
+            <span class="hm-subtitle" id="hm-summary-text">點擊日期快速篩選車次</span>
+        </div>
+        <button class="hm-toggle-btn" id="hm-toggle-btn">收合 ▲</button>
+    </div>
+    <div class="hm-body" id="hm-body">
+        <div class="hm-months-container" id="hm-months-container">
+            <!-- 測試用範例月份 (實際可由 JS 依你的資料自動生成) -->
+            <div class="hm-month-card">
+                <div class="hm-month-title">2026年 10月</div>
+                <div class="hm-weekdays">
+                    <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+                </div>
+                <div class="hm-grid">
+                    <!-- 示範幾格 -->
+                    <div class="hm-cell is-empty"></div>
+                    <div class="hm-cell is-empty"></div>
+                    <div class="hm-cell"><span class="hm-day-num">1</span></div>
+                    <div class="hm-cell has-trains" onclick="filterByDate('2026-10-31')">
+                        <span class="hm-day-num">31</span>
+                        <div class="hm-bars">
+                            <span class="hm-bar" style="background: #2ecc71;" title="區間車: 3348次"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hm-legend">
+            <span class="hm-legend-item"><span class="hm-dot" style="background:#2ecc71;"></span> 區間車/區間快</span>
+            <span class="hm-legend-item"><span class="hm-dot" style="background:#3498db;"></span> 自強號</span>
+            <span class="hm-legend-item"><span class="hm-dot" style="background:#e74c3c;"></span> 莒光號</span>
+        </div>
+    </div>
+</div>
+
 
     <main id="train-list">
       <div class="status-msg">正在讀取最新的加班車資料...</div>
@@ -787,6 +995,25 @@
     } else {
       initApp();
     }
+
+    function toggleHeatmap() {
+    const body = document.getElementById('hm-body');
+    const btn = document.getElementById('hm-toggle-btn');
+    if (body.style.display === 'none') {
+        body.style.display = 'block';
+        btn.textContent = '收合 ▲';
+    } else {
+        body.style.display = 'none';
+        btn.textContent = '展開 ▼';
+    }
+}
+
+function filterByDate(dateStr) {
+    // 這裡可以對接你原本頁面的搜尋或過濾邏輯
+    console.log("點擊了日期:", dateStr);
+    // 例如：自動填入搜尋框或滾動到對應卡片
+}
+
   </script>
 
 </body>
