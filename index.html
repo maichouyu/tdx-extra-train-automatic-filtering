@@ -697,7 +697,7 @@
   <script>
     let cachedTrains = [];
     let currentSortType = 'date-first';
-    let isWidthInitialized = false; // 控制寬度只在初次載入時計算一次
+    let isWidthInitialized = false;
 
     function toggleTheme() {
       const body = document.body;
@@ -818,9 +818,8 @@
       filterAndRender();
     }
 
-    // 寬度與置中計算：只在初次載入執行一次，之後徹底鎖定不重複計算
     function updateContainerWidth() {
-      if (isWidthInitialized) return; // 如果已經計算過就直接略過
+      if (isWidthInitialized) return;
 
       if (window.innerWidth <= 768) {
         document.getElementById('main-container').style.width = '100%';
@@ -877,7 +876,7 @@
         });
       }
 
-      isWidthInitialized = true; // 標記為已初始化，之後不再重新計算
+      isWidthInitialized = true;
     }
 
     function filterAndRender() {
@@ -981,7 +980,6 @@
         container.appendChild(card);
       });
 
-      // 僅在初次渲染時執行寬度計算，後續排序/搜尋不重複觸發
       setTimeout(() => {
         updateContainerWidth();
       }, 50);
@@ -1030,7 +1028,7 @@
       }
     }
 
-    // 動態產生熱點圖
+    // 動態產生熱點圖（已修正 MM/DD 格式年份解析，避免出現 NaN 月）
     function renderHeatmap(allTrains) {
       const container = document.getElementById('hm-months-container');
       const metaText = document.getElementById('hm-meta-text');
@@ -1041,9 +1039,27 @@
       
       allTrains.forEach(train => {
         train.cleanDates.forEach(d => {
-          allDatesSet.add(d);
-          if (!dateMap[d]) dateMap[d] = [];
-          dateMap[d].push({
+          let year, month, day, fullDateStr;
+          
+          if (d.includes('/')) {
+            const parts = d.split('/');
+            month = parts[0];
+            day = parts[1];
+            year = '2026'; // 預設年份
+            fullDateStr = `${year}-${month}-${day}`;
+          } else if (d.includes('-')) {
+            const parts = d.split('-');
+            year = parts[0];
+            month = parts[1];
+            day = parts[2];
+            fullDateStr = d;
+          } else {
+            return;
+          }
+          
+          allDatesSet.add(fullDateStr);
+          if (!dateMap[fullDateStr]) dateMap[fullDateStr] = [];
+          dateMap[fullDateStr].push({
             trainNo: train.trainNo,
             type: train.type || '區間車',
             color: getTrainTypeColor(train.type)
@@ -1051,17 +1067,17 @@
         });
       });
       
-      if (allDatesSet.size === 0) {
+      const sortedDates = Array.from(allDatesSet).sort();
+      if (sortedDates.length === 0) {
         container.innerHTML = '<div style="color:var(--text-hint); text-align:center; padding:10px;">無行駛日期資料</div>';
         return;
       }
       
-      const sortedDates = Array.from(allDatesSet).sort();
       metaText.innerHTML = `<span>統計區間：${sortedDates[0]} ～ ${sortedDates[sortedDates.length - 1]}</span><span>·</span><span>全期共 ${sortedDates.length} 天有加班車</span>`;
       
       const monthMap = {}; 
       sortedDates.forEach(d => {
-        const [year, month] = d.split('-');
+        const [year, month, day] = d.split('-');
         const ymKey = `${year}-${month}`;
         if (!monthMap[ymKey]) monthMap[ymKey] = [];
         monthMap[ymKey].push(d);
@@ -1090,8 +1106,8 @@
           monthCardHTML += `<div class="hm-cell empty"></div>`;
         }
         
-        for (let day = 1; day <= daysInMonth; day++) {
-          const dayStr = String(day).padStart(2, '0');
+        for (let dayNum = 1; dayNum <= daysInMonth; dayNum++) {
+          const dayStr = String(dayNum).padStart(2, '0');
           const fullDateStr = `${ymKey}-${dayStr}`;
           const trainsOnThisDay = dateMap[fullDateStr];
           
@@ -1101,15 +1117,15 @@
             ).join('');
             
             monthCardHTML += `
-              <div class="hm-cell has-trains" onclick="filterByDate('${fullDateStr}')" title="${fullDateStr} (${trainsOnThisDay.length}班)">
-                <span class="hm-num">${day}</span>
+              <div class="hm-cell has-trains" onclick="filterByDate('${month}/${dayStr}')" title="${month}/${dayStr} (${trainsOnThisDay.length}班)">
+                <span class="hm-num">${dayNum}</span>
                 <div class="hm-bars">${barsHTML}</div>
               </div>
             `;
           } else {
             monthCardHTML += `
               <div class="hm-cell">
-                <span class="hm-num" style="opacity: 0.3;">${day}</span>
+                <span class="hm-num" style="opacity: 0.3;">${dayNum}</span>
               </div>
             `;
           }
