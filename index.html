@@ -65,7 +65,7 @@
       --toggle-btn-text: #ffffff;
     }
 
-    /* 主容器與頂部元件寬度將由 JS 或寬螢幕預設 100% 決定 */
+    /* 主容器與頂部元件寬度 */
     .container {
       width: 100%;
       margin: 0 auto;
@@ -324,7 +324,7 @@
       display: none;
     }
 
-    /* RWD 斷點恢復為 768px：低於此寬度時切換為手機版佈局 */
+    /* 手機版 RWD 斷點 (768px 以下) */
     @media (max-width: 768px) {
       body {
         padding: 12px;
@@ -458,6 +458,7 @@
   <script>
     let cachedTrains = [];
     let currentSortType = 'date-first';
+    let isWidthInitialized = false; // 控制寬度只在初次載入時計算一次
 
     function toggleTheme() {
       const body = document.body;
@@ -577,8 +578,10 @@
       filterAndRender();
     }
 
-    // 寬度與置中計算邏輯：以 768px 為界，小於等於 768px 交由 RWD 手機版處理
+    // 寬度與置中計算：只在初次載入執行一次，之後徹底鎖定不重複計算
     function updateContainerWidth() {
+      if (isWidthInitialized) return; // 如果已經計算過就直接略過
+
       if (window.innerWidth <= 768) {
         document.getElementById('main-container').style.width = '100%';
         document.getElementById('main-header').style.width = '100%';
@@ -588,6 +591,7 @@
           card.style.marginLeft = '0';
           card.style.marginRight = '0';
         });
+        isWidthInitialized = true;
         return;
       }
 
@@ -612,7 +616,6 @@
       const topControls = document.getElementById('top-controls');
 
       if (screenWidth <= targetWidth) {
-        // 當視窗介於 768px 與卡片真實寬度之間時，撐開容器並靠左支援橫向捲動
         container.style.width = targetWidth + 'px';
         header.style.width = targetWidth + 'px';
         filterBar.style.width = targetWidth + 'px';
@@ -623,7 +626,6 @@
           card.style.marginRight = 'auto';
         });
       } else {
-        // 當視窗寬度大於 768px 且大於卡片寬度時（寬螢幕模式），全螢幕滿版，卡片置中
         container.style.width = '100%';
         header.style.width = '100%';
         filterBar.style.width = '100%';
@@ -634,6 +636,8 @@
           card.style.marginRight = 'auto';
         });
       }
+
+      isWidthInitialized = true; // 標記為已初始化，之後不再重新計算
     }
 
     function filterAndRender() {
@@ -737,7 +741,7 @@
         container.appendChild(card);
       });
 
-      // 渲染完成後觸發寬度與置中計算
+      // 僅在初次渲染時執行寬度計算，後續排序/搜尋不重複觸發
       setTimeout(() => {
         updateContainerWidth();
       }, 50);
@@ -754,7 +758,7 @@
         wrapper.classList.add('active');
         icon.textContent = '▲';
       }
-      setTimeout(updateContainerWidth, 50);
+      // 移除點擊展開時觸發的寬度計算，避免版面晃動
     }
 
     async function initApp() {
@@ -776,7 +780,7 @@
       }
     }
 
-    window.addEventListener('resize', updateContainerWidth);
+    // 移除 window resize 事件監聽，確保頁面滾動或縮放時絕對不重新計算
 
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', initApp);
