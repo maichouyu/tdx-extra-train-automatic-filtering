@@ -1,564 +1,597 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>臺鐵 45 天內加減班車時刻表</title>
-<meta name="description" content="臺鐵 45 天內加減班車與特殊列車時刻表閱覽。">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=M+PLUS+1:wght@800&display=swap" rel="stylesheet" media="all" onload="this.media='all'">
-<style>
-:root {
-  --bg: #0f172a;
-  --card: rgba(30, 41, 59, 0.75);
-  --text: #f8fafc;
-  --text-muted: #94a3b8;
-  --accent: #38bdf8;
-  --accent-glow: rgba(56, 189, 248, 0.25);
-  --border: rgba(255, 255, 255, 0.08);
-  --add-color: #22c55e;
-  --sub-color: #ef4444;
-  --date-header: #fbbf24;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>臺鐵45天內加班或增停時刻表</title>
+    <style>
+        :root {
+            --bg-color: #f5f5f7;
+            --card-bg: #ffffff;
+            --text-main: #1d1d1f;
+            --text-muted: #86868b;
+            --text-hint: #a1a1a6;
+            --border-color: #e5e5ea;
+            --input-bg: #f2f2f7;
+            --accent-color: #e67e22;
+            --accent-hover: #d35400;
+        }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    --bg: #f8fafc;
-    --card: rgba(255, 255, 255, 0.85);
-    --text: #0f172a;
-    --text-muted: #64748b;
-    --accent: #0284c7;
-    --accent-glow: rgba(2, 132, 199, 0.2);
-    --border: rgba(0, 0, 0, 0.08);
-    --add-color: #16a34a;
-    --sub-color: #dc2626;
-    --date-header: #d97706;
-  }
-}
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --card-bg: #1c1c1e;
+            --text-main: #f5f5f7;
+            --text-muted: #a1a1a6;
+            --text-hint: #6e6e73;
+            --border-color: #2c2c2e;
+            --input-bg: #2c2c2e;
+            --accent-color: #f39c12;
+            --accent-hover: #e67e22;
+        }
 
-body {
-  background: var(--bg);
-  background-image: radial-gradient(circle at 50% 0%, var(--accent-glow) 0%, transparent 70%);
-  background-attachment: fixed;
-  color: var(--text);
-  font-family: "Segoe UI", "Microsoft JhengHei", sans-serif;
-  margin: 0; padding: 12px;
-  -webkit-tap-highlight-color: transparent;
-}
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 16px;
+            display: flex;
+            justify-content: center;
+        }
 
-.header {
-  background: var(--card);
-  padding: 20px; text-align: center;
-  border-bottom: 2px solid var(--accent);
-  margin-bottom: 20px; border-radius: 12px;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-}
+        .container {
+            width: 100%;
+            max-width: 600px;
+            position: relative;
+        }
 
-h1 { margin: 0; color: var(--accent); font-size: 1.4rem; }
-.meta { color: var(--text-muted); font-size: 0.85rem; margin-top: 8px; font-family: monospace; }
+        /* 主題切換按鈕 */
+        .theme-toggle {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
 
-/* 日曆熱點圖 Widget */
-.hm-widget {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px;
-  margin: 0 0 25px 0;
-  box-sizing: border-box;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-  user-select: none;
-  -webkit-user-select: none;
-  -webkit-touch-callout: none;
-}
+        /* 標題區 */
+        .main-title {
+            color: var(--accent-color);
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin: 0 0 6px 0;
+        }
 
-.hm-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--border);
-}
+        .subtitle {
+            color: var(--accent-color);
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+        }
 
-.hm-title {
-  font-size: 0.95rem;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
+        .update-time {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 16px;
+        }
 
-.hm-toggle-btn {
-  background: var(--border);
-  color: var(--text);
-  border: 1px solid var(--border);
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 0.78rem;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  transition: all 0.2s ease;
-}
+        .divider {
+            border: none;
+            border-top: 1px solid var(--accent-color);
+            opacity: 0.6;
+            margin-bottom: 20px;
+        }
 
-.hm-toggle-btn:hover {
-  background: var(--accent);
-  color: #fff;
-}
+        /* 搜尋與排序 */
+        .section-label {
+            color: var(--accent-color);
+            font-size: 0.95rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
 
-.hm-months-container {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
+        .search-box {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 10px;
+            border: 1px solid var(--accent-color);
+            background: var(--card-bg);
+            color: var(--text-main);
+            font-size: 0.95rem;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+            outline: none;
+        }
 
-.hm-month-card {
-  background: rgba(0, 0, 0, 0.03);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 10px;
-}
+        .sort-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
 
-.hm-month-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-  font-size: 0.9rem;
-  font-weight: bold;
-  font-family: 'Consolas', monospace;
-}
+        .sort-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-main);
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
 
-.hm-weekdays {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  text-align: center;
-  font-size: 0.75rem;
-  font-weight: bold;
-  color: var(--text-muted);
-  margin-bottom: 6px;
-}
-.hm-weekdays .sun { color: #f87171; }
-.hm-weekdays .sat { color: #38bdf8; }
+        .sort-btn.active {
+            background: var(--accent-color);
+            color: #ffffff;
+            border-color: var(--accent-color);
+        }
 
-.hm-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
-}
+        /* --- 熱點圖小工具 (完全符合截圖樣式) --- */
+        .hm-widget {
+            background: #1c1c1e;
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 20px;
+            color: #ffffff;
+            box-sizing: border-box;
+        }
 
-.hm-cell {
-  height: 38px;
-  border-radius: 6px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Consolas', monospace;
-  background: var(--border);
-  border: 1px solid transparent;
-  cursor: default;
-  transition: transform 0.15s ease;
-  position: relative;
-}
+        .hm-header-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-.hm-cell.is-out, .hm-cell.is-past {
-  opacity: 0.25;
-  filter: grayscale(1);
-  pointer-events: none;
-}
+        .hm-title {
+            color: var(--accent-color);
+            font-size: 1.05rem;
+            font-weight: bold;
+        }
 
-.hm-cell.has-trains {
-  cursor: pointer;
-  background: var(--accent-glow);
-  border-color: var(--accent);
-}
+        .hm-sub-text {
+            color: #8e8e93;
+            font-size: 0.78rem;
+            margin-top: 4px;
+            margin-bottom: 12px;
+        }
 
-.hm-cell.has-trains:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
+        .hm-toggle-btn {
+            background: #2c2c2e;
+            color: #ffffff;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
 
-.hm-num {
-  font-size: 0.78rem;
-  font-weight: bold;
-}
+        .hm-month-card {
+            background: #2c2c2e;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
 
-.hm-bars {
-  display: flex;
-  gap: 2px;
-  margin-top: 3px;
-  height: 3px;
-}
-.hm-bar {
-  width: 6px;
-  height: 3px;
-  border-radius: 1.5px;
-}
+        .hm-month-title {
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
 
-/* 長按浮動視窗 Popover */
-.hm-popover {
-  position: fixed;
-  z-index: 99999;
-  background: rgba(18, 18, 22, 0.92);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  padding: 6px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.6);
-  backdrop-filter: blur(8px);
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  max-height: 250px;
-  overflow-y: auto;
-  opacity: 0;
-  transform: translateY(4px) scale(0.96);
-  transition: opacity 0.15s ease, transform 0.15s ease;
-  visibility: hidden;
-}
+        .hm-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            font-size: 0.75rem;
+            color: #8e8e93;
+            margin-bottom: 8px;
+        }
 
-.hm-popover.is-visible {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-  visibility: visible;
-}
+        .hm-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+        }
 
-.hm-popover-item {
-  display: block;
-  padding: 4px 10px;
-  border-radius: 4px;
-  font-family: 'Consolas', monospace;
-  font-size: 0.82rem;
-  font-weight: bold;
-  text-decoration: none;
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
-  text-align: center;
-  white-space: nowrap;
-  transition: background 0.15s ease;
-}
-.hm-popover-item:hover {
-  background: var(--accent);
-}
+        .hm-cell {
+            aspect-ratio: 1;
+            border-radius: 6px;
+            background: #1c1c1e;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 4px 2px 3px 2px;
+            box-sizing: border-box;
+            position: relative;
+        }
 
-/* 日期分隔與車次卡片 */
-h2.sep.date {
-  color: var(--text);
-  background: var(--date-header);
-  padding: 6px 14px;
-  margin: 30px 0 12px 0;
-  border-radius: 20px;
-  font-size: 1rem;
-  display: inline-block;
-  font-weight: bold;
-  box-shadow: 0 0 10px rgba(251, 191, 36, 0.2);
-  scroll-margin-top: 70px;
-}
+        .hm-cell.empty {
+            background: transparent;
+        }
 
-.card {
-  background: var(--card);
-  border-radius: 10px;
-  margin-bottom: 12px;
-  border-left: 6px solid var(--accent);
-  display: flex;
-  flex-wrap: wrap;
-  border-top: 1px solid var(--border);
-  border-right: 1px solid var(--border);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-  overflow: hidden;
-  scroll-margin-top: 100px;
-}
+        .hm-cell.has-trains {
+            cursor: pointer;
+            background: #3a3a3c;
+        }
 
-.card.is-sub { border-left-color: var(--sub-color); }
-.card.is-add { border-left-color: var(--add-color); }
+        .hm-cell.has-trains:hover {
+            border: 1px solid var(--accent-color);
+        }
 
-.left {
-  flex: 0 0 150px;
-  background: rgba(0, 0, 0, 0.03);
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  border-right: 1px solid var(--border);
-}
+        .hm-num {
+            font-size: 0.75rem;
+            color: #ffffff;
+            line-height: 1;
+        }
 
-.no { font-size: 1.6rem; font-weight: bold; font-family: 'Consolas', monospace; }
-.type { font-size: 0.85rem; padding: 2px 8px; border-radius: 10px; margin: 6px 0; font-weight: bold; }
-.card.is-add .type { background: rgba(34, 197, 94, 0.15); color: var(--add-color); }
-.card.is-sub .type { background: rgba(239, 68, 68, 0.15); color: var(--sub-color); }
-.route { color: var(--text); font-weight: 600; font-size: 1rem; }
+        .hm-bars {
+            display: flex;
+            gap: 2px;
+            width: 80%;
+            height: 3px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
 
-.right { flex: 1; padding: 12px; display: flex; align-items: center; }
-.stops { display: flex; flex-wrap: wrap; gap: 6px; }
-.badge {
-  background: var(--border);
-  border-radius: 6px;
-  padding: 4px 8px;
-  font-size: 0.85rem;
-  display: flex;
-  align-items: center;
-}
-.badge b { margin-right: 4px; }
-.badge small { color: var(--accent); margin-left: 4px; font-weight: bold; }
+        .hm-bar {
+            flex: 1;
+            height: 100%;
+        }
 
-@media (max-width: 600px) {
-  .card { flex-direction: column; }
-  .left { flex: none; width: auto; border-right: none; border-bottom: 1px solid var(--border); flex-direction: row; justify-content: space-between; padding: 10px 15px; }
-  .no { font-size: 1.3rem; }
-}
-</style>
+        .hm-legend {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            font-size: 0.75rem;
+            color: #8e8e93;
+            margin-top: 12px;
+        }
+
+        .hm-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .hm-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        /* --- 車次卡片樣式 --- */
+        .train-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 14px;
+            border-left: 5px solid #2ecc71;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-top: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .train-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .train-no {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #2ecc71;
+        }
+
+        .badge {
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .badge-type { background: #2ecc71; }
+        .badge-line { background: #636e72; }
+
+        .train-route {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .train-dates {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+    </style>
 </head>
 <body>
 
-<div class="header">
-  <h1>🚅 臺鐵 45 天內加減班車時刻表</h1>
-  <div class="meta" id="date-range-meta">計算中...</div>
+<div class="container">
+    <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()">深</button>
+
+    <h1 class="main-title">臺鐵45天內加班或增停時刻表</h1>
+    <div class="subtitle" id="range-text">開行區間：載入中...</div>
+    <div class="update-time" id="update-text">最後更新於：--</div>
+    
+    <hr class="divider">
+
+    <div class="section-label">搜尋車次：</div>
+    <input type="text" class="search-box" id="search-input" placeholder="輸入車次號碼 (例如: 5210)" oninput="filterAndRender()">
+
+    <div class="section-label">排序方式：</div>
+    <div class="sort-buttons">
+        <button class="sort-btn active" id="sort-date-btn" onclick="setSortMode('date')">先日期再車次</button>
+        <button class="sort-btn" id="sort-no-btn" onclick="setSortMode('number')">純車次號碼大小</button>
+    </div>
+
+    <!-- 熱點圖預覽 -->
+    <div class="hm-widget">
+        <div class="hm-header-main">
+            <div class="hm-title">行駛日期熱點分佈預覽</div>
+            <button class="hm-toggle-btn" id="hm-toggle-btn" onclick="toggleHeatmap()">收合 ▲</button>
+        </div>
+        <div class="hm-sub-text">點擊日期快速篩選車次</div>
+
+        <div id="hm-body">
+            <div id="hm-months-container"></div>
+
+            <div class="hm-legend">
+                <span class="hm-legend-item"><span class="hm-dot" style="background:#2ecc71;"></span> 區間車/區間快</span>
+                <span class="hm-legend-item"><span class="hm-dot" style="background:#3498db;"></span> 自強號</span>
+                <span class="hm-legend-item"><span class="hm-dot" style="background:#e74c3c;"></span> 莒光號</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 車次清單容器 -->
+    <div id="train-list-container"></div>
 </div>
 
-<main class="container">
-  <!-- 動態熱點圖日曆 Widget -->
-  <div class="hm-widget" id="hm-widget">
-    <div class="hm-header">
-      <div class="hm-title">📅 45天行駛日曆熱點</div>
-      <button type="button" class="hm-toggle-btn" onclick="toggleHeatmap()">
-        <span id="hm-toggle-text">收合</span>
-      </button>
-    </div>
-    <div class="hm-body" id="hm-body">
-      <div class="hm-months-container" id="hm-months-container">
-        <!-- 動態產生月份日曆 -->
-      </div>
-    </div>
-  </div>
-
-  <!-- 車次列表容器 (範例資料，可依您的資料結構擴充) -->
-  <div id="train-list-container">
-    <h2 class="sep date" id="date-2026-10-30" data-date="2026-10-30">2026/10/30</h2>
-    <div class="card is-add" id="train-1101">
-      <div class="left">
-        <div class="no">1101</div>
-        <div class="type">加班車</div>
-        <div class="route">樹林 ➔ 花蓮</div>
-      </div>
-      <div class="right">
-        <div class="stops">
-          <div class="badge"><b>樹林</b><small>07:00開</small></div>
-          <div class="badge"><b>臺北</b><small>07:20到→07:23開</small></div>
-          <div class="badge"><b>花蓮</b><small>10:00到</small></div>
-        </div>
-      </div>
-    </div>
-
-    <h2 class="sep date" id="date-2026-10-31" data-date="2026-10-31">2026/10/31</h2>
-    <div class="card is-sub" id="train-2202">
-      <div class="left">
-        <div class="no">2202</div>
-        <div class="type">停駛車</div>
-        <div class="route">高雄 ➔ 臺北</div>
-      </div>
-      <div class="right">
-        <div class="stops">
-          <div class="badge"><b>高雄</b><small>08:00開</small></div>
-          <div class="badge"><b>臺北</b><small>12:30到</small></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</main>
-
-<div id="hm-popover" class="hm-popover" role="tooltip"></div>
-
 <script>
-// 模擬有行駛列車的日期資料 (格式: 'YYYY-MM-DD': [{no: '1101', type: '加班車'}, ...])
-const trainDataMap = {
-  "2026-10-30": [{no: "1101", type: "加班車"}],
-  "2026-10-31": [{no: "2202", type: "停駛車"}]
-};
+    // 預設測試資料 (若沒有伺服器 JSON 時使用)
+    const mockData = {
+        "update_time": "2026-10-30 15:53:35",
+        "start_date": "10/31",
+        "end_date": "12/05",
+        "trains": [
+            {
+                "trainNo": "3348",
+                "type": "區間車",
+                "line": "西部幹線",
+                "route": "枋寮 22:19 -> 臺南 00:42",
+                "dates": ["2026-10-31", "2026-11-01", "2026-11-07"]
+            },
+            {
+                "trainNo": "5210",
+                "type": "自強號",
+                "line": "東部幹線",
+                "route": "樹林 07:15 -> 臺東 11:30",
+                "dates": ["2026-10-31", "2026-11-02"]
+            },
+            {
+                "trainNo": "5502",
+                "type": "莒光號",
+                "line": "南迴線",
+                "route": "臺東 14:00 -> 高雄 17:20",
+                "dates": ["2026-11-01"]
+            }
+        ]
+    };
 
-function initCalendar() {
-  const container = document.getElementById('hm-months-container');
-  container.innerHTML = '';
+    let cachedTrains = [];
+    let currentSortMode = 'date'; // 'date' 或 'number'
 
-  const today = new Date();
-  today.setHours(0,0,0,0);
-  const endDate = new Date(today.getTime());
-  endDate.setDate(today.getDate() + 45);
-
-  document.getElementById('date-range-meta').textContent = 
-    `有效區間：${formatDateStr(today)} ～ ${formatDateStr(endDate)} (往後45天)`;
-
-  // 計算需要涵蓋的月份
-  let startYear = today.getFullYear();
-  let startMonth = today.getMonth();
-  let endYear = endDate.getFullYear();
-  let endMonth = endDate.getMonth();
-
-  let currentDateCursor = new Date(startYear, startMonth, 1);
-  const finalMonthDate = new Date(endYear, endMonth, 1);
-
-  while (currentDateCursor <= finalMonthDate) {
-    const y = currentDateCursor.getFullYear();
-    const m = currentDateCursor.getMonth();
-    
-    const monthCard = createMonthCard(y, m, today, endDate);
-    container.appendChild(monthCard);
-
-    currentDateCursor.setMonth(currentDateCursor.getMonth() + 1);
-  }
-}
-
-function createMonthCard(year, month, today, endDate) {
-  const card = document.createElement('div');
-  card.className = 'hm-month-card';
-
-  const monthNames = ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
-  
-  card.innerHTML = `
-    <div class="hm-month-header">
-      <span>${year} 年 ${monthNames[month]}</span>
-    </div>
-    <div class="hm-weekdays">
-      <span class="sun">日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span class="sat">六</span>
-    </div>
-    <div class="hm-grid" id="grid-${year}-${month}"></div>
-  `;
-
-  const grid = card.querySelector('.hm-grid');
-  
-  const firstDayIndex = new Date(year, month, 1).getDay();
-  const totalDays = new Date(year, month + 1, 0).getDate();
-
-  // 填充空白格子
-  for (let i = 0; i < firstDayIndex; i++) {
-    const emptyCell = document.createElement('div');
-    emptyCell.className = 'hm-cell is-out';
-    grid.appendChild(emptyCell);
-  }
-
-  // 填充日期格子
-  for (let d = 1; d <= totalDays; d++) {
-    const cellDate = new Date(year, month, d);
-    cellDate.setHours(0,0,0,0);
-
-    const cell = document.createElement('div');
-    cell.className = 'hm-cell';
-    
-    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-    cell.setAttribute('data-date', dateStr);
-
-    const numSpan = document.createElement('span');
-    numSpan.className = 'hm-num';
-    numSpan.textContent = d;
-    cell.appendChild(numSpan);
-
-    // 判斷是否在 45 天有效區間內
-    if (cellDate < today || cellDate > endDate) {
-      cell.classList.add('is-past');
-    } else {
-      // 檢查當天是否有列車
-      if (trainDataMap[dateStr] && trainDataMap[dateStr].length > 0) {
-        cell.classList.add('has-trains');
-        const bars = document.createElement('div');
-        bars.className = 'hm-bars';
-        trainDataMap[dateStr].forEach(t => {
-          const bar = document.createElement('span');
-          bar.className = 'hm-bar';
-          bar.style.background = t.type === '加班車' ? 'var(--add-color)' : 'var(--sub-color)';
-          bars.appendChild(bar);
-        });
-        cell.appendChild(bars);
-
-        // 點擊直接跳轉到該日期標題
-        cell.onclick = () => {
-          const target = document.getElementById(`date-${dateStr}`);
-          if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        };
-
-        // 長按顯示車次 Popover 互動
-        bindLongPress(cell, dateStr);
-      }
+    // 車種顏色定義
+    function getTrainColor(type) {
+        if (!type) return '#2ecc71';
+        if (type.includes('自強')) return '#3498db';
+        if (type.includes('莒光')) return '#e74c3c';
+        return '#2ecc71'; // 區間車/區間快
     }
 
-    grid.appendChild(cell);
-  }
+    // 初始化 App
+    function initApp() {
+        // 嘗試載入 last_trains.json，若無則載入預設 Mock 資料
+        fetch('last_trains.json')
+            .then(res => res.json())
+            .then(data => processData(data))
+            .catch(() => processData(mockData));
+    }
 
-  return card;
-}
+    function processData(data) {
+        document.getElementById('range-text').textContent = `開行區間：${data.start_date} ~ ${data.end_date}`;
+        document.getElementById('update-text').textContent = `最後更新於：${data.update_time}`;
+        
+        cachedTrains = data.trains;
+        renderHeatmap(cachedTrains);
+        filterAndRender();
+    }
 
-function formatDateStr(date) {
-  return `${date.getFullYear()}/${String(date.getMonth()+1).padStart(2,'0')}/${String(date.getDate()).padStart(2,'0')}`;
-}
+    // 切換深色/淺色主題
+    function toggleTheme() {
+        const body = document.body;
+        const btn = document.getElementById('theme-btn');
+        if (body.getAttribute('data-theme') === 'dark') {
+            body.removeAttribute('data-theme');
+            btn.textContent = '深';
+        } else {
+            body.setAttribute('data-theme', 'dark');
+            btn.textContent = '淺';
+        }
+    }
 
-function toggleHeatmap() {
-  const body = document.getElementById('hm-body');
-  const text = document.getElementById('hm-toggle-text');
-  if (body.style.display === 'none') {
-    body.style.display = 'block';
-    text.textContent = '收合';
-  } else {
-    body.style.display = 'none';
-    text.textContent = '展開';
-  }
-}
+    // 熱點圖收合/展開
+    function toggleHeatmap() {
+        const body = document.getElementById('hm-body');
+        const btn = document.getElementById('hm-toggle-btn');
+        if (body.style.display === 'none') {
+            body.style.display = 'block';
+            btn.textContent = '收合 ▲';
+        } else {
+            body.style.display = 'none';
+            btn.textContent = '展開 ▼';
+        }
+    }
 
-// 長按互動邏輯 (支援觸控與滑鼠)
-function bindLongPress(cell, dateStr) {
-  let pressTimer = null;
-  const popover = document.getElementById('hm-popover');
+    // 渲染熱點圖
+    function renderHeatmap(trains) {
+        const container = document.getElementById('hm-months-container');
+        const dateMap = {};
 
-  const showPopover = (e) => {
-    e.preventDefault();
-    const trains = trainDataMap[dateStr];
-    if (!trains || trains.length === 0) return;
+        // 統計各日期開行車次與車種顏色
+        trains.forEach(t => {
+            const color = getTrainColor(t.type);
+            t.dates.forEach(d => {
+                if (!dateMap[d]) dateMap[d] = [];
+                dateMap[d].push({ trainNo: t.trainNo, color: color });
+            });
+        });
 
-    popover.innerHTML = '';
-    trains.forEach(t => {
-      const item = document.createElement('a');
-      item.className = 'hm-popover-item';
-      item.textContent = `${t.no} (${t.type})`;
-      item.href = `#train-${t.no}`;
-      item.onclick = () => popover.classList.remove('is-visible');
-      popover.appendChild(item);
-    });
+        const allDates = Object.keys(dateMap).sort();
+        if (allDates.length === 0) return;
 
-    const rect = cell.getBoundingClientRect();
-    popover.style.left = `${rect.left + rect.width / 2 - 40}px`;
-    popover.style.top = `${rect.top - 55}px`;
-    popover.classList.add('is-visible');
-  };
+        // 按月份拆分
+        const monthGroups = {};
+        allDates.forEach(d => {
+            const ym = d.substring(0, 7); // YYYY-MM
+            if (!monthGroups[ym]) monthGroups[ym] = [];
+            monthGroups[ym].push(d);
+        });
 
-  const startPress = (e) => {
-    pressTimer = setTimeout(() => showPopover(e), 500); // 長按 500ms
-  };
+        container.innerHTML = '';
 
-  const cancelPress = () => {
-    if (pressTimer) clearTimeout(pressTimer);
-  };
+        Object.keys(monthGroups).sort().forEach(ym => {
+            const [y, m] = ym.split('-');
+            const firstDay = new Date(y, parseInt(m) - 1, 1).getDay();
+            const totalDays = new Date(y, parseInt(m), 0).getDate();
 
-  cell.addEventListener('mousedown', startPress);
-  cell.addEventListener('mouseup', cancelPress);
-  cell.addEventListener('mouseleave', cancelPress);
-  cell.addEventListener('touchstart', startPress);
-  cell.addEventListener('touchend', cancelPress);
-}
+            let html = `
+                <div class="hm-month-card">
+                    <div class="hm-month-title">${y}年 ${parseInt(m)}月</div>
+                    <div class="hm-weekdays">
+                        <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+                    </div>
+                    <div class="hm-grid">
+            `;
 
-// 點擊空白處關閉 Popover
-document.addEventListener('click', (e) => {
-  const popover = document.getElementById('hm-popover');
-  if (!e.target.closest('.hm-cell') && !e.target.closest('.hm-popover')) {
-    popover.classList.remove('is-visible');
-  }
-});
+            // 補齊月初空格
+            for (let i = 0; i < firstDay; i++) {
+                html += `<div class="hm-cell empty"></div>`;
+            }
 
-document.addEventListener('DOMContentLoaded', initCalendar);
+            // 繪製日期格
+            for (let day = 1; day <= totalDays; day++) {
+                const dayStr = String(day).padStart(2, '0');
+                const fullDate = `${ym}-${dayStr}`;
+                const dayTrains = dateMap[fullDate];
+
+                if (dayTrains && dayTrains.length > 0) {
+                    const bars = dayTrains.slice(0, 3).map(item => 
+                        `<span class="hm-bar" style="background:${item.color};"></span>`
+                    ).join('');
+
+                    html += `
+                        <div class="hm-cell has-trains" onclick="selectDate('${fullDate}')" title="${fullDate} (${dayTrains.length}班)">
+                            <span class="hm-num">${day}</span>
+                            <div class="hm-bars">${bars}</div>
+                        </div>
+                    `;
+                } else {
+                    html += `
+                        <div class="hm-cell">
+                            <span class="hm-num" style="opacity: 0.3;">${day}</span>
+                        </div>
+                    `;
+                }
+            }
+
+            html += `</div></div>`;
+            container.insertAdjacentHTML('beforeend', html);
+        });
+    }
+
+    // 點擊熱點圖日期進行過濾/捲動
+    function selectDate(dateStr) {
+        const input = document.getElementById('search-input');
+        input.value = dateStr;
+        filterAndRender();
+    }
+
+    // 設定排序模式
+    function setSortMode(mode) {
+        currentSortMode = mode;
+        document.getElementById('sort-date-btn').classList.toggle('active', mode === 'date');
+        document.getElementById('sort-no-btn').classList.toggle('active', mode === 'number');
+        filterAndRender();
+    }
+
+    // 篩選與渲染車次卡片
+    function filterAndRender() {
+        const query = document.getElementById('search-input').value.trim().toLowerCase();
+        const container = document.getElementById('train-list-container');
+
+        let filtered = cachedTrains.filter(t => {
+            const matchesNo = t.trainNo.toLowerCase().includes(query);
+            const matchesDate = t.dates.some(d => d.includes(query));
+            return matchesNo || matchesDate;
+        });
+
+        // 排序 logic
+        if (currentSortMode === 'number') {
+            filtered.sort((a, b) => parseInt(a.trainNo) - parseInt(b.trainNo));
+        } else {
+            filtered.sort((a, b) => (a.dates[0] || '').localeCompare(b.dates[0] || '') || parseInt(a.trainNo) - parseInt(b.trainNo));
+        }
+
+        container.innerHTML = '';
+
+        if (filtered.length === 0) {
+            container.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:20px;">查無符合車次</div>`;
+            return;
+        }
+
+        filtered.forEach(t => {
+            const color = getTrainColor(t.type);
+            const card = document.createElement('div');
+            card.className = 'train-card';
+            card.style.borderLeftColor = color;
+
+            card.innerHTML = `
+                <div class="train-header">
+                    <span class="train-no" style="color:${color};">${t.trainNo} 次</span>
+                    <span class="badge badge-type" style="background:${color};">${t.type}</span>
+                    <span class="badge badge-line">${t.line}</span>
+                </div>
+                <div class="train-route">${t.route}</div>
+                <div class="train-dates">行駛日期：${t.dates.join(', ')}</div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    // 啟動程式
+    window.onload = initApp;
 </script>
 
 </body>
