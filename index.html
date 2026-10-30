@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>臺鐵45天內加班或增停時刻表</title>
+  <title>臺鐵45天內加班或增停資訊</title>
   <style>
     /* --- 1. 全域風格與系統原生字體 --- */
     * { box-sizing: border-box; }
@@ -13,7 +13,7 @@
       background: var(--bg-color);
       color: var(--text-color);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      padding: 0;
+      padding: 16px;
       display: flex;
       flex-direction: column;
       align-items: stretch;
@@ -65,12 +65,17 @@
       --toggle-btn-text: #ffffff;
     }
 
-    /* 頂部按鈕控制列 */
-    .top-controls {
+    /* 主容器與頂部元件寬度將由 JS 或寬螢幕預設 100% 決定 */
+    .container {
       width: 100%;
-      padding: 12px 24px 0 24px;
+      margin: 0 auto;
+    }
+
+    .top-controls {
       display: flex;
       justify-content: flex-end;
+      margin-bottom: -5px;
+      width: 100%;
     }
 
     .theme-toggle-btn {
@@ -94,16 +99,16 @@
       transform: scale(0.9);
     }
 
-    /* 標題列：寬度 100%，橘色底線延伸至畫面最外側，標題靠左 */
+    /* 標題列：寬度 100%，橘色底線等寬延伸至頁面兩側，標題維持靠左 */
     header {
-      width: 100%;
-      padding: 12px 24px 12px 24px;
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
       border-bottom: 2px solid var(--accent-color);
-      margin-bottom: 20px;
+      padding-bottom: 12px;
+      margin-bottom: 16px;
       gap: 20px;
+      width: 100%;
     }
 
     h1 {
@@ -119,14 +124,12 @@
       white-space: nowrap;
     }
 
-    /* 搜尋與排序列：置中並限制最大寬度，保持版面精緻 */
+    /* 搜尋與排序列：寬度 100% 配合頁面延展 */
     .filter-bar {
-      width: 100%;
-      max-width: 1200px;
-      margin: 0 auto 20px auto;
-      padding: 0 24px;
       display: flex;
       gap: 16px;
+      margin-bottom: 20px;
+      width: 100%;
     }
 
     .filter-group {
@@ -191,25 +194,27 @@
       box-shadow: 0 0 10px rgba(255, 152, 0, 0.4);
     }
 
-    /* 車次列表容器 */
     #train-list {
       width: 100%;
-      padding: 0 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
     }
 
-    /* 車次卡片：寬度由內容自適應，並藉由 margin: 0 auto 完美置中 */
+    /* 車次卡片：電腦版預設置中對齊 */
     .train-card {
       background: var(--card-bg);
       border: 1px solid var(--border-color);
       border-radius: 12px;
       padding: 18px 20px;
-      margin: 0 auto 16px auto;
+      margin-bottom: 16px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
       display: flex;
       gap: 20px;
       align-items: flex-start;
       width: fit-content;
-      max-width: 100%;
+      margin-left: auto;
+      margin-right: auto;
       transition: background 0.3s, border-color 0.3s;
     }
     
@@ -319,15 +324,15 @@
       display: none;
     }
 
-    /* 手機版 RWD */
-    @media (max-width: 768px) {
+    /* RWD 斷點改為 1132px：低於此寬度時切換為窄螢幕/手機版佈局 */
+    @media (max-width: 1132px) {
       body {
-        padding: 0;
+        padding: 12px;
       }
 
-      .top-controls, header, .filter-bar, #train-list {
-        padding-left: 12px;
-        padding-right: 12px;
+      .container, header, .filter-bar {
+        width: 100% !important;
+        min-width: 100%;
       }
 
       header, .filter-bar {
@@ -336,12 +341,13 @@
       }
 
       .train-card {
-        width: 100%;
+        width: 100% !important;
         flex-direction: column;
         align-items: stretch;
         gap: 12px;
         padding: 16px;
-        margin: 0 0 16px 0;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
       }
 
       .train-info-sidebar {
@@ -416,36 +422,38 @@
 </head>
 <body>
 
-  <div class="top-controls" id="top-controls">
-    <button type="button" id="themeToggle" class="theme-toggle-btn" onclick="toggleTheme()">淺</button>
-  </div>
-
-  <header id="main-header">
-    <div>
-      <h1>臺鐵45天內加班或增停時刻表</h1>
-      <div class="date-range" id="date-range" style="font-size: 0.9rem; color: var(--accent-color); font-weight: bold; margin-top: 4px;"></div>
-    </div>
-    <div class="update-time" id="last-updated">載入中...</div>
-  </header>
-
-  <div class="filter-bar" id="filter-bar">
-    <div class="filter-group">
-      <span class="filter-label">搜尋車次：</span>
-      <input type="text" id="search-input" class="search-input" placeholder="輸入車次號碼 (例如: 5210)" oninput="filterAndRender()">
+  <div class="container" id="main-container">
+    <div class="top-controls" id="top-controls">
+      <button type="button" id="themeToggle" class="theme-toggle-btn" onclick="toggleTheme()">淺</button>
     </div>
 
-    <div class="filter-group">
-      <span class="filter-label">排序方式：</span>
-      <div class="sort-btn-group">
-        <button type="button" class="sort-btn active" id="sort-date" onclick="setSortType('date-first')">先日期再車次</button>
-        <button type="button" class="sort-btn" id="sort-num" onclick="setSortType('number-first')">純車次號碼大小</button>
+    <header id="main-header">
+      <div>
+        <h1>臺鐵45天內加班或增停時刻表</h1>
+        <div class="date-range" id="date-range" style="font-size: 0.9rem; color: var(--accent-color); font-weight: bold; margin-top: 4px;"></div>
+      </div>
+      <div class="update-time" id="last-updated">載入中...</div>
+    </header>
+
+    <div class="filter-bar" id="filter-bar">
+      <div class="filter-group">
+        <span class="filter-label">搜尋車次：</span>
+        <input type="text" id="search-input" class="search-input" placeholder="輸入車次號碼 (例如: 5210)" oninput="filterAndRender()">
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">排序方式：</span>
+        <div class="sort-btn-group">
+          <button type="button" class="sort-btn active" id="sort-date" onclick="setSortType('date-first')">先日期再車次</button>
+          <button type="button" class="sort-btn" id="sort-num" onclick="setSortType('number-first')">純車次號碼大小</button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <main id="train-list">
-    <div class="status-msg">正在讀取最新的加班車資料...</div>
-  </main>
+    <main id="train-list">
+      <div class="status-msg">正在讀取最新的加班車資料...</div>
+    </main>
+  </div>
 
   <script>
     let cachedTrains = [];
@@ -569,6 +577,65 @@
       filterAndRender();
     }
 
+    // 寬度與置中計算邏輯：將 768 改為 1132，小於等於 1132px 時啟動窄螢幕捲動防護
+    function updateContainerWidth() {
+      if (window.innerWidth <= 1132) {
+        document.getElementById('main-container').style.width = '100%';
+        document.getElementById('main-header').style.width = '100%';
+        document.getElementById('filter-bar').style.width = '100%';
+        document.getElementById('top-controls').style.width = '100%';
+        document.querySelectorAll('.train-card').forEach(card => {
+          card.style.marginLeft = '0';
+          card.style.marginRight = '0';
+        });
+        return;
+      }
+
+      const cards = document.querySelectorAll('.train-card');
+      if (cards.length === 0) return;
+
+      let maxCardWidth = 0;
+      cards.forEach(card => {
+        const w = card.scrollWidth;
+        if (w > maxCardWidth) {
+          maxCardWidth = w;
+        }
+      });
+
+      const PADDING_OFFSET = 30; 
+      const targetWidth = maxCardWidth + PADDING_OFFSET;
+      const screenWidth = window.innerWidth;
+
+      const container = document.getElementById('main-container');
+      const header = document.getElementById('main-header');
+      const filterBar = document.getElementById('filter-bar');
+      const topControls = document.getElementById('top-controls');
+
+      if (screenWidth <= targetWidth) {
+        // 當視窗介於 1132px 與卡片真實寬度之間時，撐開容器並靠左支援橫向捲動
+        container.style.width = targetWidth + 'px';
+        header.style.width = targetWidth + 'px';
+        filterBar.style.width = targetWidth + 'px';
+        topControls.style.width = targetWidth + 'px';
+
+        cards.forEach(card => {
+          card.style.marginLeft = '0';
+          card.style.marginRight = 'auto';
+        });
+      } else {
+        // 當視窗寬度大於 1132px 且大於卡片寬度時，全螢幕滿版，卡片置中
+        container.style.width = '100%';
+        header.style.width = '100%';
+        filterBar.style.width = '100%';
+        topControls.style.width = '100%';
+
+        cards.forEach(card => {
+          card.style.marginLeft = 'auto';
+          card.style.marginRight = 'auto';
+        });
+      }
+    }
+
     function filterAndRender() {
       const container = document.getElementById('train-list');
       const searchKeyword = document.getElementById('search-input').value.trim();
@@ -669,6 +736,11 @@
 
         container.appendChild(card);
       });
+
+      // 渲染完成後觸發寬度與置中計算
+      setTimeout(() => {
+        updateContainerWidth();
+      }, 50);
     }
 
     function toggleStops(wrapperId, btn) {
@@ -682,6 +754,7 @@
         wrapper.classList.add('active');
         icon.textContent = '▲';
       }
+      setTimeout(updateContainerWidth, 50);
     }
 
     async function initApp() {
@@ -702,6 +775,8 @@
         `;
       }
     }
+
+    window.addEventListener('resize', updateContainerWidth);
 
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', initApp);
