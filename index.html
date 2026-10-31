@@ -1214,7 +1214,7 @@
         return;
       }
       
-      metaText.innerHTML = `<span>統計區間：${sortedDates[0]} ～ ${sortedDates[sortedDates.length - 1]}</span><span>·</span><span>全期共 ${sortedDates.length} 天有加班車</span>`;
+      metaText.innerHTML = `<span>統計區間：${sortedDates[0]} ～ ${sortedDates[sortedDates.length - 1]}</span><span>·</span><span>全期共 ${sortedDates.length} 天有加班車</span><span>可點擊日期，選取車次，自動定位至該車次</span>`;
       
       const monthMap = {}; 
       sortedDates.forEach(d => {
