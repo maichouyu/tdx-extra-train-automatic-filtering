@@ -637,9 +637,9 @@
       border-radius: 50%;
     }
 
-    /* 彈出氣泡視窗 (Popover) 樣式 */
+    /* 彈出氣泡視窗 (Popover) 樣式：使用 position: fixed 確保絕對不被任何容器裁切 */
     .hm-popover {
-      position: absolute;
+      position: fixed;
       z-index: 99999;
       background: var(--card-bg);
       border: 1px solid var(--accent-color);
@@ -735,7 +735,7 @@
     </main>
   </div>
 
-  <!-- 點擊日期彈出的車次清單 Popover -->
+  <!-- 點擊日期彈出的車次清單 Popover（移至最外層 body 內部，確保不會被容器切掉） -->
   <div id="hm-train-popover" class="hm-popover"></div>
 
   <script>
@@ -1062,13 +1062,12 @@
     // 全域變數管理當前彈窗的關閉事件
     let currentDismissPopover = null;
 
-    // 點擊日期格子顯示車次彈窗（支援滾動關閉 ＆ 點擊外部關閉）
+    // 點擊日期格子顯示車次彈窗（使用 position: fixed 計算全螢幕精準座標）
     function showTrainPopover(event, dateStr, trainsJsonStr) {
       event.stopPropagation();
       const popover = document.getElementById('hm-train-popover');
       if (!popover) return;
 
-      // 如果已經有開著的彈窗，先清除舊的監聽
       if (currentDismissPopover) {
         currentDismissPopover();
       }
@@ -1083,18 +1082,17 @@
 
       const cellEl = event.currentTarget;
       const rect = cellEl.getBoundingClientRect();
-      const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-      // 計算彈窗位置，預防超出右側螢幕
-      let leftPos = rect.left + scrollLeft;
+      // 計算視窗內的固定座標，並自動防止超出左右邊界
+      let leftPos = rect.left;
       const popoverWidth = 260;
       if (leftPos + popoverWidth > window.innerWidth - 16) {
         leftPos = window.innerWidth - popoverWidth - 16;
       }
+      if (leftPos < 16) leftPos = 16;
 
       popover.style.left = `${leftPos}px`;
-      popover.style.top = `${rect.bottom + scrollTop + 6}px`;
+      popover.style.top = `${rect.bottom + 6}px`;
       
       popover.classList.add('is-visible');
 
@@ -1114,7 +1112,6 @@
 
       currentDismissPopover = dismissHandler;
 
-      // 延遲綁定監聽，避免當前點擊事件直接觸發 outsideClickHandler
       setTimeout(() => {
         document.addEventListener('click', outsideClickHandler);
         window.addEventListener('scroll', dismissHandler, { once: true });
