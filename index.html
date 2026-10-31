@@ -637,7 +637,7 @@
       border-radius: 50%;
     }
 
-    /* 彈出氣泡視窗 (Popover) 樣式：使用 position: fixed 確保絕對不被任何容器裁切 */
+    /* 彈出氣泡視窗 (Popover) 樣式 */
     .hm-popover {
       position: fixed;
       z-index: 99999;
@@ -649,7 +649,6 @@
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
-      max-width: 260px;
       opacity: 0;
       transform: translateY(4px) scale(0.96);
       transition: opacity 0.16s ease, transform 0.16s ease;
@@ -712,7 +711,7 @@
     <div class="hm-widget" id="hm-widget">
       <div class="hm-header">
         <div class="hm-header-main">
-          <div class="hm-title"><span>行駛日期熱點分佈（開發中）</span></div>
+          <div class="hm-title"><span>📅</span><span>行駛日期熱點分佈預覽</span></div>
           <button type="button" class="hm-toggle-btn" onclick="toggleHeatmap()" id="hm-toggle-btn">
             <span id="hm-toggle-text">收合</span> <span id="hm-toggle-icon">▲</span>
           </button>
@@ -735,7 +734,7 @@
     </main>
   </div>
 
-  <!-- 點擊日期彈出的車次清單 Popover（移至最外層 body 內部，確保不會被容器切掉） -->
+  <!-- 點擊日期彈出的車次清單 Popover -->
   <div id="hm-train-popover" class="hm-popover"></div>
 
   <script>
@@ -867,7 +866,7 @@
 
       if (window.innerWidth <= 768) {
         document.getElementById('main-container').style.width = '100%';
-        document.getElementById('main-header').style.width = '100%';
+        document.getElementById('main-header').style.width = '100%
         document.getElementById('filter-bar').style.width = '100%';
         document.getElementById('top-controls').style.width = '100%';
         document.querySelectorAll('.train-card').forEach(card => {
@@ -1062,7 +1061,7 @@
     // 全域變數管理當前彈窗的關閉事件
     let currentDismissPopover = null;
 
-    // 點擊日期格子顯示車次彈窗（使用 position: fixed 計算全螢幕精準座標）
+    // 點擊日期格子顯示車次彈窗：若只有 1 個車次則強制置中對齊在格子下方；若 >= 2 個則維持彈出與自動換行
     function showTrainPopover(event, dateStr, trainsJsonStr) {
       event.stopPropagation();
       const popover = document.getElementById('hm-train-popover');
@@ -1073,21 +1072,35 @@
       }
 
       const trains = JSON.parse(decodeURIComponent(trainsJsonStr));
-      
+      const cellEl = event.currentTarget;
+      const rect = cellEl.getBoundingClientRect();
+
+      // 根據車次數量動態調整氣泡樣式與寬度
+      if (trains.length === 1) {
+        popover.style.width = `${rect.width}px`;
+        popover.style.maxWidth = `${rect.width}px`;
+      } else {
+        popover.style.width = 'auto';
+        popover.style.maxWidth = '260px';
+      }
+
       popover.innerHTML = trains.map(t => `
-        <div class="hm-popover-item" style="background: ${t.color};" onclick="scrollToTrain('${t.trainNo}')">
+        <div class="hm-popover-item" style="background: ${t.color}; width: ${trains.length === 1 ? '100%' : 'auto'};" onclick="scrollToTrain('${t.trainNo}')">
           ${t.trainNo} 次
         </div>
       `).join('');
 
-      const cellEl = event.currentTarget;
-      const rect = cellEl.getBoundingClientRect();
-
-      // 計算視窗內的固定座標，並自動防止超出左右邊界
-      let leftPos = rect.left;
-      const popoverWidth = 260;
-      if (leftPos + popoverWidth > window.innerWidth - 16) {
-        leftPos = window.innerWidth - popoverWidth - 16;
+      // 若只有 1 個車次，讓氣泡水平置中對齊格子；若 >= 2 個則以格子左側對齊
+      let leftPos;
+      if (trains.length === 1) {
+        const popoverWidth = rect.width;
+        leftPos = rect.left + (rect.width / 2) - (popoverWidth / 2);
+      } else {
+        leftPos = rect.left;
+        const popoverWidth = 260;
+        if (leftPos + popoverWidth > window.innerWidth - 16) {
+          leftPos = window.innerWidth - popoverWidth - 16;
+        }
       }
       if (leftPos < 16) leftPos = 16;
 
