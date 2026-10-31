@@ -560,7 +560,7 @@
       background: var(--input-bg);
       border: 1px solid var(--border-color);
       transition: transform 0.15s ease;
-      position: relative; /* 確保內部絕對定位基準正確 */
+      position: relative;
     }
 
     .hm-cell.empty {
@@ -637,7 +637,7 @@
       border-radius: 50%;
     }
 
-    /* 彈出氣泡視窗 (Popover) 樣式：改為 absolute 完美對齊文檔座標 */
+    /* 彈出氣泡視窗 (Popover) 樣式 */
     .hm-popover {
       position: absolute;
       z-index: 99999;
@@ -712,7 +712,7 @@
     <div class="hm-widget" id="hm-widget">
       <div class="hm-header">
         <div class="hm-header-main">
-          <div class="hm-title"><span>行駛日期熱點分佈（開發中）</span></div>
+          <div class="hm-title"><span>📅</span><span>行駛日期熱點分佈預覽</span></div>
           <button type="button" class="hm-toggle-btn" onclick="toggleHeatmap()" id="hm-toggle-btn">
             <span id="hm-toggle-text">收合</span> <span id="hm-toggle-icon">▲</span>
           </button>
@@ -735,7 +735,7 @@
     </main>
   </div>
 
-  <!-- 點擊日期彈出的車次清單 Popover 移到最外層作為 body 子元素 -->
+  <!-- 點擊日期彈出的車次清單 Popover -->
   <div id="hm-train-popover" class="hm-popover"></div>
 
   <script>
@@ -1059,11 +1059,19 @@
       }
     }
 
-    // 點擊日期格子顯示車次彈窗（修正為 absolute 座標對應頁面捲動）
+    // 全域變數管理當前彈窗的關閉事件
+    let currentDismissPopover = null;
+
+    // 點擊日期格子顯示車次彈窗（支援滾動關閉 ＆ 點擊外部關閉）
     function showTrainPopover(event, dateStr, trainsJsonStr) {
       event.stopPropagation();
       const popover = document.getElementById('hm-train-popover');
       if (!popover) return;
+
+      // 如果已經有開著的彈窗，先清除舊的監聽
+      if (currentDismissPopover) {
+        currentDismissPopover();
+      }
 
       const trains = JSON.parse(decodeURIComponent(trainsJsonStr));
       
@@ -1073,11 +1081,19 @@
         </div>
       `).join('');
 
-      const rect = event.currentTarget.getBoundingClientRect();
+      const cellEl = event.currentTarget;
+      const rect = cellEl.getBoundingClientRect();
       const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-      popover.style.left = `${Math.min(rect.left + scrollLeft, document.body.clientWidth - 280)}px`;
+      // 計算彈窗位置，預防超出右側螢幕
+      let leftPos = rect.left + scrollLeft;
+      const popoverWidth = 260;
+      if (leftPos + popoverWidth > window.innerWidth - 16) {
+        leftPos = window.innerWidth - popoverWidth - 16;
+      }
+
+      popover.style.left = `${leftPos}px`;
       popover.style.top = `${rect.bottom + scrollTop + 6}px`;
       
       popover.classList.add('is-visible');
@@ -1085,25 +1101,32 @@
       const dismissHandler = () => {
         popover.classList.remove('is-visible');
         window.removeEventListener('scroll', dismissHandler);
-        document.removeEventListener('click', closeHandler);
+        window.removeEventListener('touchmove', dismissHandler);
+        document.removeEventListener('click', outsideClickHandler);
+        currentDismissPopover = null;
       };
 
-      const closeHandler = (e) => {
-        if (!popover.contains(e.target) && !event.currentTarget.contains(e.target)) {
+      const outsideClickHandler = (e) => {
+        if (!popover.contains(e.target) && !cellEl.contains(e.target)) {
           dismissHandler();
         }
       };
 
+      currentDismissPopover = dismissHandler;
+
+      // 延遲綁定監聽，避免當前點擊事件直接觸發 outsideClickHandler
       setTimeout(() => {
-        document.addEventListener('click', closeHandler);
+        document.addEventListener('click', outsideClickHandler);
         window.addEventListener('scroll', dismissHandler, { once: true });
+        window.addEventListener('touchmove', dismissHandler, { once: true });
       }, 10);
     }
 
     // 點擊車次編號後自動滾動並高亮該車次卡片
     function scrollToTrain(trainNo) {
-      const popover = document.getElementById('hm-train-popover');
-      if (popover) popover.classList.remove('is-visible');
+      if (currentDismissPopover) {
+        currentDismissPopover();
+      }
 
       const cards = document.querySelectorAll('.train-card');
       for (let card of cards) {
