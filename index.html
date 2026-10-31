@@ -438,9 +438,9 @@
       display: flex;
       flex-direction: column;
       gap: 6px;
-      margin-bottom: 12px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
     }
 
     .hm-header-main {
@@ -485,6 +485,7 @@
       flex-wrap: wrap;
       align-items: center;
       gap: 0 6px;
+      margin-top: 6px;
     }
 
     .hm-months-container {
@@ -637,7 +638,7 @@
       border-radius: 50%;
     }
 
-    /* 彈出氣泡視窗 (Popover) 樣式 */
+    /* 彈出氣泡視窗 (Popover) 樣式：維持正常自然大小與邊線對齊 */
     .hm-popover {
       position: fixed;
       z-index: 99999;
@@ -649,6 +650,8 @@
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
+      width: auto;
+      max-width: 260px;
       opacity: 0;
       transform: translateY(4px) scale(0.96);
       transition: opacity 0.16s ease, transform 0.16s ease;
@@ -707,22 +710,20 @@
       </div>
     </div>
 
-    <!-- 行駛日期熱點圖小工具 -->
+    <!-- 行駛日期熱點圖小工具（預設折疊） -->
     <div class="hm-widget" id="hm-widget">
-      <div class="hm-header">
+      <div class="hm-header" id="hm-header">
         <div class="hm-header-main">
           <div class="hm-title"><span>行駛日期熱點分佈</span></div>
           <button type="button" class="hm-toggle-btn" onclick="toggleHeatmap()" id="hm-toggle-btn">
-            <span id="hm-toggle-text">收合</span> <span id="hm-toggle-icon">▲</span>
+            <span id="hm-toggle-text">展開</span> <span id="hm-toggle-icon">▼</span>
           </button>
         </div>
         <div class="hm-meta" id="hm-meta-text">載入中...</div>
       </div>
-      <div class="hm-body" id="hm-body">
+      <div class="hm-body" id="hm-body" style="display: none;">
         <div class="hm-months-container" id="hm-months-container"></div>
-        <div class="hm-legend" id="hm-legend">
-          <!-- 圖例將由 JS 動態帶入精準對應的顏色 -->
-        </div>
+        <div class="hm-legend" id="hm-legend"></div>
       </div>
     </div>
 
@@ -791,7 +792,6 @@
       }
     }
 
-    // 統一集中管理車種顏色對應
     function getTrainTypeColor(typeStr) {
       if (!typeStr) return '#4BE13A';
 
@@ -801,7 +801,7 @@
       if (typeStr.includes('自強') || typeStr.includes('PP')) return '#ff6f00';
       if (typeStr.includes('莒光')) return '#ff9800';
       
-      return '#4BE13A'; // 區間車 / 區間快 / 其他
+      return '#4BE13A';
     }
 
     function setSortType(type) {
@@ -855,12 +855,11 @@
       }
 
       cachedTrains = allTrains;
-      renderLegend(); // 動態產生精準對應的圖例
+      renderLegend();
       renderHeatmap(allTrains);
       filterAndRender();
     }
 
-    // 動態產生圖例，確保顏色與函式完全一致
     function renderLegend() {
       const legendContainer = document.getElementById('hm-legend');
       if (!legendContainer) return;
@@ -1065,27 +1064,32 @@
       }
     }
 
-    // 切換熱點圖收合
     function toggleHeatmap() {
       const body = document.getElementById('hm-body');
+      const header = document.getElementById('hm-header');
       const text = document.getElementById('hm-toggle-text');
       const icon = document.getElementById('hm-toggle-icon');
       
       if (body.style.display === 'none') {
         body.style.display = 'block';
+        header.style.marginBottom = '12px';
+        header.style.paddingBottom = '10px';
+        header.style.borderBottom = '1px solid var(--border-color)';
         text.textContent = '收合';
         icon.textContent = '▲';
       } else {
         body.style.display = 'none';
+        header.style.marginBottom = '0';
+        header.style.paddingBottom = '0';
+        header.style.borderBottom = 'none';
         text.textContent = '展開';
         icon.textContent = '▼';
       }
     }
 
-    // 全域變數管理當前彈窗的關閉事件
     let currentDismissPopover = null;
 
-    // 點擊日期格子顯示車次彈窗：若只有 1 個車次則強制置中對齊在格子下方；若 >= 2 個則維持彈出與自動換行
+    // 點擊日期格子顯示車次彈窗：恢復標準自動寬度與左側對齊
     function showTrainPopover(event, dateStr, trainsJsonStr) {
       event.stopPropagation();
       const popover = document.getElementById('hm-train-popover');
@@ -1099,32 +1103,16 @@
       const cellEl = event.currentTarget;
       const rect = cellEl.getBoundingClientRect();
 
-      // 根據車次數量動態調整氣泡樣式與寬度
-      if (trains.length === 1) {
-        popover.style.width = `${rect.width}px`;
-        popover.style.maxWidth = `${rect.width}px`;
-      } else {
-        popover.style.width = 'auto';
-        popover.style.maxWidth = '260px';
-      }
-
       popover.innerHTML = trains.map(t => `
-        <div class="hm-popover-item" style="background: ${t.color}; width: ${trains.length === 1 ? '100%' : 'auto'};" onclick="scrollToTrain('${t.trainNo}')">
+        <div class="hm-popover-item" style="background: ${t.color};" onclick="scrollToTrain('${t.trainNo}')">
           ${t.trainNo} 次
         </div>
       `).join('');
 
-      // 若只有 1 個車次，讓氣泡水平置中對齊格子；若 >= 2 個則以格子左側對齊
-      let leftPos;
-      if (trains.length === 1) {
-        const popoverWidth = rect.width;
-        leftPos = rect.left + (rect.width / 2) - (popoverWidth / 2);
-      } else {
-        leftPos = rect.left;
-        const popoverWidth = 260;
-        if (leftPos + popoverWidth > window.innerWidth - 16) {
-          leftPos = window.innerWidth - popoverWidth - 16;
-        }
+      let leftPos = rect.left;
+      const popoverWidth = 260;
+      if (leftPos + popoverWidth > window.innerWidth - 16) {
+        leftPos = window.innerWidth - popoverWidth - 16;
       }
       if (leftPos < 16) leftPos = 16;
 
@@ -1156,7 +1144,6 @@
       }, 10);
     }
 
-    // 點擊車次編號後自動滾動並高亮該車次卡片
     function scrollToTrain(trainNo) {
       if (currentDismissPopover) {
         currentDismissPopover();
@@ -1173,7 +1160,6 @@
       }
     }
 
-    // 動態產生熱點圖
     function renderHeatmap(allTrains) {
       const container = document.getElementById('hm-months-container');
       const metaText = document.getElementById('hm-meta-text');
