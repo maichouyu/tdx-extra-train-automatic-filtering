@@ -1058,7 +1058,7 @@
       }
     }
 
-    // 點擊日期格子顯示車次彈窗
+    // 點擊日期格子顯示車次彈窗（加入捲動自動關閉防呆）
     function showTrainPopover(event, dateStr, trainsJsonStr) {
       event.stopPropagation();
       const popover = document.getElementById('hm-train-popover');
@@ -1078,14 +1078,23 @@
       
       popover.classList.add('is-visible');
 
+      const dismissHandler = () => {
+        popover.classList.remove('is-visible');
+        window.removeEventListener('scroll', dismissHandler);
+        window.removeEventListener('touchmove', dismissHandler);
+        document.removeEventListener('click', closeHandler);
+      };
+
       const closeHandler = (e) => {
         if (!popover.contains(e.target) && !event.currentTarget.contains(e.target)) {
-          popover.classList.remove('is-visible');
-          document.removeEventListener('click', closeHandler);
+          dismissHandler();
         }
       };
+
       setTimeout(() => {
         document.addEventListener('click', closeHandler);
+        window.addEventListener('scroll', dismissHandler, { once: true });
+        window.addEventListener('touchmove', dismissHandler, { once: true });
       }, 10);
     }
 
