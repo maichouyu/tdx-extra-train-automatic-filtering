@@ -635,6 +635,46 @@
       height: 8px;
       border-radius: 50%;
     }
+
+    /* 彈出氣泡視窗 (Popover) 樣式 */
+    .hm-popover {
+      position: fixed;
+      z-index: 99999;
+      background: var(--card-bg);
+      border: 1px solid var(--accent-color);
+      border-radius: 8px;
+      padding: 8px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      max-width: 260px;
+      opacity: 0;
+      transform: translateY(4px) scale(0.96);
+      transition: opacity 0.16s ease, transform 0.16s ease;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .hm-popover.is-visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      visibility: visible;
+      pointer-events: auto;
+    }
+    .hm-popover-item {
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: #ffffff;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: center;
+      transition: filter 0.2s, transform 0.1s;
+    }
+    .hm-popover-item:hover {
+      filter: brightness(1.2);
+      transform: scale(1.05);
+    }
   </style>
 </head>
 <body>
@@ -688,6 +728,9 @@
         </div>
       </div>
     </div>
+
+    <!-- 點擊日期彈出的車次清單 Popover -->
+    <div id="hm-train-popover" class="hm-popover"></div>
 
     <main id="train-list">
       <div class="status-msg">正在讀取最新的加班車資料...</div>
@@ -1015,11 +1058,45 @@
       }
     }
 
-    // 點擊日期格子時自動滾動並高亮該日車次
-    function filterByDate(dateStr) {
+    // 點擊日期格子顯示車次彈窗
+    function showTrainPopover(event, dateStr, trainsJsonStr) {
+      event.stopPropagation();
+      const popover = document.getElementById('hm-train-popover');
+      if (!popover) return;
+
+      const trains = JSON.parse(decodeURIComponent(trainsJsonStr));
+      
+      popover.innerHTML = trains.map(t => `
+        <div class="hm-popover-item" style="background: ${t.color};" onclick="scrollToTrain('${t.trainNo}')">
+          ${t.trainNo} 次
+        </div>
+      `).join('');
+
+      const rect = event.currentTarget.getBoundingClientRect();
+      popover.style.left = `${Math.min(rect.left, window.innerWidth - 280)}px`;
+      popover.style.top = `${rect.bottom + 6}px`;
+      
+      popover.classList.add('is-visible');
+
+      const closeHandler = (e) => {
+        if (!popover.contains(e.target) && !event.currentTarget.contains(e.target)) {
+          popover.classList.remove('is-visible');
+          document.removeEventListener('click', closeHandler);
+        }
+      };
+      setTimeout(() => {
+        document.addEventListener('click', closeHandler);
+      }, 10);
+    }
+
+    // 點擊車次編號後自動滾動並高亮該車次卡片
+    function scrollToTrain(trainNo) {
+      const popover = document.getElementById('hm-train-popover');
+      if (popover) popover.classList.remove('is-visible');
+
       const cards = document.querySelectorAll('.train-card');
       for (let card of cards) {
-        if (card.innerHTML.includes(dateStr)) {
+        if (card.querySelector('.train-no') && card.querySelector('.train-no').textContent.includes(trainNo)) {
           card.scrollIntoView({ behavior: 'smooth', block: 'center' });
           card.style.borderColor = 'var(--accent-color)';
           setTimeout(() => card.style.borderColor = '', 2000);
@@ -1028,7 +1105,7 @@
       }
     }
 
-    // 動態產生熱點圖（已修正 MM/DD 格式年份解析，避免出現 NaN 月）
+    // 動態產生熱點圖
     function renderHeatmap(allTrains) {
       const container = document.getElementById('hm-months-container');
       const metaText = document.getElementById('hm-meta-text');
@@ -1045,7 +1122,7 @@
             const parts = d.split('/');
             month = parts[0];
             day = parts[1];
-            year = '2026'; // 預設年份
+            year = '2026';
             fullDateStr = `${year}-${month}-${day}`;
           } else if (d.includes('-')) {
             const parts = d.split('-');
@@ -1116,8 +1193,10 @@
               `<span class="hm-bar" style="background:${t.color};" title="${t.trainNo}次 (${t.type})"></span>`
             ).join('');
             
+            const encodedTrains = encodeURIComponent(JSON.stringify(trainsOnThisDay));
+            
             monthCardHTML += `
-              <div class="hm-cell has-trains" onclick="filterByDate('${month}/${dayStr}')" title="${month}/${dayStr} (${trainsOnThisDay.length}班)">
+              <div class="hm-cell has-trains" onclick="showTrainPopover(event, '${fullDateStr}', '${encodedTrains}')" title="${month}/${dayStr} (${trainsOnThisDay.length}班)">
                 <span class="hm-num">${dayNum}</span>
                 <div class="hm-bars">${barsHTML}</div>
               </div>
