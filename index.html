@@ -711,7 +711,7 @@
     <div class="hm-widget" id="hm-widget">
       <div class="hm-header">
         <div class="hm-header-main">
-          <div class="hm-title"><span>行駛日期熱點分佈(預覽版)</span></div>
+          <div class="hm-title"><span>行駛日期熱點分佈</span></div>
           <button type="button" class="hm-toggle-btn" onclick="toggleHeatmap()" id="hm-toggle-btn">
             <span id="hm-toggle-text">收合</span> <span id="hm-toggle-icon">▲</span>
           </button>
@@ -720,11 +720,8 @@
       </div>
       <div class="hm-body" id="hm-body">
         <div class="hm-months-container" id="hm-months-container"></div>
-        <div class="hm-legend">
-          <span class="hm-legend-item"><span class="hm-dot" style="background:#e60021;"></span> 普悠瑪/太魯閣</span>
-          <span class="hm-legend-item"><span class="hm-dot" style="background:#ff6f00;"></span> 自強號</span>
-          <span class="hm-legend-item"><span class="hm-dot" style="background:#ff9800;"></span> 莒光號</span>
-          <span class="hm-legend-item"><span class="hm-dot" style="background:#4BE13A;"></span> 區間車/區間快</span>
+        <div class="hm-legend" id="hm-legend">
+          <!-- 圖例將由 JS 動態帶入精準對應的顏色 -->
         </div>
       </div>
     </div>
@@ -794,8 +791,9 @@
       }
     }
 
+    // 統一集中管理車種顏色對應
     function getTrainTypeColor(typeStr) {
-      if (!typeStr) return '#0055b8';
+      if (!typeStr) return '#4BE13A';
 
       if (typeStr.includes('普悠瑪')) return '#e60021';
       if (typeStr.includes('太魯閣')) return '#f28500';
@@ -803,7 +801,7 @@
       if (typeStr.includes('自強') || typeStr.includes('PP')) return '#ff6f00';
       if (typeStr.includes('莒光')) return '#ff9800';
       
-      return '#4BE13A';
+      return '#4BE13A'; // 區間車 / 區間快 / 其他
     }
 
     function setSortType(type) {
@@ -857,8 +855,34 @@
       }
 
       cachedTrains = allTrains;
+      renderLegend(); // 動態產生精準對應的圖例
       renderHeatmap(allTrains);
       filterAndRender();
+    }
+
+    // 動態產生圖例，確保顏色與函式完全一致
+    function renderLegend() {
+      const legendContainer = document.getElementById('hm-legend');
+      if (!legendContainer) return;
+
+      const legendItems = [
+        { name: '普悠瑪號', sample: '普悠瑪' },
+        { name: '太魯閣號', sample: '太魯閣' },
+        { name: '新自強(3000)', sample: '自強(3000)' },
+        { name: '自強號 / PP', sample: '自強' },
+        { name: '莒光號', sample: '莒光' },
+        { name: '區間車 / 區間快', sample: '區間' }
+      ];
+
+      legendContainer.innerHTML = legendItems.map(item => {
+        const color = getTrainTypeColor(item.sample);
+        return `
+          <span class="hm-legend-item">
+            <span class="hm-dot" style="background:${color};"></span>
+            ${item.name}
+          </span>
+        `;
+      }).join('');
     }
 
     function updateContainerWidth() {
