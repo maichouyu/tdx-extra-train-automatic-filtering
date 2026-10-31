@@ -638,7 +638,7 @@
       border-radius: 50%;
     }
 
-    /* 彈出氣泡視窗 (Popover) 樣式：維持正常自然大小與邊線對齊 */
+    /* 彈出氣泡視窗 (Popover) 樣式 */
     .hm-popover {
       position: fixed;
       z-index: 99999;
@@ -1089,7 +1089,7 @@
 
     let currentDismissPopover = null;
 
-    // 點擊日期格子顯示車次彈窗：恢復標準自動寬度與左側對齊
+    // 智慧置中與防溢出邊界演算法
     function showTrainPopover(event, dateStr, trainsJsonStr) {
       event.stopPropagation();
       const popover = document.getElementById('hm-train-popover');
@@ -1109,17 +1109,27 @@
         </div>
       `).join('');
 
-      let leftPos = rect.left;
-      const popoverWidth = 260;
-      if (leftPos + popoverWidth > window.innerWidth - 16) {
-        leftPos = window.innerWidth - popoverWidth - 16;
+      // 先暫時顯示以便精準測量實際渲染寬度 (offsetWidth)
+      popover.style.left = '0px';
+      popover.style.top = '0px';
+      popover.classList.add('is-visible');
+      const popoverWidth = popover.offsetWidth;
+
+      // 演算法核心：以格子中心點為基準進行水平置中
+      let leftPos = rect.left + (rect.width / 2) - (popoverWidth / 2);
+
+      // 邊界安全防護：如果超出左右邊界，則自動平移貼齊邊線，絕不爆版
+      const margin = 16;
+      const maxLeft = window.innerWidth - popoverWidth - margin;
+
+      if (leftPos < margin) {
+        leftPos = margin;
+      } else if (leftPos > maxLeft) {
+        leftPos = maxLeft;
       }
-      if (leftPos < 16) leftPos = 16;
 
       popover.style.left = `${leftPos}px`;
       popover.style.top = `${rect.bottom + 6}px`;
-      
-      popover.classList.add('is-visible');
 
       const dismissHandler = () => {
         popover.classList.remove('is-visible');
