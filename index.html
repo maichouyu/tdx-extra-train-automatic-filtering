@@ -560,6 +560,7 @@
       background: var(--input-bg);
       border: 1px solid var(--border-color);
       transition: transform 0.15s ease;
+      position: relative; /* 確保內部絕對定位基準正確 */
     }
 
     .hm-cell.empty {
@@ -636,9 +637,9 @@
       border-radius: 50%;
     }
 
-    /* 彈出氣泡視窗 (Popover) 樣式 */
+    /* 彈出氣泡視窗 (Popover) 樣式：改為 absolute 完美對齊文檔座標 */
     .hm-popover {
-      position: fixed;
+      position: absolute;
       z-index: 99999;
       background: var(--card-bg);
       border: 1px solid var(--accent-color);
@@ -711,7 +712,7 @@
     <div class="hm-widget" id="hm-widget">
       <div class="hm-header">
         <div class="hm-header-main">
-          <div class="hm-title"><span>行駛日期熱點分佈（開發中）</span></div>
+          <div class="hm-title"><span>📅</span><span>行駛日期熱點分佈預覽</span></div>
           <button type="button" class="hm-toggle-btn" onclick="toggleHeatmap()" id="hm-toggle-btn">
             <span id="hm-toggle-text">收合</span> <span id="hm-toggle-icon">▲</span>
           </button>
@@ -729,13 +730,13 @@
       </div>
     </div>
 
-    <!-- 點擊日期彈出的車次清單 Popover -->
-    <div id="hm-train-popover" class="hm-popover"></div>
-
     <main id="train-list">
       <div class="status-msg">正在讀取最新的加班車資料...</div>
     </main>
   </div>
+
+  <!-- 點擊日期彈出的車次清單 Popover 移到最外層作為 body 子元素 -->
+  <div id="hm-train-popover" class="hm-popover"></div>
 
   <script>
     let cachedTrains = [];
@@ -1058,7 +1059,7 @@
       }
     }
 
-    // 點擊日期格子顯示車次彈窗（加入捲動自動關閉防呆）
+    // 點擊日期格子顯示車次彈窗（修正為 absolute 座標對應頁面捲動）
     function showTrainPopover(event, dateStr, trainsJsonStr) {
       event.stopPropagation();
       const popover = document.getElementById('hm-train-popover');
@@ -1073,15 +1074,17 @@
       `).join('');
 
       const rect = event.currentTarget.getBoundingClientRect();
-      popover.style.left = `${Math.min(rect.left, window.innerWidth - 280)}px`;
-      popover.style.top = `${rect.bottom + 6}px`;
+      const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+      popover.style.left = `${Math.min(rect.left + scrollLeft, document.body.clientWidth - 280)}px`;
+      popover.style.top = `${rect.bottom + scrollTop + 6}px`;
       
       popover.classList.add('is-visible');
 
       const dismissHandler = () => {
         popover.classList.remove('is-visible');
         window.removeEventListener('scroll', dismissHandler);
-        window.removeEventListener('touchmove', dismissHandler);
         document.removeEventListener('click', closeHandler);
       };
 
@@ -1094,7 +1097,6 @@
       setTimeout(() => {
         document.addEventListener('click', closeHandler);
         window.addEventListener('scroll', dismissHandler, { once: true });
-        window.addEventListener('touchmove', dismissHandler, { once: true });
       }, 10);
     }
 
