@@ -1,4 +1,4 @@
-Name: 自動監測45天內加減班車
+name: 自動監測45天內加減班車
 
 on:
   schedule:
@@ -53,8 +53,19 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # 💡 新增：推送前先拉取遠端最新變更並進行 rebase，避免拒絕推送
+          # 確保切回主分支，避免排程觸發時處於 detached HEAD 狀態
+          git checkout main || git checkout -b main
+          
+          # 拉取遠端最新變更並進行 rebase
           git pull origin main --rebase || echo "No rebase needed"
           
+          # 加入需要同步的檔案
           git add last_trains.json http_cache.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: auto update state and http cache" && git push)
+          
+          # 檢查是否有任何變更（包含全新建立的未追蹤檔案）
+          if git status --porcelain | grep -q .; then
+            git commit -m "chore: auto update state and http cache"
+            git push origin main
+          else
+            echo "No changes to commit"
+          fi
