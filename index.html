@@ -958,12 +958,19 @@
       const targetWidth = maxCardWidth + PADDING_OFFSET;
       const screenWidth = window.innerWidth;
 
+      // body 左右 padding 合計：容器被撐寬而需要橫向捲動時，
+      // 瀏覽器不會把右側 padding 算進可捲動範圍，導致右邊貼齊螢幕邊緣。
+      // 因此直接把 body 的最小寬度設為「內容寬度 + 左右 padding」，讓右側留白與左側對稱。
+      const bodyStyle = getComputedStyle(document.body);
+      const bodyPadX = (parseFloat(bodyStyle.paddingLeft) || 0) + (parseFloat(bodyStyle.paddingRight) || 0);
+
       const container = document.getElementById('main-container');
       const header = document.getElementById('main-header');
       const filterBar = document.getElementById('filter-bar');
       const topControls = document.getElementById('top-controls');
 
       if (screenWidth <= targetWidth) {
+        document.body.style.minWidth = (targetWidth + bodyPadX) + 'px';
         container.style.width = targetWidth + 'px';
         header.style.width = targetWidth + 'px';
         filterBar.style.width = targetWidth + 'px';
@@ -974,6 +981,7 @@
           card.style.marginRight = 'auto';
         });
       } else {
+        document.body.style.minWidth = '';
         container.style.width = '100%';
         header.style.width = '100%';
         filterBar.style.width = '100%';
