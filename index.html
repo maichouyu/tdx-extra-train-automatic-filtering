@@ -813,6 +813,36 @@
       filterAndRender();
     }
 
+    // 解析單筆日期字串；相容舊格式 "MM/DD+"（依 last_updated 推算年份）
+    function parseDateEntry(raw, refYear, refMonth) {
+      const m = String(raw).trim().match(/^(?:(\d{4})-(\d{2})-(\d{2})|(\d{2})\/(\d{2}))([+-])?$/);
+      if (!m) return null;
+
+      let iso;
+      if (m[1]) {
+        iso = `${m[1]}-${m[2]}-${m[3]}`;
+      } else {
+        const mon = parseInt(m[4], 10);
+        let year = refYear;
+        if (refMonth - mon > 6) year += 1;
+        else if (mon - refMonth > 6) year -= 1;
+        iso = `${year}-${m[4]}-${m[5]}`;
+      }
+      return { iso, cancelled: m[6] === '-' };
+    }
+
+    // 依年份分組顯示：["2026-12-25","2027-01-03"] → "2026年：12/25　2027年：01/03"
+    function formatDatesWithYear(isoDates) {
+      const byYear = {};
+      isoDates.forEach(iso => {
+        const y = iso.slice(0, 4);
+        (byYear[y] = byYear[y] || []).push(iso.slice(5).replace('-', '/'));
+      });
+      return Object.keys(byYear).sort()
+        .map(y => `${y}年：${byYear[y].join(', ')}`)
+        .join('　');
+    }
+
     function processJsonData(json) {
       const timeContainer = document.getElementById('last-updated');
       const rangeContainer = document.getElementById('date-range');
@@ -820,6 +850,9 @@
       if (timeContainer) timeContainer.textContent = `最後更新於：${json.last_updated || '未知'}`;
 
       const data = json.data || {};
+      const refMatch = String(json.last_updated || '').match(/^(\d{4})-(\d{2})/);
+      const refYear = refMatch ? parseInt(refMatch[1], 10) : new Date().getFullYear();
+      const refMonth = refMatch ? parseInt(refMatch[2], 10) : new Date().getMonth() + 1;
       const allTrains = [];
       const allDatesSet = new Set();
 
@@ -829,12 +862,13 @@
             const trainData = data[dir][trainNo];
             const rawDates = trainData.dates || [];
 
-            const validDates = rawDates.filter(d => !d.includes('-'));
-            if (validDates.length === 0) return;
-
-            const cleanedDates = validDates
-              .map(d => d.replace(/\+/g, '').trim())
+            // 解析日期（"YYYY-MM-DD+" 開行 / "YYYY-MM-DD-" 停駛），停駛日不顯示
+            const cleanedDates = rawDates
+              .map(d => parseDateEntry(d, refYear, refMonth))
+              .filter(p => p && !p.cancelled)
+              .map(p => p.iso)
               .sort();
+            if (cleanedDates.length === 0) return;
 
             cleanedDates.forEach(d => allDatesSet.add(d));
 
@@ -1027,7 +1061,7 @@
               ${lineBadge}
             </div>
             <div class="train-route">${train.route}</div>
-            <div class="train-dates">開行日期：${train.cleanDates.join(', ')}</div>
+            <div class="train-dates">開行日期：${formatDatesWithYear(train.cleanDates)}</div>
             ${noteHTML}
           </div>
 
@@ -1180,23 +1214,7 @@
       
       allTrains.forEach(train => {
         train.cleanDates.forEach(d => {
-          let year, month, day, fullDateStr;
-          
-          if (d.includes('/')) {
-            const parts = d.split('/');
-            month = parts[0];
-            day = parts[1];
-            year = '2026';
-            fullDateStr = `${year}-${month}-${day}`;
-          } else if (d.includes('-')) {
-            const parts = d.split('-');
-            year = parts[0];
-            month = parts[1];
-            day = parts[2];
-            fullDateStr = d;
-          } else {
-            return;
-          }
+          const fullDateStr = d; // cleanDates 已是 YYYY-MM-DD
           
           allDatesSet.add(fullDateStr);
           if (!dateMap[fullDateStr]) dateMap[fullDateStr] = [];
@@ -1260,7 +1278,7 @@
             const encodedTrains = encodeURIComponent(JSON.stringify(trainsOnThisDay));
             
             monthCardHTML += `
-              <div class="hm-cell has-trains" onclick="showTrainPopover(event, '${fullDateStr}', '${encodedTrains}')" title="${month}/${dayStr} (${trainsOnThisDay.length}班)">
+              <div class="hm-cell has-trains" onclick="showTrainPopover(event, '${fullDateStr}', '${encodedTrains}')" title="${year}/${month}/${dayStr} (${trainsOnThisDay.length}班)">
                 <span class="hm-num">${dayNum}</span>
                 <div class="hm-bars">${barsHTML}</div>
               </div>
