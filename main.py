@@ -338,8 +338,8 @@ def parse_train_data(data, date_str):
 
 def fetch_single_day(date_obj, http_cache):
     global current_token, current_key_index
-    date_str = date_obj.strftime("%m/%d")
     api_date_str = date_obj.strftime("%Y-%m-%d")
+    date_str = api_date_str  # 一律使用含年份的 ISO 格式，避免跨年錯亂
     api_url = f"https://tdx.transportdata.tw/api/basic/v3/Rail/TRA/DailyTrainTimetable/TrainDate/{api_date_str}?$format=JSON"
 
     attempt = 0
@@ -363,7 +363,11 @@ def fetch_single_day(date_obj, http_cache):
 
             if response.status_code == 304:
                 print(f"[304 Cache Hit] {api_date_str} 資料未更新，使用快取")
-                return cached_info.get("results", [])
+                cached_results = cached_info.get("results", [])
+                # 舊版快取的日期欄位是 MM/DD，這裡統一補成 ISO 日期
+                for cached_item in cached_results:
+                    cached_item[2] = api_date_str
+                return cached_results
 
             elif response.status_code == 200:
                 data = response.json()
@@ -397,6 +401,30 @@ def fetch_single_day(date_obj, http_cache):
             time.sleep(8.0)
 
 
+def normalize_date_entry(entry, ref_dt):
+    """把舊格式 'MM/DD+' 轉成 'YYYY-MM-DD+'（升級過渡用）；新格式原樣回傳。"""
+    m = re.match(r"^(\d{2})/(\d{2})([+-]?)$", entry)
+    if not m:
+        return entry
+    mon, day, sign = int(m.group(1)), m.group(2), m.group(3)
+    year = ref_dt.year
+    if ref_dt.month - mon > 6:      # 例如上次更新在 12 月、日期是 01 月 → 明年
+        year += 1
+    elif mon - ref_dt.month > 6:    # 例如上次更新在 1 月、日期是 12 月 → 去年
+        year -= 1
+    return f"{year}-{mon:02d}-{day}{sign}"
+
+
+def fmt_date(entry):
+    """'2026-12-20+' → '12/20+'，僅用於 Telegram 顯示。"""
+    m = re.match(r"^\d{4}-(\d{2})-(\d{2})([+-]?)$", entry)
+    return f"{m.group(1)}/{m.group(2)}{m.group(3)}" if m else entry
+
+
+def fmt_dates(entries):
+    return ", ".join(fmt_date(d) for d in sorted(entries))
+
+
 def load_previous_trains():
     if os.path.exists(STATE_FILE):
         try:
@@ -408,7 +436,7 @@ def load_previous_trains():
     return {}
 
 
-def save_current_trains(train_dates):
+def save_current_trains(train_dates, start_str=None, end_str=None):
     """儲存含線路、車種、過濾後備註與站點的 JSON"""
     tz_taipei = timezone(timedelta(hours=8))
     now_str = datetime.now(tz_taipei).strftime("%Y-%m-%d %H:%M:%S")
@@ -427,13 +455,18 @@ def save_current_trains(train_dates):
             }
 
     output_data = {"last_updated": now_str, "data": serializable}
+    if start_str and end_str:
+        output_data["start_date"] = start_str
+        output_data["end_date"] = end_str
 
     try:
         with open(STATE_FILE, "w", encoding="utf-8") as f:
             json.dump(output_data, f, ensure_ascii=False, indent=2)
         print("[System] 成功儲存擴充狀態至 last_trains.json")
+        return True
     except Exception as e:
         print(f"[!] 儲存 JSON 失敗: {e}")
+        return False
 
 
 def compare_new_trains(prev_data, current_train_dates):
@@ -442,6 +475,13 @@ def compare_new_trains(prev_data, current_train_dates):
 
     prev_trains_data = prev_data.get("data", prev_data)
     new_items = []
+
+    try:
+        ref_dt = datetime.strptime(
+            prev_data.get("last_updated", ""), "%Y-%m-%d %H:%M:%S"
+        )
+    except ValueError:
+        ref_dt = datetime.now(timezone(timedelta(hours=8)))
 
     for dir_key in ["shun", "ni"]:
         current_dict = current_train_dates.get(dir_key, {})
@@ -452,17 +492,18 @@ def compare_new_trains(prev_data, current_train_dates):
             route = curr_info["route"]
 
             if train_no not in prev_dict:
-                sorted_dates = ", ".join(sorted(list(curr_dates)))
                 new_items.append(
-                    f"*{train_no}次* ({route}) [全新車次]：{sorted_dates}"
+                    f"*{train_no}次* ({route}) [全新車次]：{fmt_dates(curr_dates)}"
                 )
             else:
-                prev_dates = set(prev_dict[train_no].get("dates", []))
+                prev_dates = {
+                    normalize_date_entry(d, ref_dt)
+                    for d in prev_dict[train_no].get("dates", [])
+                }
                 added_dates = curr_dates - prev_dates
                 if added_dates:
-                    sorted_added = ", ".join(sorted(list(added_dates)))
                     new_items.append(
-                        f"*{train_no}次* ({route}) 新增日期：{sorted_added}"
+                        f"*{train_no}次* ({route}) 新增日期：{fmt_dates(added_dates)}"
                     )
 
     return new_items
@@ -471,7 +512,7 @@ def compare_new_trains(prev_data, current_train_dates):
 def send_telegram_messages(bot_token, chat_id, messages):
     if not bot_token:
         print("[TG Warning] 未設定 Telegram Bot Token，跳過。")
-        return
+        return False
 
     if isinstance(chat_id, str):
         chat_ids = [
@@ -486,12 +527,15 @@ def send_telegram_messages(bot_token, chat_id, messages):
 
     if not chat_ids:
         print("[TG Warning] 未提供有效的 Chat ID，跳過。")
-        return
+        return False
 
     url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
 
+    any_chat_ok = False  # 至少有一個 Chat 完整收到所有訊息，就視為通知成功
+
     for target_id in chat_ids:
         print(f"[TG] 發送訊息至 Chat ID: {target_id}")
+        chat_ok = True
         for msg in messages:
             payload = {
                 "chat_id": target_id,
@@ -504,10 +548,15 @@ def send_telegram_messages(bot_token, chat_id, messages):
                 if res.status_code == 200:
                     print(f"[TG] 發送至 {target_id} 成功！")
                 else:
+                    chat_ok = False
                     print(f"[TG Error] 發送至 {target_id} 失敗: {res.text}")
             except Exception as e:
+                chat_ok = False
                 print(f"[TG Exception] 發送錯誤: {e}")
             time.sleep(0.3)
+        any_chat_ok = any_chat_ok or chat_ok
+
+    return any_chat_ok
 
 
 def format_telegram_report(start_str, end_str, total_found, train_dates, new_items):
@@ -539,8 +588,7 @@ def format_telegram_report(start_str, end_str, total_found, train_dates, new_ite
 
         for train_no in sorted_train_nos:
             info = data_dict[train_no]
-            dates = sorted(list(info["dates"]))
-            dates_str = ", ".join(dates)
+            dates_str = fmt_dates(info["dates"])
             route = info["route"]
             
             line = f"• *{train_no}次* ({route})：{dates_str}\n"
@@ -647,15 +695,29 @@ def main():
                         date_entry = f"{date_str}{status_sign}"
                         train_dates[dir_key][train_no]["dates"].add(date_entry)
 
+        # 防呆：API 異常回傳空資料時，不覆蓋舊狀態（否則下次全部變「全新車次」）
+        prev_has_trains = any(
+            prev_data.get("data", prev_data).get(k) for k in ("shun", "ni")
+        ) if prev_data else False
+        if total_found == 0 and prev_has_trains:
+            print("[Fatal Error] 本次抓到 0 筆資料但上一期有資料，疑似 API 異常，保留舊狀態不覆蓋。")
+            sys.exit(1)
+
         save_http_cache(http_cache)
         new_items = compare_new_trains(prev_data, train_dates)
-        save_current_trains(train_dates)
 
-        print(f"\n[System] 資料比對完成，準備發送 TG 訊息...")
+        print("\n[System] 資料比對完成，準備發送 TG 訊息...")
         tg_messages = format_telegram_report(
             start_str, end_str, total_found, train_dates, new_items
         )
-        send_telegram_messages(TG_BOT_TOKEN, TG_CHAT_ID, tg_messages)
+        tg_ok = send_telegram_messages(TG_BOT_TOKEN, TG_CHAT_ID, tg_messages)
+
+        # 通知成功後才更新狀態；否則下次執行仍會與「上次已通知的版本」比對
+        if tg_ok:
+            save_current_trains(train_dates, start_str, end_str)
+        else:
+            print("[Fatal Error] Telegram 通知失敗，未更新 last_trains.json，下次會重新比對。")
+            sys.exit(1)
 
     except Exception as e:
         print(f"[Fatal Error] 執行過程發生錯誤: {e}")
