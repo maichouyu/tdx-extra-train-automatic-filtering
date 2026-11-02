@@ -269,8 +269,17 @@
       padding: 4px 8px;
       border-radius: 4px;
       margin-top: 6px;
-      display: inline-block;
+      display: block;
       word-break: break-all;
+    }
+    .train-dates-title {
+      font-weight: bold;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--border-color, rgba(128,128,128,0.4));
+      margin-bottom: 4px;
+    }
+    .train-dates-row + .train-dates-row {
+      margin-top: 2px;
     }
 
     .train-note {
@@ -831,7 +840,7 @@
       return { iso, cancelled: m[6] === '-' };
     }
 
-    // 依年份分組顯示：["2026-12-25","2027-01-03"] → "2026年：12/25　2027年：01/03"
+    // 依年份分組，每個年份一行：2026年：12/25, 12/26 / 2027年：01/03
     function formatDatesWithYear(isoDates) {
       const byYear = {};
       isoDates.forEach(iso => {
@@ -839,8 +848,8 @@
         (byYear[y] = byYear[y] || []).push(iso.slice(5).replace('-', '/'));
       });
       return Object.keys(byYear).sort()
-        .map(y => `${y}年：${byYear[y].join(', ')}`)
-        .join('　');
+        .map(y => `<div class="train-dates-row">${y}年：${byYear[y].join(', ')}</div>`)
+        .join('');
     }
 
     function processJsonData(json) {
@@ -1061,7 +1070,7 @@
               ${lineBadge}
             </div>
             <div class="train-route">${train.route}</div>
-            <div class="train-dates">開行日期：${formatDatesWithYear(train.cleanDates)}</div>
+            <div class="train-dates"><div class="train-dates-title">開行日期</div>${formatDatesWithYear(train.cleanDates)}</div>
             ${noteHTML}
           </div>
 
