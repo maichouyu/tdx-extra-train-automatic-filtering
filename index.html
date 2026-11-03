@@ -749,55 +749,47 @@
     let currentSortType = 'date-first';
     let isWidthInitialized = false;
 
-    function toggleTheme() {
-      const body = document.body;
-      const themeBtn = document.getElementById('themeToggle');
-      if (!themeBtn) return;
-      
-      body.classList.toggle('light-mode');
-      
-      if (body.classList.contains('light-mode')) {
-        themeBtn.innerText = '深';
-        localStorage.setItem('calculator-theme', 'light');
-      } else {
-        themeBtn.innerText = '淺';
-        localStorage.setItem('calculator-theme', 'dark');
-      }
-    }
+    const THEME_KEY = 'calculator-theme';
 
     function applyTheme(isLight) {
       const btn = document.getElementById('themeToggle');
-      if (isLight) {
-        document.body.classList.add('light-mode');
-        if (btn) btn.innerText = '深';
-      } else {
-        document.body.classList.remove('light-mode');
-        if (btn) btn.innerText = '淺';
+      document.body.classList.toggle('light-mode', isLight);
+      if (btn) btn.innerText = isLight ? '深' : '淺';
+    }
+
+    // 裝置/瀏覽器是否支援深淺色偏好（深或淺任一個有匹配即視為支援）
+    function getSystemThemeSupport() {
+      if (!window.matchMedia) return false;
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ||
+             window.matchMedia('(prefers-color-scheme: light)').matches;
+    }
+
+    function toggleTheme() {
+      const isLight = !document.body.classList.contains('light-mode');
+      applyTheme(isLight);
+
+      // 僅「不支援深淺色的裝置」才寫入本地存儲；支援的裝置只影響本次開啟
+      if (!getSystemThemeSupport()) {
+        try { localStorage.setItem(THEME_KEY, isLight ? 'light' : 'dark'); } catch (e) {}
       }
     }
 
     function initTheme() {
-      const savedTheme = localStorage.getItem('calculator-theme');
-      const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      
-      if (savedTheme === 'light') {
-        applyTheme(true);
-      } else if (savedTheme === 'dark') {
-        applyTheme(false);
+      if (getSystemThemeSupport()) {
+        // 支援：完全依照裝置目前主題，不讀取也不使用本地存儲
+        try { localStorage.removeItem(THEME_KEY); } catch (e) {} // 清掉舊版殘留
+        const mq = window.matchMedia('(prefers-color-scheme: dark)');
+        applyTheme(!mq.matches);
+
+        // 裝置主題在使用期間改變時，跟著切換
+        const onChange = (e) => applyTheme(!e.matches);
+        if (mq.addEventListener) mq.addEventListener('change', onChange);
+        else if (mq.addListener) mq.addListener(onChange);
       } else {
-        applyTheme(!darkModeMediaQuery.matches);
-      }
-
-      const handleSystemThemeChange = (e) => {
-        if (!localStorage.getItem('calculator-theme')) {
-          applyTheme(!e.matches);
-        }
-      };
-
-      if (darkModeMediaQuery.addEventListener) {
-        darkModeMediaQuery.addEventListener('change', handleSystemThemeChange);
-      } else if (darkModeMediaQuery.addListener) {
-        darkModeMediaQuery.addListener(handleSystemThemeChange);
+        // 不支援：預設深色，之後由本地存儲決定
+        let saved = null;
+        try { saved = localStorage.getItem(THEME_KEY); } catch (e) {}
+        applyTheme(saved === 'light');
       }
     }
 
