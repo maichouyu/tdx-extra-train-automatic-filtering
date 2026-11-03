@@ -927,10 +927,6 @@
         document.getElementById('main-header').style.width = '100%';
         document.getElementById('filter-bar').style.width = '100%';
         document.getElementById('top-controls').style.width = '100%';
-        document.querySelectorAll('.train-card').forEach(card => {
-          card.style.marginLeft = '0';
-          card.style.marginRight = '0';
-        });
         isWidthInitialized = true;
         return;
       }
@@ -967,22 +963,12 @@
         header.style.width = targetWidth + 'px';
         filterBar.style.width = targetWidth + 'px';
         topControls.style.width = targetWidth + 'px';
-
-        cards.forEach(card => {
-          card.style.marginLeft = '0';
-          card.style.marginRight = 'auto';
-        });
       } else {
         document.body.style.minWidth = '';
         container.style.width = '100%';
         header.style.width = '100%';
         filterBar.style.width = '100%';
         topControls.style.width = '100%';
-
-        cards.forEach(card => {
-          card.style.marginLeft = 'auto';
-          card.style.marginRight = 'auto';
-        });
       }
 
       isWidthInitialized = true;
