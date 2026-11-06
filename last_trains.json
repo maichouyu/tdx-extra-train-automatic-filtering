@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-11-06 17:19:39",
+  "last_updated": "2026-11-07 01:50:41",
   "data": {
     "shun": {
       "116": {
@@ -1398,87 +1398,6 @@
       }
     },
     "ni": {
-      "5173": {
-        "type": "自強(推拉式自強號且無自行車車廂)",
-        "note": "",
-        "line_type": "山線",
-        "dates": [
-          "2026-11-06+"
-        ],
-        "route": "七堵 10:43 -> 彰化 13:56",
-        "stops": [
-          {
-            "station": "七堵",
-            "arrival": "10:43",
-            "departure": "10:43"
-          },
-          {
-            "station": "汐止",
-            "arrival": "10:52",
-            "departure": "10:54"
-          },
-          {
-            "station": "松山",
-            "arrival": "11:04",
-            "departure": "11:05"
-          },
-          {
-            "station": "臺北",
-            "arrival": "11:12",
-            "departure": "11:15"
-          },
-          {
-            "station": "板橋",
-            "arrival": "11:23",
-            "departure": "11:25"
-          },
-          {
-            "station": "樹林",
-            "arrival": "11:31",
-            "departure": "11:33"
-          },
-          {
-            "station": "桃園",
-            "arrival": "11:48",
-            "departure": "11:50"
-          },
-          {
-            "station": "中壢",
-            "arrival": "11:59",
-            "departure": "12:00"
-          },
-          {
-            "station": "新竹",
-            "arrival": "12:35",
-            "departure": "12:37"
-          },
-          {
-            "station": "竹南",
-            "arrival": "12:51",
-            "departure": "12:53"
-          },
-          {
-            "station": "苗栗",
-            "arrival": "13:03",
-            "departure": "13:04"
-          },
-          {
-            "station": "豐原",
-            "arrival": "13:29",
-            "departure": "13:30"
-          },
-          {
-            "station": "臺中",
-            "arrival": "13:40",
-            "departure": "13:42"
-          },
-          {
-            "station": "彰化",
-            "arrival": "13:56",
-            "departure": "13:56"
-          }
-        ]
-      },
       "2207": {
         "type": "區間",
         "note": "",
@@ -2900,6 +2819,6 @@
       }
     }
   },
-  "start_date": "2026-11-06",
-  "end_date": "2026-12-20"
+  "start_date": "2026-11-07",
+  "end_date": "2026-12-21"
 }
