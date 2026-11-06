@@ -270,7 +270,11 @@ def parse_train_data(data, date_str):
                 is_extra_train(train_type, note_str, train_num)
                 and train_no not in EXCLUDE_TRAINS
             ):
-                status_sign = "-" if "停駛" in note_str else "+"
+                # 增停、停駛同時存在（如支援減班的車次）→ 視為加班車(+)，以增停為優先
+                if "增停" in note_str:
+                    status_sign = "+"
+                else:
+                    status_sign = "-" if "停駛" in note_str else "+"
 
                 processed_note = process_note(note_str)
                 stop_times = item.get("StopTimes", [])
