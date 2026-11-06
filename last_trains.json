@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-11-06 05:59:10",
+  "last_updated": "2026-11-06 16:40:37",
   "data": {
     "shun": {
       "116": {
@@ -527,6 +527,72 @@
             "station": "基隆",
             "arrival": "16:50",
             "departure": "16:50"
+          }
+        ]
+      },
+      "218": {
+        "type": "太魯閣(太魯閣)",
+        "note": "※因應升資考停駛班次，本次車於11月9日(1天)增停南澳、和平、新城站。 本列次不發售無座票，非持本班次車票旅客，請勿搭乘。",
+        "line_type": "東部幹線",
+        "dates": [
+          "2026-11-09-"
+        ],
+        "route": "樹林 10:31 -> 花蓮 13:11",
+        "stops": [
+          {
+            "station": "樹林",
+            "arrival": "10:28",
+            "departure": "10:31"
+          },
+          {
+            "station": "板橋",
+            "arrival": "10:38",
+            "departure": "10:40"
+          },
+          {
+            "station": "臺北",
+            "arrival": "10:48",
+            "departure": "10:53"
+          },
+          {
+            "station": "松山",
+            "arrival": "10:59",
+            "departure": "11:00"
+          },
+          {
+            "station": "南港",
+            "arrival": "11:03",
+            "departure": "11:04"
+          },
+          {
+            "station": "宜蘭",
+            "arrival": "12:04",
+            "departure": "12:06"
+          },
+          {
+            "station": "羅東",
+            "arrival": "12:12",
+            "departure": "12:14"
+          },
+          {
+            "station": "南澳",
+            "arrival": "12:31",
+            "departure": "12:32"
+          },
+          {
+            "station": "和平",
+            "arrival": "12:42",
+            "departure": "12:43"
+          },
+          {
+            "station": "新城",
+            "arrival": "13:00",
+            "departure": "13:01"
+          },
+          {
+            "station": "花蓮",
+            "arrival": "13:11",
+            "departure": "13:11"
           }
         ]
       },
