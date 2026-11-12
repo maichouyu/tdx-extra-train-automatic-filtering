@@ -138,14 +138,25 @@
     }
 
     /* ✨ 核心魔法：SVG 鏤空遮罩 */
-    .train-icon-mask {
-      width: 1.3em; height: 1.3em;
-      background-color: currentColor;
-      -webkit-mask-size: contain; mask-size: contain;
-      -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
-      -webkit-mask-position: center; mask-position: center;
-      flex-shrink: 0;
-    }
+    /* ✨ 核心魔法：SVG 鏤空遮罩（優化純白亮度版） */
+.train-icon-mask {
+  width: 1.3em;
+  height: 1.3em;
+  background-color: #ffffff; /* 直接寫死純白，確保不管在哪個標籤都是最亮的 */
+  
+  /* 設定為遮罩模式 */
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  
+  flex-shrink: 0; /* 防止圖示被壓縮 */
+
+  /* ✨ 終極優化：強制拉高對比與亮度，把灰灰的感覺消除 */
+  filter: contrast(1.2) brightness(1.2);
+}
 
     .line-type-badge { background: #555555; }
     .train-route { font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-top: 4px; }
