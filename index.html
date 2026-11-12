@@ -323,7 +323,6 @@
   <script>
     let cachedTrains = [];
     let currentSortType = 'date-first';
-    let isWidthInitialized = false;
 
     const THEME_KEY = 'calculator-theme';
 
@@ -496,16 +495,18 @@ function getTrainIcon(typeStr) {
     }
 
     function updateContainerWidth() {
-      if (isWidthInitialized) return;
+      const container = document.getElementById('main-container');
+      const header = document.getElementById('main-header');
+      const filterBar = document.getElementById('filter-bar');
+      const topControls = document.getElementById('top-controls');
+      const targets = [container, header, filterBar, topControls];
 
-      if (window.innerWidth <= 768) {
-        document.getElementById('main-container').style.width = '100%';
-        document.getElementById('main-header').style.width = '100%';
-        document.getElementById('filter-bar').style.width = '100%';
-        document.getElementById('top-controls').style.width = '100%';
-        isWidthInitialized = true;
-        return;
-      }
+      // 每次都先清除上一次寫入的寬度，回到 CSS 預設狀態再重新計算
+      targets.forEach(el => { el.style.width = ''; });
+      document.body.style.minWidth = '';
+
+      // 手機版：交給 CSS media query（100% 寬）處理
+      if (window.innerWidth <= 768) return;
 
       const cards = document.querySelectorAll('.train-card');
       if (cards.length === 0) return;
@@ -513,39 +514,36 @@ function getTrainIcon(typeStr) {
       let maxCardWidth = 0;
       cards.forEach(card => {
         const w = card.scrollWidth;
-        if (w > maxCardWidth) {
-          maxCardWidth = w;
-        }
+        if (w > maxCardWidth) maxCardWidth = w;
       });
 
-      const PADDING_OFFSET = 30; 
+      const PADDING_OFFSET = 30;
       const targetWidth = maxCardWidth + PADDING_OFFSET;
       const screenWidth = window.innerWidth;
 
       const bodyStyle = getComputedStyle(document.body);
       const bodyPadX = (parseFloat(bodyStyle.paddingLeft) || 0) + (parseFloat(bodyStyle.paddingRight) || 0);
 
-      const container = document.getElementById('main-container');
-      const header = document.getElementById('main-header');
-      const filterBar = document.getElementById('filter-bar');
-      const topControls = document.getElementById('top-controls');
-
+      // 內容比螢幕寬時，才撐開版面（可橫向捲動）
       if (screenWidth <= targetWidth) {
         document.body.style.minWidth = (targetWidth + bodyPadX) + 'px';
-        container.style.width = targetWidth + 'px';
-        header.style.width = targetWidth + 'px';
-        filterBar.style.width = targetWidth + 'px';
-        topControls.style.width = targetWidth + 'px';
-      } else {
-        document.body.style.minWidth = '';
-        container.style.width = '100%';
-        header.style.width = '100%';
-        filterBar.style.width = '100%';
-        topControls.style.width = '100%';
+        targets.forEach(el => { el.style.width = targetWidth + 'px'; });
       }
-
-      isWidthInitialized = true;
     }
+
+    // 視窗寬度改變（含手機直橫轉）時，自動重新調整
+    let resizeTimer = null;
+    let lastInnerWidth = window.innerWidth;
+    function onViewportChange() {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        if (window.innerWidth === lastInnerWidth) return;
+        lastInnerWidth = window.innerWidth;
+        updateContainerWidth();
+      }, 100);
+    }
+    window.addEventListener('resize', onViewportChange);
+    window.addEventListener('orientationchange', onViewportChange);
 
     function filterAndRender() {
       const container = document.getElementById('train-list');
