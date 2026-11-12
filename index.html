@@ -374,15 +374,14 @@
 
 function getTrainIcon(typeStr) {
   if (!typeStr) return '';
-  
-  let svgFile = 'local.svg'; // 預設為區間車
+
+  let svgFile = 'default.svg'; // 其他(預設)
 
   if (typeStr.includes('普悠瑪')) svgFile = 'puyuma.svg';
   else if (typeStr.includes('太魯閣')) svgFile = 'taroko.svg';
   else if (typeStr.includes('莒光')) svgFile = 'chukuang.svg';
-  else if (typeStr.includes('3000') || typeStr.includes('新自強')) svgFile = 'emu3000.svg';
-  else if (typeStr.includes('自強') || typeStr.includes('PP')) svgFile = 'pp.svg';
-  else if (typeStr.includes('區間')) svgFile = 'local.svg';
+  else if (typeStr.includes('3000')) svgFile = 'emu3000.svg';
+  else if (typeStr.includes('推拉式')) svgFile = 'pp.svg'; // 自強但沒有「推拉式」→ 維持 default
 
   // 改用 img 標籤來顯示，並套用剛剛寫的 class
   return `<img src="./icon/${svgFile}" class="train-icon-img" alt="">`;
@@ -892,3 +891,4 @@ function getTrainIcon(typeStr) {
 
 </body>
 </html>
+w
