@@ -18,7 +18,7 @@
       flex-direction: column;
       align-items: stretch;
       transition: background 0.3s, color 0.3s;
-      overflow-x: auto; /* 支援橫向平滑滾動 */
+      overflow-x: auto;
     }
 
     .time-info, .update-time {
@@ -127,30 +127,38 @@
       padding-right: 16px; border-right: 1px dashed var(--border-color);
     }
     
-    .train-no { font-size: 1.8rem; font-weight: 900; line-height: 1.1; }
+    /* 車次號碼：設定 flex 讓圖示跟文字可以完美對齊 */
+    .train-no { 
+      font-size: 1.8rem; 
+      font-weight: 900; 
+      line-height: 1.1; 
+      display: flex; 
+      align-items: center; 
+    }
+
     .badge-group { display: flex; gap: 6px; flex-wrap: wrap; }
 
-    /* ✨ 車種標籤與圖示的完美對齊 */
+    /* 車種標籤 */
     .train-type-badge, .line-type-badge {
       display: inline-flex; align-items: center; gap: 6px;
       padding: 4px 10px 4px 8px; border-radius: 4px;
       font-size: 0.78rem; font-weight: bold; color: #ffffff; line-height: 1.3;
     }
 
-   /* ✨ 終極純白圖片魔法 */
-.train-icon-img {
-  width: 1.4em;
-  height: 1.4em;
-  vertical-align: -0.2em; /* 微調垂直對齊 */
-  margin-right: 6px;
-  flex-shrink: 0;
-  
-  /* 1. 先把圖強制變純黑 */
-  filter: brightness(0);
-  
-  /* 2. 再把純黑反轉成純白（這招絕對不會有灰階） */
-  filter: brightness(0) invert(1);
-}
+    /* ✨ 車次旁邊的專屬主題色圖示（遮罩魔法） */
+    .train-no-icon {
+      width: 1em;
+      height: 1em;
+      vertical-align: -0.05em;
+      margin-right: 8px; /* 與車次號碼的距離 */
+      flex-shrink: 0;
+      
+      /* 用遮罩的方式，讓圖示直接變成外層設定的主題色 */
+      background-color: currentColor; 
+      -webkit-mask-size: contain; mask-size: contain;
+      -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+      -webkit-mask-position: center; mask-position: center;
+    }
 
     .line-type-badge { background: #555555; }
     .train-route { font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-top: 4px; }
@@ -371,21 +379,27 @@
       return '#4BE13A';
     }
 
-function getTrainIcon(typeStr) {
-  if (!typeStr) return '';
+    function getTrainIcon(typeStr) {
+      if (!typeStr) return 'default.svg';
 
-  let svgFile = 'default.svg'; // 其他(預設)
+      let svgFile = 'default.svg'; // 預設為其他
 
-  if (typeStr.includes('普悠瑪')) svgFile = 'puyuma.svg';
-  else if (typeStr.includes('太魯閣')) svgFile = 'taroko.svg';
-  else if (typeStr.includes('莒光')) svgFile = 'chukuang.svg';
-  else if (typeStr.includes('3000')) svgFile = 'emu3000.svg';
-  else if (typeStr.includes('推拉式')) svgFile = 'pp.svg'; // 自強但沒有「推拉式」→ 維持 default
+      if (typeStr.includes('普悠瑪')) {
+        svgFile = 'puyuma.svg';
+      } else if (typeStr.includes('太魯閣')) {
+        svgFile = 'taroko.svg';
+      } else if (typeStr.includes('莒光')) {
+        svgFile = 'chukuang.svg';
+      } else if (typeStr.includes('3000')) {
+        svgFile = 'emu3000.svg';
+      } else if (typeStr.includes('推拉式')) {
+        svgFile = 'pp.svg';
+      }
+      
+      // 回傳遮罩用的 span，讓它可以直接吃外層的顏色
+      return `<span class="train-no-icon" style="-webkit-mask-image: url('./icon/${svgFile}'); mask-image: url('./icon/${svgFile}');"></span>`;
+    }
 
-  // 改用 img 標籤來顯示，並套用剛剛寫的 class
-  return `<img src="./icon/${svgFile}" class="train-icon-img" alt="">`;
-}
-    
     function setSortType(type) {
       currentSortType = type;
       document.getElementById('sort-date').classList.toggle('active', type === 'date-first');
@@ -495,9 +509,9 @@ function getTrainIcon(typeStr) {
     }
 
     // 版面寬度：只量一次，之後鎖定，除非視窗寬度變化過大才重算
-    let contentWidth = 0;          // 所有車次卡片的自然寬度（快取，只增不減）
-    let layoutViewportWidth = null; // 上次套用版面時的視窗寬度
-    const RELAYOUT_THRESHOLD = 120; // 視窗寬度變化超過此值才重算（px）
+    let contentWidth = 0;          
+    let layoutViewportWidth = null; 
+    const RELAYOUT_THRESHOLD = 120; 
     const MOBILE_BREAKPOINT = 768;
 
     function measureContentWidth() {
@@ -514,7 +528,6 @@ function getTrainIcon(typeStr) {
     }
 
     function updateContainerWidth(force = false) {
-      // 已鎖定且非強制：直接略過（搜尋、排序、捲動都不會再改寬度）
       if (layoutViewportWidth !== null && !force) return;
 
       const container = document.getElementById('main-container');
@@ -523,21 +536,18 @@ function getTrainIcon(typeStr) {
       const topControls = document.getElementById('top-controls');
       const targets = [container, header, filterBar, topControls];
 
-      // 先清除舊寬度，回到 CSS 預設
       targets.forEach(el => { el.style.width = ''; });
       document.body.style.minWidth = '';
 
       const screenWidth = window.innerWidth;
 
-      // 手機版：交給 CSS media query（100% 寬）
       if (screenWidth <= MOBILE_BREAKPOINT) {
         layoutViewportWidth = screenWidth;
         return;
       }
 
-      // 桌面版：卡片自然寬度只在尚未量過時才量（首次載入是完整清單）
       if (contentWidth === 0) {
-        if (document.querySelectorAll('.train-card').length === 0) return; // 還沒資料，先不鎖定
+        if (document.querySelectorAll('.train-card').length === 0) return; 
         contentWidth = measureContentWidth();
       }
 
@@ -547,7 +557,6 @@ function getTrainIcon(typeStr) {
       const bodyStyle = getComputedStyle(document.body);
       const bodyPadX = (parseFloat(bodyStyle.paddingLeft) || 0) + (parseFloat(bodyStyle.paddingRight) || 0);
 
-      // 內容比螢幕寬時，才撐開版面（可橫向捲動）
       if (screenWidth <= targetWidth) {
         document.body.style.minWidth = (targetWidth + bodyPadX) + 'px';
         targets.forEach(el => { el.style.width = targetWidth + 'px'; });
@@ -556,7 +565,6 @@ function getTrainIcon(typeStr) {
       layoutViewportWidth = screenWidth;
     }
 
-    // 視窗寬度變化過大（或跨越手機/桌面分界）才重新計算
     let resizeTimer = null;
     function onViewportChange() {
       clearTimeout(resizeTimer);
@@ -632,13 +640,6 @@ function getTrainIcon(typeStr) {
           `;
         }).join('');
 
-        const typeBadge = train.type 
-          ? `<span class="train-type-badge" style="background:${themeColor};">
-               ${getTrainIcon(train.type)}
-               ${train.type}
-             </span>` 
-          : '';
-
         const lineBadge = train.line_type
           ? `<span class="line-type-badge">${train.line_type}</span>`
           : '';
@@ -651,11 +652,18 @@ function getTrainIcon(typeStr) {
 
         card.innerHTML = `
           <div class="train-info-sidebar">
-            <span class="train-no" style="color:${themeColor};">${train.trainNo} 次</span>
+            <!-- ✨ 把圖示放在車次左邊，並用 style="color:${themeColor}" 套用主題色 -->
+            <span class="train-no" style="color:${themeColor};">
+              ${getTrainIcon(train.type)}
+              ${train.trainNo} 次
+            </span>
+            
             <div class="badge-group">
-              ${typeBadge}
+              <!-- ✨ 標籤內只留文字，圖示已經移到上面了 -->
+              <span class="train-type-badge" style="background:${themeColor};">${train.type || '其他'}</span>
               ${lineBadge}
             </div>
+            
             <div class="train-route">${train.route}</div>
             <div class="train-dates"><div class="train-dates-title">開行日期</div>${formatDatesWithYear(train.cleanDates)}</div>
             ${noteHTML}
