@@ -494,32 +494,55 @@ function getTrainIcon(typeStr) {
       }).join('');
     }
 
-    function updateContainerWidth() {
+    // 版面寬度：只量一次，之後鎖定，除非視窗寬度變化過大才重算
+    let contentWidth = 0;          // 所有車次卡片的自然寬度（快取，只增不減）
+    let layoutViewportWidth = null; // 上次套用版面時的視窗寬度
+    const RELAYOUT_THRESHOLD = 120; // 視窗寬度變化超過此值才重算（px）
+    const MOBILE_BREAKPOINT = 768;
+
+    function measureContentWidth() {
+      const cards = document.querySelectorAll('.train-card');
+      let max = 0;
+      cards.forEach(card => {
+        const prev = card.style.width;
+        card.style.width = 'max-content';
+        const w = card.getBoundingClientRect().width;
+        card.style.width = prev;
+        if (w > max) max = w;
+      });
+      return max;
+    }
+
+    function updateContainerWidth(force = false) {
+      // 已鎖定且非強制：直接略過（搜尋、排序、捲動都不會再改寬度）
+      if (layoutViewportWidth !== null && !force) return;
+
       const container = document.getElementById('main-container');
       const header = document.getElementById('main-header');
       const filterBar = document.getElementById('filter-bar');
       const topControls = document.getElementById('top-controls');
       const targets = [container, header, filterBar, topControls];
 
-      // 每次都先清除上一次寫入的寬度，回到 CSS 預設狀態再重新計算
+      // 先清除舊寬度，回到 CSS 預設
       targets.forEach(el => { el.style.width = ''; });
       document.body.style.minWidth = '';
 
-      // 手機版：交給 CSS media query（100% 寬）處理
-      if (window.innerWidth <= 768) return;
+      const screenWidth = window.innerWidth;
 
-      const cards = document.querySelectorAll('.train-card');
-      if (cards.length === 0) return;
+      // 手機版：交給 CSS media query（100% 寬）
+      if (screenWidth <= MOBILE_BREAKPOINT) {
+        layoutViewportWidth = screenWidth;
+        return;
+      }
 
-      let maxCardWidth = 0;
-      cards.forEach(card => {
-        const w = card.scrollWidth;
-        if (w > maxCardWidth) maxCardWidth = w;
-      });
+      // 桌面版：卡片自然寬度只在尚未量過時才量（首次載入是完整清單）
+      if (contentWidth === 0) {
+        if (document.querySelectorAll('.train-card').length === 0) return; // 還沒資料，先不鎖定
+        contentWidth = measureContentWidth();
+      }
 
       const PADDING_OFFSET = 30;
-      const targetWidth = maxCardWidth + PADDING_OFFSET;
-      const screenWidth = window.innerWidth;
+      const targetWidth = contentWidth + PADDING_OFFSET;
 
       const bodyStyle = getComputedStyle(document.body);
       const bodyPadX = (parseFloat(bodyStyle.paddingLeft) || 0) + (parseFloat(bodyStyle.paddingRight) || 0);
@@ -529,18 +552,22 @@ function getTrainIcon(typeStr) {
         document.body.style.minWidth = (targetWidth + bodyPadX) + 'px';
         targets.forEach(el => { el.style.width = targetWidth + 'px'; });
       }
+
+      layoutViewportWidth = screenWidth;
     }
 
-    // 視窗寬度改變（含手機直橫轉）時，自動重新調整
+    // 視窗寬度變化過大（或跨越手機/桌面分界）才重新計算
     let resizeTimer = null;
-    let lastInnerWidth = window.innerWidth;
     function onViewportChange() {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
-        if (window.innerWidth === lastInnerWidth) return;
-        lastInnerWidth = window.innerWidth;
-        updateContainerWidth();
-      }, 100);
+        if (layoutViewportWidth === null) return;
+        const w = window.innerWidth;
+        const crossedBreakpoint = (w <= MOBILE_BREAKPOINT) !== (layoutViewportWidth <= MOBILE_BREAKPOINT);
+        if (crossedBreakpoint || Math.abs(w - layoutViewportWidth) >= RELAYOUT_THRESHOLD) {
+          updateContainerWidth(true);
+        }
+      }, 150);
     }
     window.addEventListener('resize', onViewportChange);
     window.addEventListener('orientationchange', onViewportChange);
