@@ -137,13 +137,12 @@
       font-size: 0.78rem; font-weight: bold; color: #ffffff; line-height: 1.3;
     }
 
-   /* ✨ 核心魔法：SVG 鏤空遮罩（強制純白版） */
+   /* ✨ 核心魔法：SVG 鏤空遮罩（絕對純白版） */
 .train-icon-mask {
   width: 1.3em;
   height: 1.3em;
-  background-color: #ffffff; /* 確保填滿純白 */
   
-  /* 設定為遮罩模式 */
+  /* 1. 基礎遮罩設定 */
   -webkit-mask-size: contain;
   mask-size: contain;
   -webkit-mask-repeat: no-repeat;
@@ -151,10 +150,15 @@
   -webkit-mask-position: center;
   mask-position: center;
   
-  flex-shrink: 0; /* 防止圖示被壓縮 */
+  flex-shrink: 0;
 
-  /* ✨ 終極魔法：把所有的灰階、半透明，全部強制拉成純白 */
-  filter: grayscale(1) contrast(999) brightness(1.5);
+  /* 2. 強制把灰階變成純白，把半透明逼成實心 */
+  background-color: #ffffff; 
+  filter: grayscale(1) contrast(999) brightness(3);
+  
+  /* 3. 終極魔法：多層陰影疊加（讓它發光變厚） */
+  /* 這行可以強制讓邊緣變實，看起來就像字體一樣白 */
+  text-shadow: 0 0 0 #ffffff, 0 0 0 #ffffff; 
 }
 
     .line-type-badge { background: #555555; }
