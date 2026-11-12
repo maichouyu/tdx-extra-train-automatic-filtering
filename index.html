@@ -66,627 +66,198 @@
     }
 
     /* 主容器與頂部元件寬度 */
-    .container {
-      width: 100%;
-      margin: 0 auto;
-    }
-
-    .top-controls {
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: -5px;
-      width: 100%;
-    }
+    .container { width: 100%; margin: 0 auto; }
+    .top-controls { display: flex; justify-content: flex-end; margin-bottom: -5px; width: 100%; }
 
     .theme-toggle-btn {
-      background: var(--toggle-btn-bg);
-      color: var(--toggle-btn-text);
-      border: none;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      font-size: 0.85rem;
-      cursor: pointer;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      background: var(--toggle-btn-bg); color: var(--toggle-btn-text);
+      border: none; width: 36px; height: 36px; border-radius: 50%;
+      font-size: 0.85rem; cursor: pointer; font-weight: bold;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
+    .theme-toggle-btn:active { transform: scale(0.9); }
 
-    .theme-toggle-btn:active {
-      transform: scale(0.9);
-    }
-
-    /* 標題列：寬度 100%，橘色底線等寬延伸至頁面兩側，標題維持靠左 */
     header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      border-bottom: 2px solid var(--accent-color);
-      padding-bottom: 12px;
-      margin-bottom: 16px;
-      gap: 20px;
-      width: 100%;
+      display: flex; justify-content: space-between; align-items: flex-end;
+      border-bottom: 2px solid var(--accent-color); padding-bottom: 12px;
+      margin-bottom: 16px; gap: 20px; width: 100%;
     }
 
-    h1 {
-      margin: 0;
-      font-size: 1.4rem;
-      color: var(--accent-color);
-      font-weight: 800;
-    }
+    h1 { margin: 0; font-size: 1.4rem; color: var(--accent-color); font-weight: 800; }
+    .update-time { font-size: 0.8rem; color: var(--text-hint); white-space: nowrap; }
 
-    .update-time {
-      font-size: 0.8rem;
-      color: var(--text-hint);
-      white-space: nowrap;
-    }
-
-    /* 搜尋與排序列：寬度 100% 配合頁面延展 */
-    .filter-bar {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 20px;
-      width: 100%;
-    }
-
-    .filter-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      flex: 1;
-    }
-
-    .filter-label {
-      font-size: 0.85rem;
-      color: var(--accent-color);
-      font-weight: bold;
-    }
+    .filter-bar { display: flex; gap: 16px; margin-bottom: 20px; width: 100%; }
+    .filter-group { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+    .filter-label { font-size: 0.85rem; color: var(--accent-color); font-weight: bold; }
 
     .search-input {
-      width: 100%;
-      background: var(--input-bg);
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      padding: 10px 12px;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      outline: none;
-      transition: border-color 0.2s ease, background 0.3s, color 0.3s;
+      width: 100%; background: var(--input-bg); border: 1px solid var(--border-color);
+      color: var(--text-main); padding: 10px 12px; border-radius: 8px;
+      font-size: 0.9rem; outline: none; transition: border-color 0.2s ease, background 0.3s, color 0.3s;
     }
+    .search-input:focus { border-color: var(--accent-color); }
 
-    .search-input:focus {
-      border-color: var(--accent-color);
-    }
-
-    .sort-btn-group {
-      display: flex;
-      gap: 8px;
-      width: 100%;
-    }
-
+    .sort-btn-group { display: flex; gap: 8px; width: 100%; }
     .sort-btn {
-      flex: 1;
-      background: var(--input-bg);
-      border: 1px solid var(--border-color);
-      color: var(--text-muted);
-      padding: 10px 12px;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      text-align: center;
-      white-space: nowrap;
+      flex: 1; background: var(--input-bg); border: 1px solid var(--border-color);
+      color: var(--text-muted); padding: 10px 12px; border-radius: 8px;
+      font-size: 0.85rem; font-weight: bold; cursor: pointer;
+      transition: all 0.2s ease; text-align: center; white-space: nowrap;
     }
-
-    .sort-btn:hover {
-      border-color: var(--accent-color);
-      color: var(--text-main);
-    }
-
+    .sort-btn:hover { border-color: var(--accent-color); color: var(--text-main); }
     .sort-btn.active {
-      background: var(--accent-color);
-      border-color: var(--accent-color);
-      color: #121212;
-      box-shadow: 0 0 10px rgba(255, 152, 0, 0.4);
+      background: var(--accent-color); border-color: var(--accent-color);
+      color: #121212; box-shadow: 0 0 10px rgba(255, 152, 0, 0.4);
     }
 
-    #train-list {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-    }
+    #train-list { width: 100%; display: flex; flex-direction: column; align-items: stretch; }
 
-    /* 車次卡片：電腦版預設置中對齊 */
     .train-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 18px 20px;
-      margin-bottom: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      display: flex;
-      gap: 20px;
-      align-items: flex-start;
-      width: fit-content;
-      margin-left: auto;
-      margin-right: auto;
+      background: var(--card-bg); border: 1px solid var(--border-color);
+      border-radius: 12px; padding: 18px 20px; margin-bottom: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; gap: 20px;
+      align-items: flex-start; width: fit-content; margin-left: auto; margin-right: auto;
       transition: background 0.3s, border-color 0.3s;
     }
     
     .train-info-sidebar {
-      width: 255px;
-      min-width: 255px;
-      flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      padding-right: 16px;
-      border-right: 1px dashed var(--border-color);
+      width: 255px; min-width: 255px; flex-shrink: 0;
+      display: flex; flex-direction: column; gap: 6px;
+      padding-right: 16px; border-right: 1px dashed var(--border-color);
     }
     
-    .train-no {
-      font-size: 1.8rem;
-      font-weight: 900;
-      line-height: 1.1;
-    }
+    .train-no { font-size: 1.8rem; font-weight: 900; line-height: 1.1; }
+    .badge-group { display: flex; gap: 6px; flex-wrap: wrap; }
 
-    .badge-group {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-
+    /* ✨ 車種標籤與圖示的完美對齊 */
     .train-type-badge, .line-type-badge {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 0.78rem;
-      font-weight: bold;
-      color: #ffffff;
-      line-height: 1.3;
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 10px 4px 8px; border-radius: 4px;
+      font-size: 0.78rem; font-weight: bold; color: #ffffff; line-height: 1.3;
     }
 
-    .line-type-badge {
-      background: #555555;
+    /* ✨ 核心魔法：SVG 鏤空遮罩 */
+    .train-icon-mask {
+      width: 1.3em; height: 1.3em;
+      background-color: currentColor;
+      -webkit-mask-size: contain; mask-size: contain;
+      -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+      -webkit-mask-position: center; mask-position: center;
+      flex-shrink: 0;
     }
+
+    .line-type-badge { background: #555555; }
+    .train-route { font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-top: 4px; }
     
-    .train-route {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--text-main);
-      margin-top: 4px;
-    }
-
     .train-dates {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      background: var(--input-bg);
-      padding: 4px 8px;
-      border-radius: 4px;
-      margin-top: 6px;
-      display: block;
-      word-break: break-all;
+      font-size: 0.75rem; color: var(--text-muted); background: var(--input-bg);
+      padding: 4px 8px; border-radius: 4px; margin-top: 6px; display: block; word-break: break-all;
     }
-    .train-dates-title {
-      font-weight: bold;
-      padding-bottom: 4px;
-      border-bottom: 1px solid var(--border-color, rgba(128,128,128,0.4));
-      margin-bottom: 4px;
-    }
-    .train-dates-row + .train-dates-row {
-      margin-top: 2px;
-    }
+    .train-dates-title { font-weight: bold; padding-bottom: 4px; border-bottom: 1px solid var(--border-color, rgba(128,128,128,0.4)); margin-bottom: 4px; }
+    .train-dates-row + .train-dates-row { margin-top: 2px; }
 
     .train-note {
-      font-size: 0.75rem;
-      color: var(--accent-color);
-      background: var(--input-bg);
-      padding: 4px 8px;
-      border-radius: 4px;
-      margin-top: 4px;
-      word-break: break-all;
-      border-left: 3px solid var(--accent-color);
-      line-height: 1.4;
+      font-size: 0.75rem; color: var(--accent-color); background: var(--input-bg);
+      padding: 4px 8px; border-radius: 4px; margin-top: 4px; word-break: break-all;
+      border-left: 3px solid var(--accent-color); line-height: 1.4;
     }
 
-    .stops-wrapper {
-      flex: 1;
-    }
-
-    /* 4欄車站格線：每欄完全由文字 (max-content) 自動調整寬度 */
-    .stops-grid {
-      display: grid;
-      grid-template-columns: repeat(4, max-content);
-      gap: 8px;
-    }
+    .stops-wrapper { flex: 1; }
+    .stops-grid { display: grid; grid-template-columns: repeat(4, max-content); gap: 8px; }
 
     .stop-item {
-      background: var(--input-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      padding: 8px 12px;
-      font-size: 0.85rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      white-space: nowrap;
+      background: var(--input-bg); border: 1px solid var(--border-color);
+      border-radius: 6px; padding: 8px 12px; font-size: 0.85rem;
+      display: flex; justify-content: space-between; align-items: center; gap: 12px; white-space: nowrap;
     }
     
-    .station-name {
-      font-weight: bold;
-      color: var(--text-main);
-      white-space: nowrap;
-    }
+    .station-name { font-weight: bold; color: var(--text-main); white-space: nowrap; }
+    .time-info { font-size: 0.75rem; white-space: nowrap; }
+    .toggle-btn { display: none; }
 
-    .time-info {
-      font-size: 0.75rem;
-      white-space: nowrap;
-    }
-
-    .toggle-btn {
-      display: none;
-    }
-
-    /* 手機版 RWD 斷點 (768px 以下) */
     @media (max-width: 768px) {
-      body {
-        padding: 12px;
-      }
-
-      .container, header, .filter-bar {
-        width: 100% !important;
-        min-width: 100%;
-      }
-
-      header, .filter-bar {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .train-card {
-        width: 100% !important;
-        flex-direction: column;
-        align-items: stretch;
-        gap: 12px;
-        padding: 16px;
-        margin-left: 0 !important;
-        margin-right: 0 !important;
-      }
-
-      .train-info-sidebar {
-        width: 100%;
-        border-right: none;
-        border-bottom: 1px dashed var(--border-color);
-        padding-right: 0;
-        padding-bottom: 12px;
-      }
-
-      .toggle-btn {
-        display: flex;
-        width: 100%;
-        background: var(--input-bg);
-        color: var(--text-muted);
-        border: 1px solid var(--border-color);
-        border-radius: 6px;
-        padding: 8px 12px;
-        font-size: 0.85rem;
-        font-weight: bold;
-        cursor: pointer;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 4px;
-      }
-
-      .toggle-btn .icon {
-        font-size: 0.75rem;
-        color: var(--accent-color);
-        transition: transform 0.2s ease;
-      }
-
-      .stops-wrapper {
-        display: none;
-        margin-top: 8px;
-        padding-top: 8px;
-      }
-
-      .stops-wrapper.active {
-        display: block;
-      }
-
-      .stops-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 6px;
-      }
-
-      .stop-item {
-        padding: 6px 8px;
-        font-size: 0.72rem;
-        white-space: nowrap;
-        gap: 4px;
-      }
-
-      .station-name {
-        white-space: nowrap;
-      }
-
-      .time-info {
-        font-size: 0.7rem;
-        white-space: nowrap;
-      }
+      body { padding: 12px; }
+      .container, header, .filter-bar { width: 100% !important; min-width: 100%; }
+      header, .filter-bar { flex-direction: column; align-items: stretch; }
+      .train-card { width: 100% !important; flex-direction: column; align-items: stretch; gap: 12px; padding: 16px; margin-left: 0 !important; margin-right: 0 !important; }
+      .train-info-sidebar { width: 100%; border-right: none; border-bottom: 1px dashed var(--border-color); padding-right: 0; padding-bottom: 12px; }
+      .toggle-btn { display: flex; width: 100%; background: var(--input-bg); color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 12px; font-size: 0.85rem; font-weight: bold; cursor: pointer; justify-content: space-between; align-items: center; margin-top: 4px; }
+      .toggle-btn .icon { font-size: 0.75rem; color: var(--accent-color); transition: transform 0.2s ease; }
+      .stops-wrapper { display: none; margin-top: 8px; padding-top: 8px; }
+      .stops-wrapper.active { display: block; }
+      .stops-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+      .stop-item { padding: 6px 8px; font-size: 0.72rem; white-space: nowrap; gap: 4px; }
+      .station-name { white-space: nowrap; }
+      .time-info { font-size: 0.7rem; white-space: nowrap; }
     }
 
-    .status-msg {
-      text-align: center;
-      padding: 40px;
-      color: var(--text-hint);
-      font-size: 1rem;
-    }
+    .status-msg { text-align: center; padding: 40px; color: var(--text-hint); font-size: 1rem; }
 
     /* --- 行駛日期熱點圖小工具樣式 --- */
     .hm-widget {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 16px 20px;
-      margin-bottom: 20px;
-      width: 100%;
-      box-sizing: border-box;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      user-select: none;
-      -webkit-user-select: none;
-      transition: background 0.3s, border-color 0.3s;
+      background: var(--card-bg); border: 1px solid var(--border-color);
+      border-radius: 12px; padding: 16px 20px; margin-bottom: 20px;
+      width: 100%; box-sizing: border-box; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      user-select: none; -webkit-user-select: none; transition: background 0.3s, border-color 0.3s;
     }
 
-    .hm-header {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-bottom: 0;
-      padding-bottom: 0;
-      border-bottom: none;
-    }
-
-    .hm-header-main {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-    }
-
-    .hm-title {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.95rem;
-      font-weight: bold;
-      color: var(--accent-color);
-    }
+    .hm-header { display: flex; flex-direction: column; gap: 6px; margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+    .hm-header-main { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+    .hm-title { display: flex; align-items: center; gap: 6px; font-size: 0.95rem; font-weight: bold; color: var(--accent-color); }
 
     .hm-toggle-btn {
-      background: var(--input-bg);
-      color: var(--text-muted);
-      border: 1px solid var(--border-color);
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 0.78rem;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      transition: all 0.2s ease;
+      background: var(--input-bg); color: var(--text-muted); border: 1px solid var(--border-color);
+      padding: 4px 10px; border-radius: 6px; font-size: 0.78rem; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s ease;
     }
+    .hm-toggle-btn:hover { color: var(--text-main); border-color: var(--accent-color); }
 
-    .hm-toggle-btn:hover {
-      color: var(--text-main);
-      border-color: var(--accent-color);
-    }
-
-    .hm-meta {
-      font-size: 0.78rem;
-      color: var(--text-hint);
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 0 6px;
-      margin-top: 6px;
-    }
-
-    .hm-months-container {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      width: 100%;
-    }
+    .hm-meta { font-size: 0.78rem; color: var(--text-hint); display: flex; flex-wrap: wrap; align-items: center; gap: 0 6px; margin-top: 6px; }
+    .hm-months-container { display: flex; flex-direction: column; gap: 14px; width: 100%; }
 
     .hm-month-card {
-      background: var(--input-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 12px 14px;
-      transition: background 0.3s, border-color 0.3s;
+      background: var(--input-bg); border: 1px solid var(--border-color);
+      border-radius: 10px; padding: 12px 14px; transition: background 0.3s, border-color 0.3s;
     }
 
-    .hm-month-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-      padding: 0 4px;
-    }
-
-    .hm-month-name {
-      font-size: 0.92rem;
-      font-weight: bold;
-      color: var(--text-main);
-      font-family: monospace;
-    }
-
-    .hm-month-count {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      background: var(--card-bg);
-      padding: 2px 8px;
-      border-radius: 12px;
-      border: 1px solid var(--border-color);
-    }
-
-    .hm-weekdays {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 5px;
-      text-align: center;
-      font-size: 0.75rem;
-      font-weight: bold;
-      color: var(--text-hint);
-      margin-bottom: 6px;
-    }
-
+    .hm-month-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 4px; }
+    .hm-month-name { font-size: 0.92rem; font-weight: bold; color: var(--text-main); font-family: monospace; }
+    .hm-month-count { font-size: 0.75rem; color: var(--text-muted); background: var(--card-bg); padding: 2px 8px; border-radius: 12px; border: 1px solid var(--border-color); }
+    .hm-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; font-size: 0.75rem; font-weight: bold; color: var(--text-hint); margin-bottom: 6px; }
     .hm-weekdays .sun { color: #f87171; }
     .hm-weekdays .sat { color: #38bdf8; }
-
-    .hm-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      grid-auto-rows: 38px;
-      gap: 5px;
-    }
+    .hm-grid { display: grid; grid-template-columns: repeat(7, 1fr); grid-auto-rows: 38px; gap: 5px; }
 
     .hm-cell {
-      height: 38px;
-      border-radius: 6px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      box-sizing: border-box;
-      font-family: monospace;
-      padding: 2px;
-      background: var(--input-bg);
-      border: 1px solid var(--border-color);
-      transition: transform 0.15s ease;
-      position: relative;
+      height: 38px; border-radius: 6px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; box-sizing: border-box;
+      font-family: monospace; padding: 2px; background: var(--input-bg);
+      border: 1px solid var(--border-color); transition: transform 0.15s ease; position: relative;
     }
 
-    .hm-cell.empty {
-      background: transparent;
-      border: 1px solid transparent;
-      visibility: hidden;
-      pointer-events: none;
-    }
-
-    .hm-num {
-      font-size: 0.78rem;
-      font-weight: bold;
-      line-height: 1;
-      color: var(--text-hint);
-    }
-
-    .hm-cell.has-trains {
-      cursor: pointer;
-      background: var(--card-bg);
-      border-color: var(--border-color);
-    }
-
-    .hm-cell.has-trains:hover {
-      transform: translateY(-2px);
-      border-color: var(--accent-color);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    }
-
-    .hm-cell.has-trains .hm-num {
-      color: var(--text-main);
-    }
-
-    .hm-bars {
-      display: flex;
-      gap: 2px;
-      margin-top: 3px;
-      height: 3px;
-      width: 100%;
-      max-width: 30px;
-      justify-content: center;
-    }
-
-    .hm-bar {
-      flex: 1;
-      height: 100%;
-      border-radius: 1px;
-    }
-
-    .hm-legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px 14px;
-      justify-content: center;
-      margin-top: 14px;
-      padding-top: 10px;
-      border-top: 1px solid var(--border-color);
-    }
-
-    .hm-legend-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      background: transparent;
-      border: 1px solid transparent;
-      border-radius: 12px;
-      padding: 3px 8px;
-    }
-
-    .hm-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-    }
+    .hm-cell.empty { background: transparent; border: 1px solid transparent; visibility: hidden; pointer-events: none; }
+    .hm-num { font-size: 0.78rem; font-weight: bold; line-height: 1; color: var(--text-hint); }
+    .hm-cell.has-trains { cursor: pointer; background: var(--card-bg); border-color: var(--border-color); }
+    .hm-cell.has-trains:hover { transform: translateY(-2px); border-color: var(--accent-color); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); }
+    .hm-cell.has-trains .hm-num { color: var(--text-main); }
+    .hm-bars { display: flex; gap: 2px; margin-top: 3px; height: 3px; width: 100%; max-width: 30px; justify-content: center; }
+    .hm-bar { flex: 1; height: 100%; border-radius: 1px; }
+    .hm-legend { display: flex; flex-wrap: wrap; gap: 8px 14px; justify-content: center; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border-color); }
+    .hm-legend-item { display: inline-flex; align-items: center; gap: 5px; font-size: 0.75rem; color: var(--text-muted); background: transparent; border: 1px solid transparent; border-radius: 12px; padding: 3px 8px; }
+    .hm-dot { width: 8px; height: 8px; border-radius: 50%; }
 
     /* 彈出氣泡視窗 (Popover) 樣式 */
     .hm-popover {
-      position: fixed;
-      z-index: 99999;
-      background: var(--card-bg);
-      border: 1px solid var(--accent-color);
-      border-radius: 8px;
-      padding: 8px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      width: auto;
-      max-width: 260px;
-      opacity: 0;
-      transform: translateY(4px) scale(0.96);
-      transition: opacity 0.16s ease, transform 0.16s ease;
-      visibility: hidden;
-      pointer-events: none;
+      position: fixed; z-index: 99999; background: var(--card-bg);
+      border: 1px solid var(--accent-color); border-radius: 8px; padding: 8px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5); display: flex; flex-wrap: wrap; gap: 6px;
+      width: auto; max-width: 260px; opacity: 0; transform: translateY(4px) scale(0.96);
+      transition: opacity 0.16s ease, transform 0.16s ease; visibility: hidden; pointer-events: none;
     }
-    .hm-popover.is-visible {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-      visibility: visible;
-      pointer-events: auto;
-    }
-    .hm-popover-item {
-      font-size: 0.85rem;
-      font-weight: bold;
-      color: #ffffff;
-      padding: 4px 10px;
-      border-radius: 6px;
-      cursor: pointer;
-      text-align: center;
-      transition: filter 0.2s, transform 0.1s;
-    }
-    .hm-popover-item:hover {
-      filter: brightness(1.2);
-      transform: scale(1.05);
-    }
+    .hm-popover.is-visible { opacity: 1; transform: translateY(0) scale(1); visibility: visible; pointer-events: auto; }
+    .hm-popover-item { font-size: 0.85rem; font-weight: bold; color: #ffffff; padding: 4px 10px; border-radius: 6px; cursor: pointer; text-align: center; transition: filter 0.2s, transform 0.1s; }
+    .hm-popover-item:hover { filter: brightness(1.2); transform: scale(1.05); }
   </style>
 </head>
 <body>
@@ -757,7 +328,6 @@
       if (btn) btn.innerText = isLight ? '深' : '淺';
     }
 
-    // 裝置/瀏覽器是否支援深淺色偏好（深或淺任一個有匹配即視為支援）
     function getSystemThemeSupport() {
       if (!window.matchMedia) return false;
       return window.matchMedia('(prefers-color-scheme: dark)').matches ||
@@ -767,8 +337,6 @@
     function toggleTheme() {
       const isLight = !document.body.classList.contains('light-mode');
       applyTheme(isLight);
-
-      // 僅「不支援深淺色的裝置」才寫入本地存儲；支援的裝置只影響本次開啟
       if (!getSystemThemeSupport()) {
         try { localStorage.setItem(THEME_KEY, isLight ? 'light' : 'dark'); } catch (e) {}
       }
@@ -776,17 +344,13 @@
 
     function initTheme() {
       if (getSystemThemeSupport()) {
-        // 支援：完全依照裝置目前主題，不讀取也不使用本地存儲
-        try { localStorage.removeItem(THEME_KEY); } catch (e) {} // 清掉舊版殘留
+        try { localStorage.removeItem(THEME_KEY); } catch (e) {}
         const mq = window.matchMedia('(prefers-color-scheme: dark)');
         applyTheme(!mq.matches);
-
-        // 裝置主題在使用期間改變時，跟著切換
         const onChange = (e) => applyTheme(!e.matches);
         if (mq.addEventListener) mq.addEventListener('change', onChange);
         else if (mq.addListener) mq.addListener(onChange);
       } else {
-        // 不支援：預設深色，之後由本地存儲決定
         let saved = null;
         try { saved = localStorage.getItem(THEME_KEY); } catch (e) {}
         applyTheme(saved === 'light');
@@ -795,30 +359,45 @@
 
     function getTrainTypeColor(typeStr) {
       if (!typeStr) return '#4BE13A';
-
       if (typeStr.includes('普悠瑪')) return '#e60021';
       if (typeStr.includes('太魯閣')) return '#f28500';
       if (typeStr.includes('3000') || typeStr.includes('新自強')) return '#d84315';
       if (typeStr.includes('自強') || typeStr.includes('PP')) return '#ff6f00';
       if (typeStr.includes('莒光')) return '#ff9800';
-      
       return '#4BE13A';
+    }
+
+    // ✨ 修正：把 3000 與新自強的判斷放在自強前面，避免被誤判為 PP
+    function getTrainIcon(typeStr) {
+      if (!typeStr) return '';
+      
+      let svgFile = 'local.svg'; // 預設為區間車
+
+      // 1. 先判斷獨立的車種
+      if (typeStr.includes('普悠瑪')) svgFile = 'puyuma.svg';
+      else if (typeStr.includes('太魯閣')) svgFile = 'taroko.svg';
+      else if (typeStr.includes('莒光')) svgFile = 'chukuang.svg';
+      
+      // 2. 處理自強號的變體（必須把 3000 放前面，否則會先被自強攔截）
+      else if (typeStr.includes('3000') || typeStr.includes('新自強')) svgFile = 'emu3000.svg';
+      else if (typeStr.includes('自強') || typeStr.includes('PP')) svgFile = 'pp.svg';
+      
+      // 3. 區間車
+      else if (typeStr.includes('區間')) svgFile = 'local.svg';
+
+      return `<span class="train-icon-mask" style="-webkit-mask-image: url('./${svgFile}'); mask-image: url('./${svgFile}');"></span>`;
     }
 
     function setSortType(type) {
       currentSortType = type;
-
       document.getElementById('sort-date').classList.toggle('active', type === 'date-first');
       document.getElementById('sort-num').classList.toggle('active', type === 'number-first');
-
       filterAndRender();
     }
 
-    // 解析單筆日期字串；相容舊格式 "MM/DD+"（依 last_updated 推算年份）
     function parseDateEntry(raw, refYear, refMonth) {
       const m = String(raw).trim().match(/^(?:(\d{4})-(\d{2})-(\d{2})|(\d{2})\/(\d{2}))([+-])?$/);
       if (!m) return null;
-
       let iso;
       if (m[1]) {
         iso = `${m[1]}-${m[2]}-${m[3]}`;
@@ -832,7 +411,6 @@
       return { iso, cancelled: m[6] === '-' };
     }
 
-    // 依年份分組，每個年份一行：2026年：12/25, 12/26 / 2027年：01/03
     function formatDatesWithYear(isoDates) {
       const byYear = {};
       isoDates.forEach(iso => {
@@ -863,7 +441,6 @@
             const trainData = data[dir][trainNo];
             const rawDates = trainData.dates || [];
 
-            // 解析日期（"YYYY-MM-DD+" 開行 / "YYYY-MM-DD-" 停駛），停駛日不顯示
             const cleanedDates = rawDates
               .map(d => parseDateEntry(d, refYear, refMonth))
               .filter(p => p && !p.cancelled)
@@ -946,9 +523,6 @@
       const targetWidth = maxCardWidth + PADDING_OFFSET;
       const screenWidth = window.innerWidth;
 
-      // body 左右 padding 合計：容器被撐寬而需要橫向捲動時，
-      // 瀏覽器不會把右側 padding 算進可捲動範圍，導致右邊貼齊螢幕邊緣。
-      // 因此直接把 body 的最小寬度設為「內容寬度 + 左右 padding」，讓右側留白與左側對稱。
       const bodyStyle = getComputedStyle(document.body);
       const bodyPadX = (parseFloat(bodyStyle.paddingLeft) || 0) + (parseFloat(bodyStyle.paddingRight) || 0);
 
@@ -1035,7 +609,10 @@
         }).join('');
 
         const typeBadge = train.type 
-          ? `<span class="train-type-badge" style="background:${themeColor};">${train.type}</span>` 
+          ? `<span class="train-type-badge" style="background:${themeColor};">
+               ${getTrainIcon(train.type)}
+               ${train.type}
+             </span>` 
           : '';
 
         const lineBadge = train.line_type
@@ -1118,7 +695,6 @@
 
     let currentDismissPopover = null;
 
-    // 智慧置中與防溢出邊界演算法
     function showTrainPopover(event, dateStr, trainsJsonStr) {
       event.stopPropagation();
       const popover = document.getElementById('hm-train-popover');
@@ -1138,16 +714,13 @@
         </div>
       `).join('');
 
-      // 先暫時顯示以便精準測量實際渲染寬度 (offsetWidth)
       popover.style.left = '0px';
       popover.style.top = '0px';
       popover.classList.add('is-visible');
       const popoverWidth = popover.offsetWidth;
 
-      // 演算法核心：以格子中心點為基準進行水平置中
       let leftPos = rect.left + (rect.width / 2) - (popoverWidth / 2);
 
-      // 邊界安全防護：如果超出左右邊界，則自動平移貼齊邊線，絕不爆版
       const margin = 16;
       const maxLeft = window.innerWidth - popoverWidth - margin;
 
@@ -1209,8 +782,7 @@
       
       allTrains.forEach(train => {
         train.cleanDates.forEach(d => {
-          const fullDateStr = d; // cleanDates 已是 YYYY-MM-DD
-          
+          const fullDateStr = d;
           allDatesSet.add(fullDateStr);
           if (!dateMap[fullDateStr]) dateMap[fullDateStr] = [];
           dateMap[fullDateStr].push({
