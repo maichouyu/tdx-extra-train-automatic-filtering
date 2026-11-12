@@ -2,6 +2,144 @@
   "last_updated": "2026-11-13 02:45:56",
   "data": {
     "shun": {
+      "128": {
+  "type": "自強(推拉式)(PP)",
+  "note": "車型：E500型推拉式(僅供參考)。每日行駛。",
+  "line_type": "山線",
+  "dates": [
+    "2026-11-27+",
+    "2026-11-28+"
+  ],
+  "route": "潮州 12:47 -> 基隆 18:30",
+  "stops": [
+    {
+      "station": "潮州",
+      "arrival": "12:47",
+      "departure": "12:47"
+    },
+    {
+      "station": "屏東",
+      "arrival": "12:59",
+      "departure": "13:01"
+    },
+    {
+      "station": "九曲堂",
+      "arrival": "13:07",
+      "departure": "13:08"
+    },
+    {
+      "station": "鳳山",
+      "arrival": "13:15",
+      "departure": "13:16"
+    },
+    {
+      "station": "高雄",
+      "arrival": "13:22",
+      "departure": "13:24"
+    },
+    {
+      "station": "新左營",
+      "arrival": "13:32",
+      "departure": "13:35"
+    },
+    {
+      "station": "臺南",
+      "arrival": "14:00",
+      "departure": "14:02"
+    },
+    {
+      "station": "臺中",
+      "arrival": "15:30",
+      "departure": "15:33"
+    },
+    {
+      "station": "臺北",
+      "arrival": "17:45",
+      "departure": "17:50"
+    },
+    {
+      "station": "基隆",
+      "arrival": "18:30",
+      "departure": "18:30"
+    }
+  ]
+},
+"554": {
+  "type": "莒光",
+  "note": "每日行駛。在和平跨日。",
+  "line_type": "海線",
+  "dates": [
+    "2026-11-27+"
+  ],
+  "route": "潮州 12:57 -> 花蓮 19:30",
+  "stops": [
+    {
+      "station": "潮州",
+      "arrival": "12:57",
+      "departure": "12:57"
+    },
+    {
+      "station": "屏東",
+      "arrival": "13:10",
+      "departure": "13:12"
+    },
+    {
+      "station": "鳳山",
+      "arrival": "13:25",
+      "departure": "13:27"
+    },
+    {
+      "station": "高雄",
+      "arrival": "13:33",
+      "departure": "13:35"
+    },
+    {
+      "station": "新左營",
+      "arrival": "13:44",
+      "departure": "13:46"
+    },
+    {
+      "station": "楠梓",
+      "arrival": "13:52",
+      "departure": "13:54"
+    },
+    {
+      "station": "岡山",
+      "arrival": "14:02",
+      "departure": "14:04"
+    },
+    {
+      "station": "臺南",
+      "arrival": "14:35",
+      "departure": "14:38"
+    },
+    {
+      "station": "嘉義",
+      "arrival": "15:25",
+      "departure": "15:28"
+    },
+    {
+      "station": "彰化",
+      "arrival": "16:20",
+      "departure": "16:23"
+    },
+    {
+      "station": "臺中",
+      "arrival": "16:40",
+      "departure": "16:43"
+    },
+    {
+      "station": "臺北",
+      "arrival": "18:15",
+      "departure": "18:20"
+    },
+    {
+      "station": "花蓮",
+      "arrival": "19:30",
+      "departure": "19:30"
+    }
+  ]
+}
       "5254": {
         "type": "自強(3000)(EMU3000 型電車)",
         "note": "本列次不發售無座票，非持本班次車票旅客，請勿搭乘。 第6節為騰雲座艙，為本公司公告指定不發售無座位車票之車廂，持當日當次騰雲座艙車票旅客始可搭乘。",
