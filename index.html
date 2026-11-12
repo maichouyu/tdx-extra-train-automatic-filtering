@@ -137,28 +137,19 @@
       font-size: 0.78rem; font-weight: bold; color: #ffffff; line-height: 1.3;
     }
 
-   /* ✨ 核心魔法：SVG 鏤空遮罩（絕對純白版） */
-.train-icon-mask {
-  width: 1.3em;
-  height: 1.3em;
-  
-  /* 1. 基礎遮罩設定 */
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  mask-position: center;
-  
+   /* ✨ 終極純白圖片魔法 */
+.train-icon-img {
+  width: 1.4em;
+  height: 1.4em;
+  vertical-align: -0.2em; /* 微調垂直對齊 */
+  margin-right: 6px;
   flex-shrink: 0;
-
-  /* 2. 強制把灰階變成純白，把半透明逼成實心 */
-  background-color: #ffffff; 
-  filter: grayscale(1) contrast(999) brightness(3);
   
-  /* 3. 終極魔法：多層陰影疊加（讓它發光變厚） */
-  /* 這行可以強制讓邊緣變實，看起來就像字體一樣白 */
-  text-shadow: 0 0 0 #ffffff, 0 0 0 #ffffff; 
+  /* 1. 先把圖強制變純黑 */
+  filter: brightness(0);
+  
+  /* 2. 再把純黑反轉成純白（這招絕對不會有灰階） */
+  filter: brightness(0) invert(1);
 }
 
     .line-type-badge { background: #555555; }
@@ -381,27 +372,22 @@
       return '#4BE13A';
     }
 
-    // ✨ 修正：把 3000 與新自強的判斷放在自強前面，避免被誤判為 PP
-    function getTrainIcon(typeStr) {
-      if (!typeStr) return '';
-      
-      let svgFile = 'local.svg'; // 預設為區間車
+function getTrainIcon(typeStr) {
+  if (!typeStr) return '';
+  
+  let svgFile = 'local.svg'; // 預設為區間車
 
-      // 1. 先判斷獨立的車種
-      if (typeStr.includes('普悠瑪')) svgFile = 'puyuma.svg';
-      else if (typeStr.includes('太魯閣')) svgFile = 'taroko.svg';
-      else if (typeStr.includes('莒光')) svgFile = 'chukuang.svg';
-      
-      // 2. 處理自強號的變體（必須把 3000 放前面，否則會先被自強攔截）
-      else if (typeStr.includes('3000') || typeStr.includes('新自強')) svgFile = 'emu3000.svg';
-      else if (typeStr.includes('自強') || typeStr.includes('PP')) svgFile = 'pp.svg';
-      
-      // 3. 區間車
-      else if (typeStr.includes('區間')) svgFile = 'local.svg';
+  if (typeStr.includes('普悠瑪')) svgFile = 'puyuma.svg';
+  else if (typeStr.includes('太魯閣')) svgFile = 'taroko.svg';
+  else if (typeStr.includes('莒光')) svgFile = 'chukuang.svg';
+  else if (typeStr.includes('3000') || typeStr.includes('新自強')) svgFile = 'emu3000.svg';
+  else if (typeStr.includes('自強') || typeStr.includes('PP')) svgFile = 'pp.svg';
+  else if (typeStr.includes('區間')) svgFile = 'local.svg';
 
-      return `<span class="train-icon-mask" style="-webkit-mask-image: url('./${svgFile}'); mask-image: url('./${svgFile}');"></span>`;
-    }
-
+  // 改用 img 標籤來顯示，並套用剛剛寫的 class
+  return `<img src="./${svgFile}" class="train-icon-img" alt="">`;
+}
+    
     function setSortType(type) {
       currentSortType = type;
       document.getElementById('sort-date').classList.toggle('active', type === 'date-first');
