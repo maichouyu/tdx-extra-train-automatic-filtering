@@ -385,7 +385,7 @@ function getTrainIcon(typeStr) {
   else if (typeStr.includes('區間')) svgFile = 'local.svg';
 
   // 改用 img 標籤來顯示，並套用剛剛寫的 class
-  return `<img src="./${svgFile}" class="train-icon-img" alt="">`;
+  return `<img src="./icon/${svgFile}" class="train-icon-img" alt="">`;
 }
     
     function setSortType(type) {
