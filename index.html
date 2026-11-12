@@ -137,12 +137,11 @@
       font-size: 0.78rem; font-weight: bold; color: #ffffff; line-height: 1.3;
     }
 
-    /* ✨ 核心魔法：SVG 鏤空遮罩 */
-    /* ✨ 核心魔法：SVG 鏤空遮罩（優化純白亮度版） */
+   /* ✨ 核心魔法：SVG 鏤空遮罩（強制純白版） */
 .train-icon-mask {
   width: 1.3em;
   height: 1.3em;
-  background-color: #ffffff; /* 直接寫死純白，確保不管在哪個標籤都是最亮的 */
+  background-color: #ffffff; /* 確保填滿純白 */
   
   /* 設定為遮罩模式 */
   -webkit-mask-size: contain;
@@ -154,8 +153,8 @@
   
   flex-shrink: 0; /* 防止圖示被壓縮 */
 
-  /* ✨ 終極優化：強制拉高對比與亮度，把灰灰的感覺消除 */
-  filter: contrast(1.2) brightness(1.2);
+  /* ✨ 終極魔法：把所有的灰階、半透明，全部強制拉成純白 */
+  filter: grayscale(1) contrast(999) brightness(1.5);
 }
 
     .line-type-badge { background: #555555; }
