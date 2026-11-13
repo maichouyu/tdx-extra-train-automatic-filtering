@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>臺鐵45天內加班或班次調整資訊</title>
+  <style>
+    /* --- 1. 全域風格與系統原生字體 --- */
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg-color);
+      color: var(--text-color);
+      font-family: var(--font-sans);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      transition: background 0.3s, color 0.3s;
+      overflow-x: auto;
+    }
+
+    .time-info, .update-time {
+      font-family: var(--font-mono);
+    }
+
+    /* --- 2. 顏色變數（深色模式預設） --- */
+    :root {
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      --font-mono: 'Noto Sans Mono', ui-monospace, 'SFMono-Regular', 'Roboto Mono', Consolas, 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', monospace;
+      --bg-color: #121212;
+      --card-bg: #1e1e1e;
+      --text-color: #e0e0e0;
+      --text-main: #ffffff;
+      --text-muted: #aaa;
+      --text-hint: #888;
+      --border-color: #333;
+      
+      --accent-color: #ff9800;
+      --accent-hover: #e68a00;
+      
+      --input-bg: #252525;
+      --input-border: #444;
+      
+      --toggle-btn-bg: #ffffff;
+      --toggle-btn-text: #121212;
+    }
+
+    /* 淺色模式主題變數 */
+    body.light-mode {
+      --bg-color: #f5f5f7;
+      --card-bg: #ffffff;
+      --text-color: #333333;
+      --text-main: #111111;
+      --text-muted: #555555;
+      --text-hint: #777777;
+      --border-color: #dddddd;
+      
+      --accent-color: #e67e22; 
+      --accent-hover: #d35400;
+      
+      --input-bg: #fdfdfd;
+      --input-border: #cccccc;
+      
+      --toggle-btn-bg: #111111;
+      --toggle-btn-text: #ffffff;
+    }
+
+    /* 主容器與頂部元件寬度 */
+    .container { width: 100%; margin: 0 auto; }
+    .top-controls { display: flex; justify-content: flex-end; margin-bottom: -5px; width: 100%; }
+
+    .theme-toggle-btn {
+      background: var(--toggle-btn-bg); color: var(--toggle-btn-text);
+      border: none; width: 36px; height: 36px; border-radius: 50%;
+      font-size: 0.85rem; cursor: pointer; font-weight: bold;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .theme-toggle-btn:active { transform: scale(0.9); }
+
+    header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      border-bottom: 2px solid var(--accent-color); padding-bottom: 12px;
+      margin-bottom: 16px; gap: 20px; width: 100%;
+    }
+
+    h1 { margin: 0; font-size: 1.4rem; color: var(--accent-color); font-weight: 800; }
+    .update-time { font-size: 0.8rem; color: var(--text-hint); white-space: nowrap; }
+
+    .filter-bar { display: flex; gap: 16px; margin-bottom: 20px; width: 100%; }
+    .filter-group { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+    .filter-label { font-size: 0.85rem; color: var(--accent-color); font-weight: bold; }
+
+    .search-input {
+      width: 100%; background: var(--input-bg); border: 1px solid var(--border-color);
+      color: var(--text-main); padding: 10px 12px; border-radius: 8px;
+      font-size: 0.9rem; outline: none; transition: border-color 0.2s ease, background 0.3s, color 0.3s;
+    }
+    .search-input:focus { border-color: var(--accent-color); }
+
+    .sort-btn-group { display: flex; gap: 8px; width: 100%; }
+    .sort-btn {
+      flex: 1; background: var(--input-bg); border: 1px solid var(--border-color);
+      color: var(--text-muted); padding: 10px 12px; border-radius: 8px;
+      font-size: 0.85rem; font-weight: bold; cursor: pointer;
+      transition: all 0.2s ease; text-align: center; white-space: nowrap;
+    }
+    .sort-btn:hover { border-color: var(--accent-color); color: var(--text-main); }
+    .sort-btn.active {
+      background: var(--accent-color); border-color: var(--accent-color);
+      color: #121212; box-shadow: 0 0 10px rgba(255, 152, 0, 0.4);
+    }
+
+    #train-list { width: 100%; display: flex; flex-direction: column; align-items: stretch; }
+
+    .train-card {
+      background: var(--card-bg); border: 1px solid var(--border-color);
+      border-radius: 12px; padding: 18px 20px; margin-bottom: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; gap: 20px;
+      align-items: flex-start; width: fit-content; margin-left: auto; margin-right: auto;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    
+    .train-info-sidebar {
+      width: 255px; min-width: 255px; flex-shrink: 0;
+      display: flex; flex-direction: column; gap: 6px;
+      padding-right: 16px; border-right: 1px dashed var(--border-color);
+    }
+    
+    /* 車次號碼：設定 flex 讓圖示跟文字可以完美對齊 */
+    .train-no { 
+      font-size: 1.8rem; 
+      font-weight: 900; 
+      line-height: 1.1; 
+      display: flex; 
+      align-items: center; 
+    }
+
+    .badge-group { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    /* 車種標籤 */
+    .train-type-badge, .line-type-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 10px 4px 8px; border-radius: 4px;
+      font-size: 0.78rem; font-weight: bold; color: #ffffff; line-height: 1.3;
+    }
+
+    /* ✨ 車次旁邊的專屬主題色圖示（遮罩魔法） */
+    .train-no-icon {
+      width: 1em;
+      height: 1em;
+      vertical-align: -0.05em;
+      margin-right: 8px; /* 與車次號碼的距離 */
+      flex-shrink: 0;
+      
+      /* 用遮罩的方式，讓圖示直接變成外層設定的主題色 */
+      background-color: currentColor; 
+      -webkit-mask-size: contain; mask-size: contain;
+      -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+      -webkit-mask-position: center; mask-position: center;
+    }
+
+    .line-type-badge { background: #555555; }
+    .train-route { font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-top: 4px; }
+    
+    .train-dates {
+      font-size: 0.75rem; color: var(--text-muted); background: var(--input-bg);
+      padding: 4px 8px; border-radius: 4px; margin-top: 6px; display: block; word-break: break-all;
+    }
+    .train-dates-title { font-weight: bold; padding-bottom: 4px; border-bottom: 1px solid var(--border-color, rgba(128,128,128,0.4)); margin-bottom: 4px; }
+    .train-dates-row + .train-dates-row { margin-top: 2px; }
+
+    .train-note {
+      font-size: 0.75rem; color: var(--accent-color); background: var(--input-bg);
+      padding: 4px 8px; border-radius: 4px; margin-top: 4px; word-break: break-all;
+      border-left: 3px solid var(--accent-color); line-height: 1.4;
+    }
+
+    .stops-wrapper { flex: 1; }
+    .stops-grid { display: grid; grid-template-columns: repeat(4, max-content); gap: 8px; }
+
+    .stop-item {
+      background: var(--input-bg); border: 1px solid var(--border-color);
+      border-radius: 6px; padding: 8px 12px; font-size: 0.85rem;
+      display: flex; justify-content: space-between; align-items: center; gap: 12px; white-space: nowrap;
+    }
+    
+    .station-name { font-weight: bold; color: var(--text-main); white-space: nowrap; }
+    .time-info { font-size: 0.75rem; white-space: nowrap; }
+    .toggle-btn { display: none; }
+
+    @media (max-width: 768px) {
+      body { padding: 12px; }
+      .container, header, .filter-bar { width: 100% !important; min-width: 100%; }
+      header, .filter-bar { flex-direction: column; align-items: stretch; }
+      .train-card { width: 100% !important; flex-direction: column; align-items: stretch; gap: 12px; padding: 16px; margin-left: 0 !important; margin-right: 0 !important; }
+      .train-info-sidebar { width: 100%; border-right: none; border-bottom: 1px dashed var(--border-color); padding-right: 0; padding-bottom: 12px; }
+      .toggle-btn { display: flex; width: 100%; background: var(--input-bg); color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 12px; font-size: 0.85rem; font-weight: bold; cursor: pointer; justify-content: space-between; align-items: center; margin-top: 4px; }
+      .toggle-btn .icon { font-size: 0.75rem; color: var(--accent-color); transition: transform 0.2s ease; }
+      .stops-wrapper { display: none; margin-top: 8px; padding-top: 8px; }
+      .stops-wrapper.active { display: block; }
+      .stops-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+      .stop-item { padding: 6px 8px; font-size: 0.72rem; white-space: nowrap; gap: 4px; }
+      .station-name { white-space: nowrap; }
+      .time-info { font-size: 0.7rem; white-space: nowrap; }
+    }
+
+    .status-msg { text-align: center; padding: 40px; color: var(--text-hint); font-size: 1rem; }
+
+    /* --- 行駛日期熱點圖小工具樣式 --- */
+    .hm-widget {
+      background: var(--card-bg); border: 1px solid var(--border-color);
+      border-radius: 12px; padding: 16px 20px; margin-bottom: 20px;
+      width: 100%; box-sizing: border-box; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      user-select: none; -webkit-user-select: none; transition: background 0.3s, border-color 0.3s;
+    }
+
+    .hm-header { display: flex; flex-direction: column; gap: 6px; margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+    .hm-header-main { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+    .hm-title { display: flex; align-items: center; gap: 6px; font-size: 0.95rem; font-weight: bold; color: var(--accent-color); }
+
+    .hm-toggle-btn {
+      background: var(--input-bg); color: var(--text-muted); border: 1px solid var(--border-color);
+      padding: 4px 10px; border-radius: 6px; font-size: 0.78rem; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s ease;
+    }
+    .hm-toggle-btn:hover { color: var(--text-main); border-color: var(--accent-color); }
+
+    .hm-meta { font-size: 0.78rem; color: var(--text-hint); display: flex; flex-wrap: wrap; align-items: center; gap: 0 6px; margin-top: 6px; }
+    .hm-months-container { display: flex; flex-direction: column; gap: 14px; width: 100%; }
+
+    .hm-month-card {
+      background: var(--input-bg); border: 1px solid var(--border-color);
+      border-radius: 10px; padding: 12px 14px; transition: background 0.3s, border-color 0.3s;
+    }
+
+    .hm-month-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 4px; }
+    .hm-month-name { font-size: 0.92rem; font-weight: bold; color: var(--text-main); font-family: var(--font-mono); }
+    .hm-month-count { font-size: 0.75rem; color: var(--text-muted); background: var(--card-bg); padding: 2px 8px; border-radius: 12px; border: 1px solid var(--border-color); }
+    .hm-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; font-size: 0.75rem; font-weight: bold; color: var(--text-hint); margin-bottom: 6px; }
+    .hm-weekdays .sun { color: #f87171; }
+    .hm-weekdays .sat { color: #38bdf8; }
+    .hm-grid { display: grid; grid-template-columns: repeat(7, 1fr); grid-auto-rows: 38px; gap: 5px; }
+
+    .hm-cell {
+      height: 38px; border-radius: 6px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; box-sizing: border-box;
+      font-family: var(--font-mono); padding: 2px; background: var(--input-bg);
+      border: 1px solid var(--border-color); transition: transform 0.15s ease; position: relative;
+    }
+
+    .hm-cell.empty { background: transparent; border: 1px solid transparent; visibility: hidden; pointer-events: none; }
+    .hm-num { font-size: 0.78rem; font-weight: bold; line-height: 1; color: var(--text-hint); }
+    .hm-cell.has-trains { cursor: pointer; background: var(--card-bg); border-color: var(--border-color); }
+    .hm-cell.has-trains:hover { transform: translateY(-2px); border-color: var(--accent-color); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); }
+    .hm-cell.has-trains .hm-num { color: var(--text-main); }
+    .hm-bars { display: flex; gap: 2px; margin-top: 3px; height: 3px; width: 100%; max-width: 30px; justify-content: center; }
+    .hm-bar { flex: 1; height: 100%; border-radius: 1px; }
+    .hm-legend { display: flex; flex-wrap: wrap; gap: 8px 14px; justify-content: center; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border-color); }
+    .hm-legend-item { display: inline-flex; align-items: center; gap: 5px; font-size: 0.75rem; color: var(--text-muted); background: transparent; border: 1px solid transparent; border-radius: 12px; padding: 3px 8px; }
+    .hm-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+    /* 彈出氣泡視窗 (Popover) 樣式 */
+    .hm-popover {
+      position: fixed; z-index: 99999; background: var(--card-bg);
+      border: 1px solid var(--accent-color); border-radius: 8px; padding: 8px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5); display: flex; flex-wrap: wrap; gap: 6px;
+      width: auto; max-width: 260px; opacity: 0; transform: translateY(4px) scale(0.96);
+      transition: opacity 0.16s ease, transform 0.16s ease; visibility: hidden; pointer-events: none;
+    }
+    .hm-popover.is-visible { opacity: 1; transform: translateY(0) scale(1); visibility: visible; pointer-events: auto; }
+    .hm-popover-item { font-size: 0.85rem; font-weight: bold; color: #ffffff; padding: 4px 10px; border-radius: 6px; cursor: pointer; text-align: center; transition: filter 0.2s, transform 0.1s; }
+    .hm-popover-item:hover { filter: brightness(1.2); transform: scale(1.05); }
+  </style>
+</head>
+<body>
+
+  <div class="container" id="main-container">
+    <div class="top-controls" id="top-controls">
+      <button type="button" id="themeToggle" class="theme-toggle-btn" onclick="toggleTheme()">淺</button>
+    </div>
+
+    <header id="main-header">
+      <div>
+        <h1>臺鐵45天內加班或班次調整時刻表</h1>
+        <div class="date-range" id="date-range" style="font-size: 0.9rem; color: var(--accent-color); font-weight: bold; margin-top: 4px;"></div>
+      </div>
+      <div class="update-time" id="last-updated">載入中...</div>
+    </header>
+
+    <div class="filter-bar" id="filter-bar">
+      <div class="filter-group">
+        <span class="filter-label">搜尋車次：</span>
+        <input type="text" id="search-input" class="search-input" placeholder="輸入車次號碼 (例如: 5210)" oninput="filterAndRender()">
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">排序方式：</span>
+        <div class="sort-btn-group">
+          <button type="button" class="sort-btn active" id="sort-date" onclick="setSortType('date-first')">先日期再車次</button>
+          <button type="button" class="sort-btn" id="sort-num" onclick="setSortType('number-first')">純車次號碼大小</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 行駛日期熱點圖小工具（預設折疊） -->
+    <div class="hm-widget" id="hm-widget">
+      <div class="hm-header" id="hm-header">
+        <div class="hm-header-main">
+          <div class="hm-title"><span>行駛日期熱點分佈</span></div>
+          <button type="button" class="hm-toggle-btn" onclick="toggleHeatmap()" id="hm-toggle-btn">
+            <span id="hm-toggle-text">展開</span> <span id="hm-toggle-icon">▼</span>
+          </button>
+        </div>
+        <div class="hm-meta" id="hm-meta-text">載入中...</div>
+      </div>
+      <div class="hm-body" id="hm-body" style="display: none;">
+        <div class="hm-months-container" id="hm-months-container"></div>
+        <div class="hm-legend" id="hm-legend"></div>
+      </div>
+    </div>
+
+    <main id="train-list">
+      <div class="status-msg">正在讀取最新的加班車資料...</div>
+    </main>
+  </div>
+
+  <!-- 點擊日期彈出的車次清單 Popover -->
+  <div id="hm-train-popover" class="hm-popover"></div>
+
+  <script>
+    let cachedTrains = [];
+    let currentSortType = 'date-first';
+
+    const THEME_KEY = 'calculator-theme';
+
+    function applyTheme(isLight) {
+      const btn = document.getElementById('themeToggle');
+      document.body.classList.toggle('light-mode', isLight);
+      if (btn) btn.innerText = isLight ? '深' : '淺';
+    }
+
+    function getSystemThemeSupport() {
+      if (!window.matchMedia) return false;
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ||
+             window.matchMedia('(prefers-color-scheme: light)').matches;
+    }
+
+    function toggleTheme() {
+      const isLight = !document.body.classList.contains('light-mode');
+      applyTheme(isLight);
+      if (!getSystemThemeSupport()) {
+        try { localStorage.setItem(THEME_KEY, isLight ? 'light' : 'dark'); } catch (e) {}
+      }
+    }
+
+    function initTheme() {
+      if (getSystemThemeSupport()) {
+        try { localStorage.removeItem(THEME_KEY); } catch (e) {}
+        const mq = window.matchMedia('(prefers-color-scheme: dark)');
+        applyTheme(!mq.matches);
+        const onChange = (e) => applyTheme(!e.matches);
+        if (mq.addEventListener) mq.addEventListener('change', onChange);
+        else if (mq.addListener) mq.addListener(onChange);
+      } else {
+        let saved = null;
+        try { saved = localStorage.getItem(THEME_KEY); } catch (e) {}
+        applyTheme(saved === 'light');
+      }
+    }
+
+    function getTrainTypeColor(typeStr) {
+      if (!typeStr) return '#4BE13A';
+      if (typeStr.includes('普悠瑪')) return '#e60021';
+      if (typeStr.includes('太魯閣')) return '#f28500';
+      if (typeStr.includes('3000') || typeStr.includes('新自強')) return '#d84315';
+      if (typeStr.includes('自強') || typeStr.includes('PP')) return '#ff6f00';
+      if (typeStr.includes('莒光')) return '#ff9800';
+      return '#4BE13A';
+    }
+
+    function getTrainIcon(typeStr) {
+      if (!typeStr) return 'default.svg';
+
+      let svgFile = 'default.svg'; // 預設為其他
+
+      if (typeStr.includes('普悠瑪')) {
+        svgFile = 'puyuma.svg';
+      } else if (typeStr.includes('太魯閣')) {
+        svgFile = 'taroko.svg';
+      } else if (typeStr.includes('莒光')) {
+        svgFile = 'chukuang.svg';
+      } else if (typeStr.includes('3000')) {
+        svgFile = 'emu3000.svg';
+      } else if (typeStr.includes('推拉式')) {
+        svgFile = 'pp.svg';
+      }
+      
+      // 回傳遮罩用的 span，讓它可以直接吃外層的顏色
+      return `<span class="train-no-icon" style="-webkit-mask-image: url('./icon/${svgFile}'); mask-image: url('./icon/${svgFile}');"></span>`;
+    }
+
+    function setSortType(type) {
+      currentSortType = type;
+      document.getElementById('sort-date').classList.toggle('active', type === 'date-first');
+      document.getElementById('sort-num').classList.toggle('active', type === 'number-first');
+      filterAndRender();
+    }
+
+    function parseDateEntry(raw, refYear, refMonth) {
+      const m = String(raw).trim().match(/^(?:(\d{4})-(\d{2})-(\d{2})|(\d{2})\/(\d{2}))([+-])?$/);
+      if (!m) return null;
+      let iso;
+      if (m[1]) {
+        iso = `${m[1]}-${m[2]}-${m[3]}`;
+      } else {
+        const mon = parseInt(m[4], 10);
+        let year = refYear;
+        if (refMonth - mon > 6) year += 1;
+        else if (mon - refMonth > 6) year -= 1;
+        iso = `${year}-${m[4]}-${m[5]}`;
+      }
+      return { iso, cancelled: m[6] === '-' };
+    }
+
+    function formatDatesWithYear(isoDates) {
+      const byYear = {};
+      isoDates.forEach(iso => {
+        const y = iso.slice(0, 4);
+        (byYear[y] = byYear[y] || []).push(iso.slice(5).replace('-', '/'));
+      });
+      return Object.keys(byYear).sort()
+        .map(y => `<div class="train-dates-row">${y}年：${byYear[y].join(', ')}</div>`)
+        .join('');
+    }
+
+    function processJsonData(json) {
+      const timeContainer = document.getElementById('last-updated');
+      const rangeContainer = document.getElementById('date-range');
+
+      if (timeContainer) timeContainer.textContent = `最後更新於：${json.last_updated || '未知'}`;
+
+      const data = json.data || {};
+      const refMatch = String(json.last_updated || '').match(/^(\d{4})-(\d{2})/);
+      const refYear = refMatch ? parseInt(refMatch[1], 10) : new Date().getFullYear();
+      const refMonth = refMatch ? parseInt(refMatch[2], 10) : new Date().getMonth() + 1;
+      const allTrains = [];
+      const allDatesSet = new Set();
+
+      ['shun', 'ni'].forEach(dir => {
+        if (data[dir]) {
+          Object.keys(data[dir]).forEach(trainNo => {
+            const trainData = data[dir][trainNo];
+            const rawDates = trainData.dates || [];
+
+            const cleanedDates = rawDates
+              .map(d => parseDateEntry(d, refYear, refMonth))
+              .filter(p => p && !p.cancelled)
+              .map(p => p.iso)
+              .sort();
+            if (cleanedDates.length === 0) return;
+
+            cleanedDates.forEach(d => allDatesSet.add(d));
+
+            allTrains.push({
+              trainNo,
+              ...trainData,
+              cleanDates: cleanedDates
+            });
+          });
+        }
+      });
+
+      if (json.start_date && json.end_date) {
+        rangeContainer.textContent = `統計區間：${json.start_date} ～ ${json.end_date}`;
+      } else if (allDatesSet.size > 0) {
+        const sortedDates = Array.from(allDatesSet).sort();
+        rangeContainer.textContent = `開行區間：${sortedDates[0]} ～ ${sortedDates[sortedDates.length - 1]}`;
+      }
+
+      cachedTrains = allTrains;
+      renderLegend();
+      renderHeatmap(allTrains);
+      filterAndRender();
+    }
+
+    function renderLegend() {
+      const legendContainer = document.getElementById('hm-legend');
+      if (!legendContainer) return;
+
+      const legendItems = [
+        { name: '普悠瑪號', sample: '普悠瑪' },
+        { name: '太魯閣號', sample: '太魯閣' },
+        { name: '新自強(3000)', sample: '自強(3000)' },
+        { name: '自強號 / PP', sample: '自強' },
+        { name: '莒光號', sample: '莒光' },
+        { name: '區間車 / 區間快', sample: '區間' }
+      ];
+
+      legendContainer.innerHTML = legendItems.map(item => {
+        const color = getTrainTypeColor(item.sample);
+        return `
+          <span class="hm-legend-item">
+            <span class="hm-dot" style="background:${color};"></span>
+            ${item.name}
+          </span>
+        `;
+      }).join('');
+    }
+
+    // 版面寬度：只量一次，之後鎖定，除非視窗寬度變化過大才重算
+    let contentWidth = 0;          
+    let layoutViewportWidth = null; 
+    const RELAYOUT_THRESHOLD = 120; 
+    const MOBILE_BREAKPOINT = 768;
+
+    function measureContentWidth() {
+      const cards = document.querySelectorAll('.train-card');
+      let max = 0;
+      cards.forEach(card => {
+        const prev = card.style.width;
+        card.style.width = 'max-content';
+        const w = card.getBoundingClientRect().width;
+        card.style.width = prev;
+        if (w > max) max = w;
+      });
+      return max;
+    }
+
+    function updateContainerWidth(force = false) {
+      if (layoutViewportWidth !== null && !force) return;
+
+      const container = document.getElementById('main-container');
+      const header = document.getElementById('main-header');
+      const filterBar = document.getElementById('filter-bar');
+      const topControls = document.getElementById('top-controls');
+      const targets = [container, header, filterBar, topControls];
+
+      targets.forEach(el => { el.style.width = ''; });
+      document.body.style.minWidth = '';
+
+      const screenWidth = window.innerWidth;
+
+      if (screenWidth <= MOBILE_BREAKPOINT) {
+        layoutViewportWidth = screenWidth;
+        return;
+      }
+
+      if (contentWidth === 0) {
+        if (document.querySelectorAll('.train-card').length === 0) return; 
+        contentWidth = measureContentWidth();
+      }
+
+      const PADDING_OFFSET = 30;
+      const targetWidth = contentWidth + PADDING_OFFSET;
+
+      const bodyStyle = getComputedStyle(document.body);
+      const bodyPadX = (parseFloat(bodyStyle.paddingLeft) || 0) + (parseFloat(bodyStyle.paddingRight) || 0);
+
+      if (screenWidth <= targetWidth) {
+        document.body.style.minWidth = (targetWidth + bodyPadX) + 'px';
+        targets.forEach(el => { el.style.width = targetWidth + 'px'; });
+      }
+
+      layoutViewportWidth = screenWidth;
+    }
+
+    let resizeTimer = null;
+    function onViewportChange() {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        if (layoutViewportWidth === null) return;
+        const w = window.innerWidth;
+        const crossedBreakpoint = (w <= MOBILE_BREAKPOINT) !== (layoutViewportWidth <= MOBILE_BREAKPOINT);
+        if (crossedBreakpoint || Math.abs(w - layoutViewportWidth) >= RELAYOUT_THRESHOLD) {
+          updateContainerWidth(true);
+        }
+      }, 150);
+    }
+    window.addEventListener('resize', onViewportChange);
+    window.addEventListener('orientationchange', onViewportChange);
+
+    function filterAndRender() {
+      const container = document.getElementById('train-list');
+      const searchKeyword = document.getElementById('search-input').value.trim();
+
+      if (!container) return;
+
+      let displayTrains = cachedTrains.filter(train => {
+        if (!searchKeyword) return true;
+        return train.trainNo.includes(searchKeyword);
+      });
+
+      if (displayTrains.length === 0) {
+        container.innerHTML = '<div class="status-msg">沒有找到符合搜尋條件的加班車資料。</div>';
+        return;
+      }
+
+      displayTrains.sort((a, b) => {
+        if (currentSortType === 'number-first') {
+          return parseInt(a.trainNo) - parseInt(b.trainNo);
+        } else {
+          const firstDateA = a.cleanDates[0] || '';
+          const firstDateB = b.cleanDates[0] || '';
+
+          if (firstDateA !== firstDateB) {
+            return firstDateA.localeCompare(firstDateB);
+          }
+          return parseInt(a.trainNo) - parseInt(b.trainNo);
+        }
+      });
+
+      container.innerHTML = '';
+      displayTrains.forEach((train, index) => {
+        const card = document.createElement('div');
+        card.className = 'train-card';
+
+        const themeColor = getTrainTypeColor(train.type);
+        card.style.borderLeft = `6px solid ${themeColor}`;
+
+        const totalStops = train.stops || [];
+        
+        const stopsHTML = totalStops.map((st, idx) => {
+          let timeText = '';
+          if (idx === 0) {
+            timeText = `${st.departure || st.arrival}開`;
+          } else if (idx === totalStops.length - 1) {
+            timeText = `${st.arrival || st.departure}到`;
+          } else if (st.arrival === st.departure) {
+            timeText = `${st.departure}開`;
+          } else {
+            timeText = `${st.arrival}到→${st.departure}開`;
+          }
+
+          return `
+            <div class="stop-item">
+              <span class="station-name">${st.station}</span>
+              <span class="time-info" style="color: var(--accent-color); font-weight: 600;">${timeText}</span>
+            </div>
+          `;
+        }).join('');
+
+        const lineBadge = train.line_type
+          ? `<span class="line-type-badge">${train.line_type}</span>`
+          : '';
+
+        const noteHTML = train.note 
+          ? `<div class="train-note">備註：${train.note}</div>` 
+          : '';
+
+        const wrapperId = `stops-wrapper-${index}`;
+
+        card.innerHTML = `
+          <div class="train-info-sidebar">
+            <!-- ✨ 把圖示放在車次左邊，並用 style="color:${themeColor}" 套用主題色 -->
+            <span class="train-no" style="color:${themeColor};">
+              ${getTrainIcon(train.type)}
+              ${train.trainNo} 次
+            </span>
+            
+            <div class="badge-group">
+              <!-- ✨ 標籤內只留文字，圖示已經移到上面了 -->
+              <span class="train-type-badge" style="background:${themeColor};">${train.type || '其他'}</span>
+              ${lineBadge}
+            </div>
+            
+            <div class="train-route">${train.route}</div>
+            <div class="train-dates"><div class="train-dates-title">開行日期</div>${formatDatesWithYear(train.cleanDates)}</div>
+            ${noteHTML}
+          </div>
+
+          <button class="toggle-btn" onclick="toggleStops('${wrapperId}', this)">
+            <span>查看詳細停靠站 (${totalStops.length} 站)</span>
+            <span class="icon">▼</span>
+          </button>
+
+          <div id="${wrapperId}" class="stops-wrapper">
+            <div class="stops-grid">
+              ${stopsHTML || '<div style="color:var(--text-hint);">無詳細停靠站資料</div>'}
+            </div>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+
+      setTimeout(() => {
+        updateContainerWidth();
+      }, 50);
+    }
+
+    function toggleStops(wrapperId, btn) {
+      const wrapper = document.getElementById(wrapperId);
+      const icon = btn.querySelector('.icon');
+      
+      if (wrapper.classList.contains('active')) {
+        wrapper.classList.remove('active');
+        icon.textContent = '▼';
+      } else {
+        wrapper.classList.add('active');
+        icon.textContent = '▲';
+      }
+    }
+
+    function toggleHeatmap() {
+      const body = document.getElementById('hm-body');
+      const header = document.getElementById('hm-header');
+      const text = document.getElementById('hm-toggle-text');
+      const icon = document.getElementById('hm-toggle-icon');
+      
+      if (body.style.display === 'none') {
+        body.style.display = 'block';
+        header.style.marginBottom = '12px';
+        header.style.paddingBottom = '10px';
+        header.style.borderBottom = '1px solid var(--border-color)';
+        text.textContent = '收合';
+        icon.textContent = '▲';
+      } else {
+        body.style.display = 'none';
+        header.style.marginBottom = '0';
+        header.style.paddingBottom = '0';
+        header.style.borderBottom = 'none';
+        text.textContent = '展開';
+        icon.textContent = '▼';
+      }
+    }
+
+    let currentDismissPopover = null;
+
+    function showTrainPopover(event, dateStr, trainsJsonStr) {
+      event.stopPropagation();
+      const popover = document.getElementById('hm-train-popover');
+      if (!popover) return;
+
+      if (currentDismissPopover) {
+        currentDismissPopover();
+      }
+
+      const trains = JSON.parse(decodeURIComponent(trainsJsonStr));
+      const cellEl = event.currentTarget;
+      const rect = cellEl.getBoundingClientRect();
+
+      popover.innerHTML = trains.map(t => `
+        <div class="hm-popover-item" style="background: ${t.color};" onclick="scrollToTrain('${t.trainNo}')">
+          ${t.trainNo} 次
+        </div>
+      `).join('');
+
+      popover.style.left = '0px';
+      popover.style.top = '0px';
+      popover.classList.add('is-visible');
+      const popoverWidth = popover.offsetWidth;
+
+      let leftPos = rect.left + (rect.width / 2) - (popoverWidth / 2);
+
+      const margin = 16;
+      const maxLeft = window.innerWidth - popoverWidth - margin;
+
+      if (leftPos < margin) {
+        leftPos = margin;
+      } else if (leftPos > maxLeft) {
+        leftPos = maxLeft;
+      }
+
+      popover.style.left = `${leftPos}px`;
+      popover.style.top = `${rect.bottom + 6}px`;
+
+      const dismissHandler = () => {
+        popover.classList.remove('is-visible');
+        window.removeEventListener('scroll', dismissHandler);
+        window.removeEventListener('touchmove', dismissHandler);
+        document.removeEventListener('click', outsideClickHandler);
+        currentDismissPopover = null;
+      };
+
+      const outsideClickHandler = (e) => {
+        if (!popover.contains(e.target) && !cellEl.contains(e.target)) {
+          dismissHandler();
+        }
+      };
+
+      currentDismissPopover = dismissHandler;
+
+      setTimeout(() => {
+        document.addEventListener('click', outsideClickHandler);
+        window.addEventListener('scroll', dismissHandler, { once: true });
+        window.addEventListener('touchmove', dismissHandler, { once: true });
+      }, 10);
+    }
+
+    function scrollToTrain(trainNo) {
+      if (currentDismissPopover) {
+        currentDismissPopover();
+      }
+
+      const cards = document.querySelectorAll('.train-card');
+      for (let card of cards) {
+        if (card.querySelector('.train-no') && card.querySelector('.train-no').textContent.includes(trainNo)) {
+          card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          card.style.borderColor = 'var(--accent-color)';
+          setTimeout(() => card.style.borderColor = '', 2000);
+          break;
+        }
+      }
+    }
+
+    function renderHeatmap(allTrains) {
+      const container = document.getElementById('hm-months-container');
+      const metaText = document.getElementById('hm-meta-text');
+      if (!container) return;
+      
+      const dateMap = {}; 
+      const allDatesSet = new Set();
+      
+      allTrains.forEach(train => {
+        train.cleanDates.forEach(d => {
+          const fullDateStr = d;
+          allDatesSet.add(fullDateStr);
+          if (!dateMap[fullDateStr]) dateMap[fullDateStr] = [];
+          dateMap[fullDateStr].push({
+            trainNo: train.trainNo,
+            type: train.type || '區間車',
+            color: getTrainTypeColor(train.type)
+          });
+        });
+      });
+      
+      const sortedDates = Array.from(allDatesSet).sort();
+      if (sortedDates.length === 0) {
+        container.innerHTML = '<div style="color:var(--text-hint); text-align:center; padding:10px;">無行駛日期資料</div>';
+        return;
+      }
+      
+      metaText.innerHTML = `<span>本期共 ${sortedDates.length} 天有加班車</span><span>可點擊日期，選取車次，自動定位至該車次</span>`;
+      
+      const monthMap = {}; 
+      sortedDates.forEach(d => {
+        const [year, month, day] = d.split('-');
+        const ymKey = `${year}-${month}`;
+        if (!monthMap[ymKey]) monthMap[ymKey] = [];
+        monthMap[ymKey].push(d);
+      });
+      
+      container.innerHTML = '';
+      
+      Object.keys(monthMap).sort().forEach(ymKey => {
+        const [year, month] = ymKey.split('-');
+        const daysInMonth = new Date(year, month, 0).getDate();
+        const firstDayOfWeek = new Date(`${ymKey}-01`).getDay();
+        
+        let monthCardHTML = `
+          <div class="hm-month-card">
+            <div class="hm-month-header">
+              <span class="hm-month-name">${year} 年 ${parseInt(month)} 月</span>
+              <span class="hm-month-count">共 ${monthMap[ymKey].length} 天有車</span>
+            </div>
+            <div class="hm-weekdays">
+              <span class="sun">日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span class="sat">六</span>
+            </div>
+            <div class="hm-grid">
+        `;
+        
+        for (let i = 0; i < firstDayOfWeek; i++) {
+          monthCardHTML += `<div class="hm-cell empty"></div>`;
+        }
+        
+        for (let dayNum = 1; dayNum <= daysInMonth; dayNum++) {
+          const dayStr = String(dayNum).padStart(2, '0');
+          const fullDateStr = `${ymKey}-${dayStr}`;
+          const trainsOnThisDay = dateMap[fullDateStr];
+          
+          if (trainsOnThisDay && trainsOnThisDay.length > 0) {
+            const barsHTML = trainsOnThisDay.slice(0, 4).map(t => 
+              `<span class="hm-bar" style="background:${t.color};" title="${t.trainNo}次 (${t.type})"></span>`
+            ).join('');
+            
+            const encodedTrains = encodeURIComponent(JSON.stringify(trainsOnThisDay));
+            
+            monthCardHTML += `
+              <div class="hm-cell has-trains" onclick="showTrainPopover(event, '${fullDateStr}', '${encodedTrains}')" title="${year}/${month}/${dayStr} (${trainsOnThisDay.length}班)">
+                <span class="hm-num">${dayNum}</span>
+                <div class="hm-bars">${barsHTML}</div>
+              </div>
+            `;
+          } else {
+            monthCardHTML += `
+              <div class="hm-cell">
+                <span class="hm-num" style="opacity: 0.3;">${dayNum}</span>
+              </div>
+            `;
+          }
+        }
+        
+        monthCardHTML += `</div></div>`;
+        container.insertAdjacentHTML('beforeend', monthCardHTML);
+      });
+    }
+
+    async function initApp() {
+      initTheme();
+      try {
+        const cacheBuster = new Date().getTime();
+        const response = await fetch(`./last_trains.json?v=${cacheBuster}`);
+        
+        if (!response.ok) throw new Error(`HTTP 錯誤狀態: ${response.status}`);
+        const realJson = await response.json();
+        processJsonData(realJson);
+      } catch (err) {
+        console.error('讀取 JSON 資料失敗：', err.message);
+        document.getElementById('train-list').innerHTML = `
+          <div class="status-msg" style="color: #ff5252;">
+            資料讀取失敗，請確認 <code>last_trains.json</code> 檔案格式是否正確。
+          </div>
+        `;
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initApp);
+    } else {
+      initApp();
+    }
+  </script>
+
+</body>
+</html>
