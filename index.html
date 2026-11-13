@@ -396,6 +396,8 @@
         svgFile = 'emu3000.svg';
       } else if (typeStr.includes('推拉式')) {
         svgFile = 'pp.svg';
+      } else if (typeStr.includes('區間')) { // 含「區間」與「區間快」
+        svgFile = 'local.svg';
       }
       
       // 回傳遮罩用的 span，讓它可以直接吃外層的顏色
