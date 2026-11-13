@@ -159,12 +159,44 @@ def get_valid_token():
     sys.exit(1)
 
 
+def parse_note_dates(note):
+    """
+    解析備註中「月 + 日期清單」的寫法，回傳 {(月, 日), ...}。
+    支援：11月 14-15、21-22、28-29日及12月5-6、12-13日(共10天)
+          （月與數字間可有空白；日期可用「-」表示範圍，「、」「及」分隔）
+    只吃每個「?月」後面連續的「數字／範圍／分隔符」，遇到括號或文字就停，
+    因此「(共10天)」的 10 不會被誤認成日期。
+    """
+    result = set()
+    if not note:
+        return result
+    parts = re.split(r"(\d{1,2})\s*月", note)
+    # parts = [前文, 月, 後文, 月, 後文, ...]
+    for i in range(1, len(parts) - 1, 2):
+        month = int(parts[i])
+        if not 1 <= month <= 12:
+            continue
+        m = re.match(r"[\s\d\-~～－–、,，及和日]*", parts[i + 1])
+        seg = m.group(0) if m else ""
+        for a, b in re.findall(r"(\d{1,2})(?:\s*[-~～－–]\s*(\d{1,2}))?", seg):
+            start = int(a)
+            end = int(b) if b else start
+            if start > end:
+                start, end = end, start
+            for day in range(start, end + 1):
+                if 1 <= day <= 31:
+                    result.add((month, day))
+    return result
+
+
 def is_extra_train(train_type, note, train_num):
     if "專開" in train_type:
         return False
     # 檢查備註中是否有「?月?日」格式（例如 12月5日），或車次在 6000~6999 之間
     has_date = bool(re.search(r"\d+月\d+日", note))
-    return has_date or (6000 <= train_num <= 6999)
+    # 新增：備註只要有「增停」就視為要抓出來
+    has_stop = "增停" in note
+    return has_date or has_stop or (6000 <= train_num <= 6999)
 
 
 def process_note(raw_note):
@@ -270,6 +302,15 @@ def parse_train_data(data, date_str):
                 is_extra_train(train_type, note_str, train_num)
                 and train_no not in EXCLUDE_TRAINS
             ):
+                # 「每日行駛」但只在特定日期增停的車次：每天的時刻表都帶同一段備註，
+                # 只保留備註列出的那幾天，避免整期 45 天都被標成加班。
+                # （舊格式「12月5日」不受影響，維持原本行為）
+                if "增停" in note_str and not re.search(r"\d+月\d+日", note_str):
+                    listed = parse_note_dates(note_str)
+                    d = datetime.strptime(date_str, "%Y-%m-%d")
+                    if listed and (d.month, d.day) not in listed:
+                        continue
+
                 # 增停、停駛同時存在（如支援減班的車次）→ 視為加班車(+)，以增停為優先
                 if "增停" in note_str:
                     status_sign = "+"
