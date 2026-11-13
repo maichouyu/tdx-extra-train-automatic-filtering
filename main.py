@@ -190,13 +190,15 @@ def parse_note_dates(note):
 
 
 def is_extra_train(train_type, note, train_num):
-    if "專開" in train_type:
+    # 專車、專開一律不抓（車種或備註出現皆排除）
+    if any(k in train_type or k in note for k in ("專車", "專開")):
         return False
-    # 檢查備註中是否有「?月?日」格式（例如 12月5日），或車次在 6000~6999 之間
+    # 備註有「增停」就抓
+    if "增停" in note:
+        return True
+    # 備註有「?月?日」格式（例如 12月5日），或車次在 6000~6999 之間
     has_date = bool(re.search(r"\d+月\d+日", note))
-    # 新增：備註只要有「增停」就視為要抓出來
-    has_stop = "增停" in note
-    return has_date or has_stop or (6000 <= train_num <= 6999)
+    return has_date or (6000 <= train_num <= 6999)
 
 
 def process_note(raw_note):
