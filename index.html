@@ -381,8 +381,7 @@
       return '#4BE13A';
     }
 
-    // 熱點日曆每格的色條：每個車種至少一條；車種 4 種以上時各車種只畫一條（不重複），
-    // 車種少於 4 種時，依班數補足到最多 4 條。依圖例順序排列，同色相鄰。
+    // 熱點日曆每格的色條：每個車種一條，顏色不重複。依圖例順序排列。
     const HM_TYPE_SAMPLES = ['普悠瑪', '太魯閣', '自強(3000)', '自強', '莒光', '區間'];
 
     function buildHeatmapBars(trains) {
@@ -394,28 +393,14 @@
         if (!groups.has(t.color)) groups.set(t.color, []);
         groups.get(t.color).push(t);
       });
-      const keys = Array.from(groups.keys()).sort((a, b) => rank(a) - rank(b));
 
-      const bars = keys.map(k => ({ color: k, group: groups.get(k) }));
-      const used = {};
-      keys.forEach(k => { used[k] = 1; });
-
-      const target = Math.min(trains.length, 4);
-      while (bars.length < target) {
-        let best = null;
-        keys.forEach(k => {
-          const remain = groups.get(k).length - used[k];
-          if (remain > 0 && (best === null || remain > groups.get(best).length - used[best])) best = k;
-        });
-        if (best === null) break;
-        bars.push({ color: best, group: groups.get(best) });
-        used[best]++;
-      }
-      bars.sort((a, b) => rank(a.color) - rank(b.color));
-
-      return bars.map(b =>
-        `<span class="hm-bar" style="background:${b.color};" title="${b.group[0].type}（${b.group.length}班）"></span>`
-      ).join('');
+      return Array.from(groups.keys())
+        .sort((a, b) => rank(a) - rank(b))
+        .map(color => {
+          const g = groups.get(color);
+          return `<span class="hm-bar" style="background:${color};" title="${g[0].type}（${g.length}班）"></span>`;
+        })
+        .join('');
     }
 
     function getTrainIcon(typeStr) {
