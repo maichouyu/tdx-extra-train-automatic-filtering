@@ -189,21 +189,78 @@ def parse_note_dates(note):
     return result
 
 
-def has_minguo_year(note):
-    """備註含「民國115年」這類民國紀年寫法"""
-    return bool(re.search(r"民國\s*\d+\s*年", note))
+def has_minguo_date(note):
+    """備註含「民國115年11月19」這類民國紀年的年月日寫法（延長行駛的備註一定帶日期）"""
+    return bool(re.search(r"民國\s*\d+\s*年\s*\d+\s*月\s*\d+", note))
 
 
 def is_extra_train(train_type, note, train_num):
     # 專車、專開一律不抓（車種或備註出現皆排除）
     if any(k in train_type or k in note for k in ("專車", "專開")):
         return False
-    # 備註有「增停」或「民國x年」就抓
-    if "增停" in note or has_minguo_year(note):
+    # 備註有「增停」或「民國x年x月x」就抓
+    if "增停" in note or has_minguo_date(note):
         return True
-    # 備註有「?月?日」格式（例如 12月5日），或車次在 6000~6999 之間
-    has_date = bool(re.search(r"\d+月\d+日", note))
+    # 備註有「?月?」格式（例如 12月5日、11月19、21日、12月5-6日），或車次在 6000~6999 之間
+    has_date = bool(re.search(r"\d+月\s*\d+", note))
     return has_date or (6000 <= train_num <= 6999)
+
+
+def parse_run_dates(raw_note, ref_date_str):
+    """
+    備註「行駛」前面若是純日期清單，就解析成完整的 ISO 日期清單。
+    例：民國115年11月20、22日,民國115年12月4、6、11、13、18、20日行駛。
+    →  ['2026-11-20', '2026-11-22', '2026-12-04', ...]
+    TDX 有時只在其中一天回傳該車次，但備註已寫出全部行駛日，這裡用來補齊。
+
+    只在「行駛」前面全是日期寫法時才展開；「每日行駛」「週一至週五行駛」、
+    「11月1日至12月31日每日行駛」這類寫法一律不展開（回傳空清單）。
+    """
+    if not raw_note or "行駛" not in raw_note:
+        return []
+    head = raw_note.split("行駛", 1)[0].strip()
+    # 純度檢查：去掉「民國x年」後，只能剩數字、月、日與分隔符號
+    probe = re.sub(r"民國\s*\d+\s*年", "", head)
+    if "月" not in probe or not re.fullmatch(r"[\s\d月日、,，及和\-~～－–]+", probe):
+        return []
+
+    try:
+        ref = datetime.strptime(ref_date_str, "%Y-%m-%d")
+    except ValueError:
+        return []
+
+    tokens = re.split(r"(?:民國\s*(\d+)\s*年\s*)?(\d{1,2})\s*月", head)
+    # tokens = [前文, 民國年或None, 月, 後文, 民國年或None, 月, 後文, ...]
+    out = set()
+    last_year, last_month = None, None
+    for i in range(1, len(tokens) - 2, 3):
+        minguo, month_s, seg = tokens[i], tokens[i + 1], tokens[i + 2]
+        month = int(month_s)
+        if not 1 <= month <= 12:
+            continue
+        if minguo:
+            year = int(minguo) + 1911
+        elif last_year is not None:
+            year = last_year + (1 if month < last_month else 0)
+        else:
+            year = ref.year
+            if ref.month - month > 6:
+                year += 1
+            elif month - ref.month > 6:
+                year -= 1
+        last_year, last_month = year, month
+
+        for a, b in re.findall(r"(\d{1,2})(?:\s*[-~～－–]\s*(\d{1,2}))?", seg):
+            start = int(a)
+            end = int(b) if b else start
+            if start > end:
+                start, end = end, start
+            for day in range(start, end + 1):
+                try:
+                    out.add(datetime(year, month, day).strftime("%Y-%m-%d"))
+                except ValueError:
+                    pass
+    return sorted(out)
 
 
 def process_note(raw_note):
@@ -309,10 +366,11 @@ def parse_train_data(data, date_str):
                 is_extra_train(train_type, note_str, train_num)
                 and train_no not in EXCLUDE_TRAINS
             ):
-                # 「每日行駛」但只在特定日期增停的車次：每天的時刻表都帶同一段備註，
-                # 只保留備註列出的那幾天，避免整期 45 天都被標成加班。
+                # 備註列出日期清單（如「11月19、21-22日及12月5-6日」）的車次：
+                # 每天的時刻表可能都帶同一段備註，只保留備註列出的那幾天，
+                # 避免整期 45 天都被標成加班。
                 # （舊格式「12月5日」不受影響，維持原本行為）
-                if ("增停" in note_str or has_minguo_year(note_str)) and not re.search(r"\d+月\d+日", note_str):
+                if not re.search(r"\d+月\d+日", note_str):
                     listed = parse_note_dates(note_str)
                     d = datetime.strptime(date_str, "%Y-%m-%d")
                     if listed and (d.month, d.day) not in listed:
@@ -384,6 +442,7 @@ def parse_train_data(data, date_str):
                     train_type,
                     processed_note,
                     line_type,
+                    parse_run_dates(note_str, date_str),  # 備註列出的全部行駛日
                 ])
     return results
 
@@ -701,6 +760,8 @@ def main():
                 day_results = future.result()
                 if day_results:
                     for item in day_results:
+                        # 新版每筆多一個「備註行駛日」欄位；舊快取只有 12 欄
+                        run_dates = item[12] if len(item) > 12 else []
                         (
                             train_no,
                             train_num,
@@ -714,7 +775,7 @@ def main():
                             train_type,
                             note,
                             line_type,
-                        ) = item
+                        ) = item[:12]
                         total_found += 1
                         dir_key = "shun" if train_num % 2 == 0 else "ni"
 
@@ -746,6 +807,11 @@ def main():
 
                         date_entry = f"{date_str}{status_sign}"
                         train_dates[dir_key][train_no]["dates"].add(date_entry)
+
+                        # 以備註列出的行駛日補齊 TDX 缺漏的日期（取聯集，只保留統計範圍內）
+                        for rd in run_dates:
+                            if start_str <= rd <= end_str:
+                                train_dates[dir_key][train_no]["dates"].add(f"{rd}{status_sign}")
 
         # 防呆：API 異常回傳空資料時，不覆蓋舊狀態（否則下次全部變「全新車次」）
         prev_has_trains = any(
