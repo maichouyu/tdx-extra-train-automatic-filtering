@@ -712,13 +712,12 @@ def format_telegram_report(start_str, end_str, total_found, train_dates, new_ite
         current_msg += "\n"
 
     if current_msg.strip():
-    # ✨ 把這三行加回來 ✨
-    footer = "\n------------------------------------\n*詳細資訊請上：*\nhttps://maichouyu.github.io/tdx-extra-train-automatic-filtering/\n查看。"
-    current_msg += footer
-    messages.append(current_msg)
+    # ✨ 把這三行加回來（請確保縮排跟 if 對齊） ✨
+        footer = "\n------------------------------------\n*詳細資訊請上：*\nhttps://maichouyu.github.io/tdx-extra-train-automatic-filtering/\n查看。"
+        current_msg += footer
+        messages.append(current_msg)
 
     return messages
-
 def main():
     missing_vars = []
     if not KEY_PAIRS:
