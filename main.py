@@ -189,12 +189,17 @@ def parse_note_dates(note):
     return result
 
 
+def has_minguo_year(note):
+    """備註含「民國115年」這類民國紀年寫法"""
+    return bool(re.search(r"民國\s*\d+\s*年", note))
+
+
 def is_extra_train(train_type, note, train_num):
     # 專車、專開一律不抓（車種或備註出現皆排除）
     if any(k in train_type or k in note for k in ("專車", "專開")):
         return False
-    # 備註有「增停」就抓
-    if "增停" in note:
+    # 備註有「增停」或「民國x年」就抓
+    if "增停" in note or has_minguo_year(note):
         return True
     # 備註有「?月?日」格式（例如 12月5日），或車次在 6000~6999 之間
     has_date = bool(re.search(r"\d+月\d+日", note))
@@ -307,7 +312,7 @@ def parse_train_data(data, date_str):
                 # 「每日行駛」但只在特定日期增停的車次：每天的時刻表都帶同一段備註，
                 # 只保留備註列出的那幾天，避免整期 45 天都被標成加班。
                 # （舊格式「12月5日」不受影響，維持原本行為）
-                if "增停" in note_str and not re.search(r"\d+月\d+日", note_str):
+                if ("增停" in note_str or has_minguo_year(note_str)) and not re.search(r"\d+月\d+日", note_str):
                     listed = parse_note_dates(note_str)
                     d = datetime.strptime(date_str, "%Y-%m-%d")
                     if listed and (d.month, d.day) not in listed:
@@ -648,9 +653,6 @@ def format_telegram_report(start_str, end_str, total_found, train_dates, new_ite
         current_msg += "\n"
 
     if current_msg.strip():
-        # ✨ 在這裡加上網頁連結 ✨
-        footer = "\n------------------------------------\n*詳細資訊請上：*\nhttps://maichouyu.github.io/tdx-extra-train-automatic-filtering/\n查看。"
-        current_msg += footer
         messages.append(current_msg)
 
     return messages
